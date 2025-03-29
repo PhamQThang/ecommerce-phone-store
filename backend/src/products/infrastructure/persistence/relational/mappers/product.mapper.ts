@@ -6,7 +6,7 @@ import { ProductImageMapper } from '../../../../../product-images/infrastructure
 
 import { BrandMapper } from '../../../../../brands/infrastructure/persistence/relational/mappers/brand.mapper';
 
-import { ProductStatus } from '../../../../product.type';
+import { ItemStatus, ProductStatus } from '../../../../product.type';
 import { ProductEntity } from '../entities/product.entity';
 
 export class ProductMapper {
@@ -36,6 +36,7 @@ export class ProductMapper {
 
       const colors = raw.identities?.reduce(
         (acc, item) => {
+          if (item.status === ItemStatus.SOLD) return acc;
           if (acc[item.color.id] === undefined) {
             acc[item.color.id] = {
               name: item.color.name,
