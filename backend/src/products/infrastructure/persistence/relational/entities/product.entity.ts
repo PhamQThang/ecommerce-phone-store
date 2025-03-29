@@ -5,13 +5,13 @@ import { ProductImageEntity } from '../../../../../product-images/infrastructure
 import { BrandEntity } from '../../../../../brands/infrastructure/persistence/relational/entities/brand.entity';
 
 import {
+  Column,
   CreateDateColumn,
   Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-  Column,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
 
@@ -19,6 +19,12 @@ import { EntityRelationalHelper } from '../../../../../utils/relational-entity-h
   name: 'product',
 })
 export class ProductEntity extends EntityRelationalHelper {
+  @Column({
+    nullable: false,
+    type: Number,
+  })
+  basePrice: number;
+
   @Column({
     nullable: true,
     type: Number,

@@ -1,14 +1,14 @@
-import { ProductIdentitiesModule } from '../product-identities/product-identities.module';
-import { ProductImagesModule } from '../product-images/product-images.module';
-import { BrandsModule } from '../brands/brands.module';
 import {
   // common
   Module,
   forwardRef,
 } from '@nestjs/common';
-import { ProductsService } from './products.service';
-import { ProductsController } from './products.controller';
+import { BrandsModule } from '../brands/brands.module';
+import { ProductIdentitiesModule } from '../product-identities/product-identities.module';
+import { ProductImagesModule } from '../product-images/product-images.module';
 import { RelationalProductPersistenceModule } from './infrastructure/persistence/relational/relational-persistence.module';
+import { ProductsController } from './products.controller';
+import { ProductsService } from './products.service';
 
 @Module({
   imports: [

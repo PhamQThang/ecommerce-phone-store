@@ -1,3 +1,5 @@
+import { ColorEntity } from '../../../../../colors/infrastructure/persistence/relational/entities/color.entity';
+
 import { ProductEntity } from '../../../../../products/infrastructure/persistence/relational/entities/product.entity';
 
 import {
@@ -7,6 +9,8 @@ import {
   UpdateDateColumn,
   Column,
   ManyToOne,
+  JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
 
@@ -14,6 +18,10 @@ import { EntityRelationalHelper } from '../../../../../utils/relational-entity-h
   name: 'product_identity',
 })
 export class ProductIdentityEntity extends EntityRelationalHelper {
+  @OneToOne(() => ColorEntity, { eager: true, nullable: false })
+  @JoinColumn()
+  color: ColorEntity;
+
   @ManyToOne(() => ProductEntity, (parentEntity) => parentEntity.identities, {
     eager: false,
     nullable: false,

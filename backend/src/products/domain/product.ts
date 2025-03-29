@@ -1,10 +1,28 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Brand } from '../../brands/domain/brand';
 import { ProductIdentity } from '../../product-identities/domain/product-identity';
 import { ProductImage } from '../../product-images/domain/product-image';
-import { Brand } from '../../brands/domain/brand';
-import { ApiProperty } from '@nestjs/swagger';
 import { ProductStatus } from '../product.type';
 
+export class ColorMapping {
+  id: string;
+  name: string;
+  count: number;
+}
+
 export class Product {
+  @ApiProperty({
+    type: () => Array<ColorMapping>,
+    nullable: true,
+  })
+  colors?: ColorMapping[];
+
+  @ApiProperty({
+    type: () => Number,
+    nullable: false,
+  })
+  basePrice: number;
+
   @ApiProperty({
     type: () => Number,
     nullable: true,

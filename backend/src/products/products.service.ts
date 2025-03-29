@@ -1,25 +1,25 @@
-import { ProductIdentitiesService } from '../product-identities/product-identities.service';
 import { ProductIdentity } from '../product-identities/domain/product-identity';
+import { ProductIdentitiesService } from '../product-identities/product-identities.service';
 
-import { ProductImagesService } from '../product-images/product-images.service';
 import { ProductImage } from '../product-images/domain/product-image';
+import { ProductImagesService } from '../product-images/product-images.service';
 
 import { BrandsService } from '../brands/brands.service';
 import { Brand } from '../brands/domain/brand';
 
 import {
+  HttpStatus,
+  Inject,
   // common
   Injectable,
-  HttpStatus,
   UnprocessableEntityException,
-  Inject,
   forwardRef,
 } from '@nestjs/common';
+import { IPaginationOptions } from '../utils/types/pagination-options';
+import { Product } from './domain/product';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductRepository } from './infrastructure/persistence/product.repository';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { Product } from './domain/product';
 
 @Injectable()
 export class ProductsService {
@@ -94,6 +94,8 @@ export class ProductsService {
     return this.productRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      basePrice: createProductDto.basePrice,
+
       screenSize: createProductDto.screenSize,
 
       pin: createProductDto.pin,
@@ -208,6 +210,8 @@ export class ProductsService {
     return this.productRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
+      basePrice: updateProductDto.basePrice,
+
       screenSize: updateProductDto.screenSize,
 
       pin: updateProductDto.pin,

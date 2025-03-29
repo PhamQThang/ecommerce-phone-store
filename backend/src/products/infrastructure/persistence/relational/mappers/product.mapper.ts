@@ -6,12 +6,14 @@ import { ProductImageMapper } from '../../../../../product-images/infrastructure
 
 import { BrandMapper } from '../../../../../brands/infrastructure/persistence/relational/mappers/brand.mapper';
 
-import { ProductEntity } from '../entities/product.entity';
 import { ProductStatus } from '../../../../product.type';
+import { ProductEntity } from '../entities/product.entity';
 
 export class ProductMapper {
   static toDomain(raw: ProductEntity): Product {
     const domainEntity = new Product();
+    domainEntity.basePrice = raw.basePrice;
+
     domainEntity.screenSize = raw.screenSize;
 
     domainEntity.pin = raw.pin;
@@ -31,6 +33,28 @@ export class ProductMapper {
       domainEntity.identities = null;
       domainEntity.status = ProductStatus.IN_STOCK;
       domainEntity.quantity = raw.identities.length;
+
+      const colors = raw.identities?.reduce(
+        (acc, item) => {
+          if (acc[item.color.id] === undefined) {
+            acc[item.color.id] = {
+              name: item.color.name,
+              count: 1,
+            };
+            return acc;
+          }
+          acc[item.color.id].count++;
+          return acc;
+        },
+        {} as Map<string, { name: string; count: number }>,
+      );
+      domainEntity.colors = Object.entries(colors || {}).map(
+        ([key, value]) => ({
+          id: key,
+          name: value?.name,
+          count: value?.count,
+        }),
+      );
     } else if (raw.identities === null) {
       domainEntity.identities = null;
       domainEntity.status = ProductStatus.OUT_OF_STOCK;
@@ -66,6 +90,8 @@ export class ProductMapper {
 
   static toPersistence(domainEntity: Product): ProductEntity {
     const persistenceEntity = new ProductEntity();
+    persistenceEntity.basePrice = domainEntity.basePrice;
+
     persistenceEntity.screenSize = domainEntity.screenSize;
 
     persistenceEntity.pin = domainEntity.pin;
