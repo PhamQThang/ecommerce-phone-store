@@ -1,5 +1,5 @@
-import { ProductModelsService } from '../product-models/product-models.service';
 import { ProductModel } from '../product-models/domain/product-model';
+import { ProductModelsService } from '../product-models/product-models.service';
 
 import { ProductIdentity } from '../product-identities/domain/product-identity';
 import { ProductIdentitiesService } from '../product-identities/product-identities.service';
@@ -124,8 +124,6 @@ export class ProductsService {
       chipset: createProductDto.chipset,
 
       os: createProductDto.os,
-
-      seriCode: createProductDto.seriCode,
 
       identities,
       images,
@@ -258,8 +256,6 @@ export class ProductsService {
       chipset: updateProductDto.chipset,
 
       os: updateProductDto.os,
-
-      seriCode: updateProductDto.seriCode,
 
       identities,
 

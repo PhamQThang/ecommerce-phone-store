@@ -1,5 +1,5 @@
-import { Product } from '../../../../domain/product';
 import { ProductModelMapper } from '../../../../../product-models/infrastructure/persistence/relational/mappers/product-model.mapper';
+import { Product } from '../../../../domain/product';
 
 import { ProductIdentityMapper } from '../../../../../product-identities/infrastructure/persistence/relational/mappers/product-identity.mapper';
 
@@ -28,8 +28,6 @@ export class ProductMapper {
     domainEntity.chipset = raw.chipset;
 
     domainEntity.os = raw.os;
-
-    domainEntity.seriCode = raw.seriCode;
 
     if (raw.identities) {
       // domainEntity.identities = raw.identities.map((item) =>
@@ -113,8 +111,6 @@ export class ProductMapper {
     persistenceEntity.chipset = domainEntity.chipset;
 
     persistenceEntity.os = domainEntity.os;
-
-    persistenceEntity.seriCode = domainEntity.seriCode;
 
     if (domainEntity.identities) {
       persistenceEntity.identities = domainEntity.identities.map((item) =>
