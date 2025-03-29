@@ -51,7 +51,8 @@ export default function AdminSidebar() {
 
   // Lấy role từ localStorage
   useEffect(() => {
-    const userRole = localStorage.getItem("role");
+    // const userRole = localStorage.getItem("role");
+    const userRole = "admin"; // Giả lập role admin
     setRole(userRole);
   }, []);
 
@@ -82,7 +83,7 @@ export default function AdminSidebar() {
     },
     {
       title: "Quản lý nhập hàng",
-      url: "/admin/inventory",
+      url: "/admin/import-orders",
       icon: Truck,
       roles: ["admin", "staff"],
     },

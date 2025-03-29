@@ -18,7 +18,7 @@ const benefits = [
 
 export default function BenefitsSection() {
   return (
-    <div className="bg-cyan-900 text-white py-6 px-4">
+    <div className="bg-blue-400 text-white py-6 px-4">
       <div className="max-w-6xl mx-auto grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-x-12 md:gap-y-8 lg:grid-cols-4">
         {benefits.map((benefit, index) => (
           <div key={index} className="flex items-center space-x-4 relative">

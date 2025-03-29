@@ -115,23 +115,23 @@ export default function ClientHeader() {
   ];
 
   const navItems = [
-    { name: "Trang chủ", href: "#" },
+    { name: "Trang chủ", href: "/client" },
     { name: "Sản phẩm", href: "#", hasDropdown: true },
     { name: "Tin tức", href: "#" },
-    { name: "Đơn hàng", href: "#" },
-    { name: "Giỏ hàng", href: "#" },
+    { name: "Đơn hàng", href: "/client/order" },
+    { name: "Giỏ hàng", href: "/client/cart" },
   ];
 
   return (
     <div className="flex flex-col sticky top-0 z-50 bg-white shadow-sm">
-      <div className="container w-full max-w-7xl mx-auto py-3">
+      <div className="container w-full mx-auto py-3">
         <div className="flex items-center justify-between">
           <Link href="/client">
             <Image
               src="/images/logo.png"
               alt="Fixi Mobile"
-              width={40}
-              height={40}
+              width={60}
+              height={60}
             />
           </Link>
 
@@ -264,7 +264,7 @@ export default function ClientHeader() {
                               >
                                 {category.name}
                               </Link>
-                              <button
+                              <Button
                                 onClick={() => toggleCategory(category.name)}
                                 className="p-2 hover:bg-green-50 rounded-lg transition-colors duration-200"
                               >
@@ -275,7 +275,7 @@ export default function ClientHeader() {
                                       : ""
                                   }`}
                                 />
-                              </button>
+                              </Button>
                             </div>
                             {openCategory === category.name && (
                               <div className="pl-6 mt-1">
@@ -310,7 +310,7 @@ export default function ClientHeader() {
         </div>
       </div>
 
-      <div className="hidden md:flex bg-cyan-300 items-center justify-center gap-8 py-3 text-base font-semibold relative">
+      <div className="hidden md:flex bg-cyan-300 items-center justify-center text-base font-semibold relative">
         {navItems.map((item) =>
           item.hasDropdown ? (
             <div
@@ -319,7 +319,7 @@ export default function ClientHeader() {
               onMouseEnter={() => setIsProductsOpen(true)}
               onMouseLeave={() => setIsProductsOpen(false)}
             >
-              <span className="cursor-pointer text-gray-800 hover:text-green-600 transition-colors duration-200 flex items-center gap-1">
+              <span className="cursor-pointer text-gray-800 hover:bg-black hover:text-white transition-colors duration-200 flex items-center py-3 px-6">
                 {item.name}
               </span>
               {isProductsOpen && (
@@ -352,7 +352,7 @@ export default function ClientHeader() {
             <Link
               key={item.name}
               href={item.href}
-              className="text-gray-800 hover:text-green-600 transition-colors duration-200"
+              className="text-gray-800 font-bold hover:bg-black hover:text-white transition-colors duration-200 py-3 px-6"
             >
               {item.name}
             </Link>
