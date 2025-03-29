@@ -4,6 +4,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNotEmpty } from 'class-validator';
+import { ProductDto } from 'src/products/dto/product.dto';
 
 export class UpdateOrderDto {
   @ApiProperty({
@@ -13,4 +14,16 @@ export class UpdateOrderDto {
   @Type(() => String)
   @IsNotEmpty()
   cartId: string;
+
+  @ApiProperty({
+    type: () => [ProductDto],
+  })
+  @Type(() => ProductDto)
+  items?: ProductDto[];
+
+  @ApiProperty({
+    type: String,
+  })
+  @Type(() => String)
+  userId?: string;
 }

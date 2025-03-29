@@ -1,16 +1,18 @@
-import { ProductsModule } from '../products/products.module';
-import { UsersModule } from '../users/users.module';
 import {
   // common
   Module,
 } from '@nestjs/common';
-import { OrdersService } from './orders.service';
-import { OrdersController } from './orders.controller';
+import { CartsModule } from 'src/carts/carts.module';
+import { ProductsModule } from '../products/products.module';
+import { UsersModule } from '../users/users.module';
 import { RelationalOrderPersistenceModule } from './infrastructure/persistence/relational/relational-persistence.module';
+import { OrdersController } from './orders.controller';
+import { OrdersService } from './orders.service';
 
 @Module({
   imports: [
     ProductsModule,
+    CartsModule,
 
     UsersModule,
 

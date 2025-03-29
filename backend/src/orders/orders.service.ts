@@ -1,21 +1,21 @@
-import { ProductsService } from '../products/products.service';
 import { Product } from '../products/domain/product';
+import { ProductsService } from '../products/products.service';
 
-import { UsersService } from '../users/users.service';
 import { User } from '../users/domain/user';
+import { UsersService } from '../users/users.service';
 
 import {
+  HttpStatus,
   // common
   Injectable,
-  HttpStatus,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { CartsService } from '../carts/carts.service';
+import { IPaginationOptions } from '../utils/types/pagination-options';
+import { Order } from './domain/order';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderRepository } from './infrastructure/persistence/order.repository';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { Order } from './domain/order';
-import { CartsService } from '../carts/carts.service';
 
 @Injectable()
 export class OrdersService {
@@ -121,10 +121,8 @@ export class OrdersService {
 
     let user: User | undefined = undefined;
 
-    if (updateOrderDto.user) {
-      const userObject = await this.userService.findById(
-        updateOrderDto.user.id,
-      );
+    if (updateOrderDto.userId) {
+      const userObject = await this.userService.findById(updateOrderDto.userId);
       if (!userObject) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
