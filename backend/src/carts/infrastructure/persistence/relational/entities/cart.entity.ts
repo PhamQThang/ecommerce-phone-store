@@ -1,19 +1,15 @@
 import { CartProductEntity } from '../../../../../cart-products/infrastructure/persistence/relational/entities/cart-product.entity';
 
-import { ProductEntity } from '../../../../../products/infrastructure/persistence/relational/entities/product.entity';
-
 import { UserEntity } from '../../../../../users/infrastructure/persistence/relational/entities/user.entity';
 
 import {
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  JoinColumn,
-  OneToOne,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
 } from 'typeorm';
 import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
 
@@ -26,10 +22,6 @@ export class CartEntity extends EntityRelationalHelper {
     nullable: true,
   })
   items?: CartProductEntity[] | null;
-
-  @ManyToMany(() => ProductEntity, { eager: true, nullable: true })
-  @JoinTable()
-  products?: ProductEntity[] | null;
 
   @OneToOne(() => UserEntity, { eager: true, nullable: false })
   @JoinColumn()

@@ -1,13 +1,13 @@
-import { CartsModule } from '../carts/carts.module';
-import { ColorsModule } from '../colors/colors.module';
-import { ProductsModule } from '../products/products.module';
 import {
   // common
   Module,
   forwardRef,
 } from '@nestjs/common';
-import { CartProductsService } from './cart-products.service';
+import { CartsModule } from '../carts/carts.module';
+import { ColorsModule } from '../colors/colors.module';
+import { ProductsModule } from '../products/products.module';
 import { CartProductsController } from './cart-products.controller';
+import { CartProductsService } from './cart-products.service';
 import { RelationalCartProductPersistenceModule } from './infrastructure/persistence/relational/relational-persistence.module';
 
 @Module({

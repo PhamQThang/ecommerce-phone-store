@@ -1,7 +1,5 @@
-import { Cart } from '../../../../domain/cart';
 import { CartProductMapper } from '../../../../../cart-products/infrastructure/persistence/relational/mappers/cart-product.mapper';
-
-import { ProductMapper } from '../../../../../products/infrastructure/persistence/relational/mappers/product.mapper';
+import { Cart } from '../../../../domain/cart';
 
 import { UserMapper } from '../../../../../users/infrastructure/persistence/relational/mappers/user.mapper';
 
@@ -16,14 +14,6 @@ export class CartMapper {
       );
     } else if (raw.items === null) {
       domainEntity.items = null;
-    }
-
-    if (raw.products) {
-      domainEntity.products = raw.products.map((item) =>
-        ProductMapper.toDomain(item),
-      );
-    } else if (raw.products === null) {
-      domainEntity.products = null;
     }
 
     if (raw.userId) {
@@ -45,14 +35,6 @@ export class CartMapper {
       );
     } else if (domainEntity.items === null) {
       persistenceEntity.items = null;
-    }
-
-    if (domainEntity.products) {
-      persistenceEntity.products = domainEntity.products.map((item) =>
-        ProductMapper.toPersistence(item),
-      );
-    } else if (domainEntity.products === null) {
-      persistenceEntity.products = null;
     }
 
     if (domainEntity.userId) {

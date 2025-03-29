@@ -2,21 +2,23 @@ import { CartsService } from '../carts/carts.service';
 import { ColorsService } from '../colors/colors.service';
 import { Color } from '../colors/domain/color';
 
-import { ProductsService } from '../products/products.service';
 import { Product } from '../products/domain/product';
+import { ProductsService } from '../products/products.service';
 
 import {
+  forwardRef,
+  HttpStatus,
+  Inject,
   // common
   Injectable,
-  HttpStatus,
   UnprocessableEntityException,
-  Inject,
 } from '@nestjs/common';
+import { Cart } from 'src/carts/domain/cart';
+import { IPaginationOptions } from '../utils/types/pagination-options';
+import { CartProduct } from './domain/cart-product';
 import { CreateCartProductDto } from './dto/create-cart-product.dto';
 import { UpdateCartProductDto } from './dto/update-cart-product.dto';
 import { CartProductRepository } from './infrastructure/persistence/cart-product.repository';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { CartProduct } from './domain/cart-product';
 
 @Injectable()
 export class CartProductsService {
