@@ -12,7 +12,16 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
     return <p className="text-center text-red-500">Sản phẩm không tồn tại!</p>;
   }
 
-  return <ProductDetail {...product} />;
+  return (
+    <ProductDetail
+      {...product}
+      description={
+        typeof product.description === "string"
+          ? { text: product.description, images: [] }
+          : product.description
+      }
+    />
+  );
 };
 
 export default ProductPage;

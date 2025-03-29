@@ -106,7 +106,7 @@ const products = [
   },
   {
     id: "apple-airpods-max",
-    images: ["/images/airpods1.png", "/images/airpods2.png"],
+    images: ["/images/ip.png", "/images/ip.png"],
     category: "AirPods",
     title: "Apple AirPods Max",
     oldPrice: "14,500,000",
@@ -140,7 +140,7 @@ const products = [
   },
   {
     id: "macbook-pro-2024",
-    images: ["/images/macbook1.png", "/images/macbook2.png"],
+    images: ["/images/ip.png", "/images/ip.png"],
     category: "MacBook",
     title: "MacBook Pro 16-inch M3 Max",
     oldPrice: "75,000,000",
