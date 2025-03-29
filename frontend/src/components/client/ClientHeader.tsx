@@ -115,16 +115,16 @@ export default function ClientHeader() {
   ];
 
   const navItems = [
-    { name: "Trang chủ", href: "#" },
+    { name: "Trang chủ", href: "/client" },
     { name: "Sản phẩm", href: "#", hasDropdown: true },
     { name: "Tin tức", href: "#" },
-    { name: "Đơn hàng", href: "#" },
-    { name: "Giỏ hàng", href: "#" },
+    { name: "Đơn hàng", href: "/client/order" },
+    { name: "Giỏ hàng", href: "/client/cart" },
   ];
 
   return (
     <div className="flex flex-col sticky top-0 z-50 bg-white shadow-sm">
-      <div className="container w-full max-w-7xl mx-auto py-3">
+      <div className="container w-full mx-auto py-3">
         <div className="flex items-center justify-between">
           <Link href="/client">
             <Image
