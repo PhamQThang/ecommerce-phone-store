@@ -1,3 +1,5 @@
+import { ProductModelDto } from '../../product-models/dto/product-model.dto';
+
 import { ProductIdentityDto } from '../../product-identities/dto/product-identity.dto';
 
 import { ProductImageDto } from '../../product-images/dto/product-image.dto';
@@ -25,6 +27,15 @@ import {
 } from 'class-transformer';
 
 export class CreateProductDto {
+  @ApiProperty({
+    required: true,
+    type: () => ProductModelDto,
+  })
+  @ValidateNested()
+  @Type(() => ProductModelDto)
+  @IsNotEmptyObject()
+  model: ProductModelDto;
+
   @ApiProperty({
     required: true,
     type: () => Number,

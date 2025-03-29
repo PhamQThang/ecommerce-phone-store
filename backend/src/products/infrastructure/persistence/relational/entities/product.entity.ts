@@ -1,3 +1,5 @@
+import { ProductModelEntity } from '../../../../../product-models/infrastructure/persistence/relational/entities/product-model.entity';
+
 import { ProductIdentityEntity } from '../../../../../product-identities/infrastructure/persistence/relational/entities/product-identity.entity';
 
 import { ProductImageEntity } from '../../../../../product-images/infrastructure/persistence/relational/entities/product-image.entity';
@@ -19,6 +21,9 @@ import { EntityRelationalHelper } from '../../../../../utils/relational-entity-h
   name: 'product',
 })
 export class ProductEntity extends EntityRelationalHelper {
+  @ManyToOne(() => ProductModelEntity, { eager: true, nullable: false })
+  model: ProductModelEntity;
+
   @Column({
     nullable: false,
     type: Number,

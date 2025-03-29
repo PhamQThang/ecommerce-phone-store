@@ -1,3 +1,4 @@
+import { ProductModel } from '../../product-models/domain/product-model';
 import { ApiProperty } from '@nestjs/swagger';
 import { Brand } from '../../brands/domain/brand';
 import { ProductIdentity } from '../../product-identities/domain/product-identity';
@@ -11,6 +12,12 @@ export class ColorMapping {
 }
 
 export class Product {
+  @ApiProperty({
+    type: () => ProductModel,
+    nullable: false,
+  })
+  model: ProductModel;
+
   @ApiProperty({
     type: () => Array<ColorMapping>,
     nullable: true,

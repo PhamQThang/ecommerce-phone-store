@@ -1,37 +1,43 @@
-import { ProductModelEntity } from '../../../../../product-models/infrastructure/persistence/relational/entities/product-model.entity';
+import { BrandEntity } from '../../../../../brands/infrastructure/persistence/relational/entities/brand.entity';
 
 import {
+  Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  Column,
-  OneToMany,
 } from 'typeorm';
 import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
 
 @Entity({
-  name: 'brand',
+  name: 'product_model',
 })
-export class BrandEntity extends EntityRelationalHelper {
-  @OneToMany(() => ProductModelEntity, (childEntity) => childEntity.brand, {
-    eager: true,
-    nullable: false,
-  })
-  models: ProductModelEntity[];
-
+export class ProductModelEntity extends EntityRelationalHelper {
   @Column({
     nullable: false,
     type: String,
     unique: true,
   })
-  slug: string;
+  code: string;
+
+  @ManyToOne(() => BrandEntity, (parentEntity) => parentEntity.models, {
+    eager: false,
+    nullable: false,
+  })
+  brand: BrandEntity;
 
   @Column({
     nullable: false,
     type: String,
   })
   name: string;
+
+  @Column({
+    nullable: true,
+    type: String,
+  })
+  description?: string | null;
 
   @PrimaryGeneratedColumn('uuid')
   id: string;

@@ -1,3 +1,6 @@
+import { ProductModelsService } from '../product-models/product-models.service';
+import { ProductModel } from '../product-models/domain/product-model';
+
 import { ProductIdentity } from '../product-identities/domain/product-identity';
 import { ProductIdentitiesService } from '../product-identities/product-identities.service';
 
@@ -24,6 +27,8 @@ import { ProductRepository } from './infrastructure/persistence/product.reposito
 @Injectable()
 export class ProductsService {
   constructor(
+    private readonly productModelService: ProductModelsService,
+
     @Inject(forwardRef(() => ProductIdentitiesService))
     private readonly productIdentityService: ProductIdentitiesService,
 
@@ -39,6 +44,18 @@ export class ProductsService {
   async create(createProductDto: CreateProductDto) {
     // Do not remove comment below.
     // <creating-property />
+    const modelObject = await this.productModelService.findById(
+      createProductDto.model.id,
+    );
+    if (!modelObject) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          model: 'notExists',
+        },
+      });
+    }
+    const model = modelObject;
 
     let identities: ProductIdentity[] | null | undefined = undefined;
 
@@ -94,6 +111,8 @@ export class ProductsService {
     return this.productRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      model,
+
       basePrice: createProductDto.basePrice,
 
       screenSize: createProductDto.screenSize,
@@ -151,6 +170,22 @@ export class ProductsService {
   ) {
     // Do not remove comment below.
     // <updating-property />
+    let model: ProductModel | undefined = undefined;
+
+    if (updateProductDto.model) {
+      const modelObject = await this.productModelService.findById(
+        updateProductDto.model.id,
+      );
+      if (!modelObject) {
+        throw new UnprocessableEntityException({
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            model: 'notExists',
+          },
+        });
+      }
+      model = modelObject;
+    }
 
     let identities: ProductIdentity[] | null | undefined = undefined;
 
@@ -210,6 +245,8 @@ export class ProductsService {
     return this.productRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
+      model,
+
       basePrice: updateProductDto.basePrice,
 
       screenSize: updateProductDto.screenSize,

@@ -1,24 +1,30 @@
-import { ProductModel } from '../../product-models/domain/product-model';
+import { Brand } from '../../brands/domain/brand';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class Brand {
-  @ApiProperty({
-    type: () => [ProductModel],
-    nullable: false,
-  })
-  models: ProductModel[];
-
+export class ProductModel {
   @ApiProperty({
     type: () => String,
     nullable: false,
   })
-  slug: string;
+  code: string;
+
+  @ApiProperty({
+    type: () => Brand,
+    nullable: false,
+  })
+  brand: Brand;
 
   @ApiProperty({
     type: () => String,
     nullable: false,
   })
   name: string;
+
+  @ApiProperty({
+    type: () => String,
+    nullable: true,
+  })
+  description?: string | null;
 
   @ApiProperty({
     type: String,

@@ -1,4 +1,5 @@
 import { Product } from '../../../../domain/product';
+import { ProductModelMapper } from '../../../../../product-models/infrastructure/persistence/relational/mappers/product-model.mapper';
 
 import { ProductIdentityMapper } from '../../../../../product-identities/infrastructure/persistence/relational/mappers/product-identity.mapper';
 
@@ -12,6 +13,10 @@ import { ProductEntity } from '../entities/product.entity';
 export class ProductMapper {
   static toDomain(raw: ProductEntity): Product {
     const domainEntity = new Product();
+    if (raw.model) {
+      domainEntity.model = ProductModelMapper.toDomain(raw.model);
+    }
+
     domainEntity.basePrice = raw.basePrice;
 
     domainEntity.screenSize = raw.screenSize;
@@ -91,6 +96,12 @@ export class ProductMapper {
 
   static toPersistence(domainEntity: Product): ProductEntity {
     const persistenceEntity = new ProductEntity();
+    if (domainEntity.model) {
+      persistenceEntity.model = ProductModelMapper.toPersistence(
+        domainEntity.model,
+      );
+    }
+
     persistenceEntity.basePrice = domainEntity.basePrice;
 
     persistenceEntity.screenSize = domainEntity.screenSize;

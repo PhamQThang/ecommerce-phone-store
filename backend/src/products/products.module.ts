@@ -1,3 +1,4 @@
+import { ProductModelsModule } from '../product-models/product-models.module';
 import {
   // common
   Module,
@@ -12,6 +13,8 @@ import { ProductsService } from './products.service';
 
 @Module({
   imports: [
+    ProductModelsModule,
+
     forwardRef(() => ProductIdentitiesModule),
 
     forwardRef(() => ProductImagesModule),

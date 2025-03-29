@@ -1,11 +1,12 @@
-import { ProductModelDto } from '../../product-models/dto/product-model.dto';
+import { BrandDto } from '../../brands/dto/brand.dto';
 
 import {
   // decorators here
 
   IsString,
-  IsArray,
+  IsOptional,
   ValidateNested,
+  IsNotEmptyObject,
 } from 'class-validator';
 
 import {
@@ -18,22 +19,22 @@ import {
   Type,
 } from 'class-transformer';
 
-export class CreateBrandDto {
-  @ApiProperty({
-    required: true,
-    type: () => [ProductModelDto],
-  })
-  @ValidateNested()
-  @Type(() => ProductModelDto)
-  @IsArray()
-  models: ProductModelDto[];
-
+export class CreateProductModelDto {
   @ApiProperty({
     required: true,
     type: () => String,
   })
   @IsString()
-  slug: string;
+  code: string;
+
+  @ApiProperty({
+    required: true,
+    type: () => BrandDto,
+  })
+  @ValidateNested()
+  @Type(() => BrandDto)
+  @IsNotEmptyObject()
+  brand: BrandDto;
 
   @ApiProperty({
     required: true,
@@ -41,6 +42,14 @@ export class CreateBrandDto {
   })
   @IsString()
   name: string;
+
+  @ApiProperty({
+    required: false,
+    type: () => String,
+  })
+  @IsOptional()
+  @IsString()
+  description?: string | null;
 
   // Don't forget to use the class-validator decorators in the DTO properties.
 }
