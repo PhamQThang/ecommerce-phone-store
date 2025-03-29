@@ -10,6 +10,7 @@ import {
   CarouselPrevious,
   CarouselApi,
 } from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
 
 export default function HomeCarousel() {
   const [api, setApi] = useState<CarouselApi>();
@@ -53,7 +54,7 @@ export default function HomeCarousel() {
   }, [api]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-4 px-4 sm:py-6 sm:px-6 lg:py-8 lg:px-8">
+    <div className="w-full max-w-7xl mx-auto py-3 px-3">
       <Carousel
         setApi={setApi}
         className="w-full"
@@ -64,13 +65,13 @@ export default function HomeCarousel() {
         <CarouselContent>
           {banners.map((banner, index) => (
             <CarouselItem key={index}>
-              <div className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] rounded-xl overflow-hidden">
+              <div className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
                 <Image
                   src={banner.src}
                   alt={banner.alt}
                   fill
                   style={{ objectFit: "cover" }}
-                  className="rounded-xl"
+                  className=""
                 />
               </div>
             </CarouselItem>
@@ -81,9 +82,9 @@ export default function HomeCarousel() {
       </Carousel>
       <div className="flex justify-center gap-2 mt-4">
         {Array.from({ length: count }).map((_, index) => (
-          <button
+          <Button
             key={index}
-            className={`h-3 w-3 rounded-full transition-colors duration-200 ${
+            className={`h-3 rounded-full transition-colors duration-200 ${
               current === index + 1 ? "bg-green-600" : "bg-gray-300"
             }`}
             onClick={() => api?.scrollTo(index)}

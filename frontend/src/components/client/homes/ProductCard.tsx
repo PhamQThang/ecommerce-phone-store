@@ -1,74 +1,68 @@
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Star } from "lucide-react";
 
-interface Product {
-  id: number;
-  name: string;
-  originalPrice: number;
-  discountedPrice: number;
+interface ProductProps {
+  id: string;
+  images?: string[]; // Mảng ảnh (có thể undefined)
+  category: string;
+  title: string;
+  newPrice: number;
+  oldPrice?: number;
   discountPercentage: number;
-  image: string;
+  rating: number;
 }
 
-interface ProductCardProps {
-  product: Product;
-}
-
-export default function ProductCard({ product }: ProductCardProps) {
+const ProductCard: React.FC<ProductProps> = ({
+  id,
+  images = [],
+  category,
+  title,
+  newPrice,
+  oldPrice,
+  discountPercentage,
+  rating,
+}) => {
   const formatPrice = (price: number) =>
-    price.toLocaleString("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    });
+    price.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 
-  const hasDiscount = product.discountPercentage > 0;
+  const thumbnail = images.length > 0 ? images[0] : "/image/default.png"; // Lấy ảnh đầu tiên hoặc mặc định
+  const hasDiscount = discountPercentage > 0;
 
   return (
-    <Link
-      href={`/products/${product.id}`}
-      className="bg-white rounded-xl shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
-    >
-      <div className="relative w-full h-40 sm:h-48 md:h-56">
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          style={{ objectFit: "contain" }}
-          className="p-2"
-        />
-        {hasDiscount && (
-          <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow">
-            -{product.discountPercentage}%
-          </div>
-        )}
-      </div>
-      {/* Thông tin sản phẩm */}
-      <div className="p-2">
-        <h3 className="text-sm sm:text-base font-semibold text-gray-800 line-clamp-2">
-          {product.name}
-        </h3>
-        {/* Đánh giá sao */}
-        <div className="flex items-center gap-1 mt-2">
-          {[...Array(5)].map((_, index) => (
-            <Star
-              key={index}
-              className="h-4 w-4 text-yellow-400 fill-yellow-400"
-            />
-          ))}
-        </div>
-        {/* Giá sản phẩm */}
-        <div className="mt-3 flex flex-col sm:flex-row sm:items-center sm:gap-2">
-          <span className="text-lg font-bold text-green-600">
-            {formatPrice(product.discountedPrice)}
-          </span>
+    <div className="border p-4 rounded-lg shadow-md hover:shadow-xl transition-transform duration-300 hover:scale-105">
+      <Link href={`/client/products/${id}`} className="block">
+        <div className="relative">
+          <Image
+            src={thumbnail}
+            alt={title}
+            width={200}
+            height={200}
+            className="mx-auto object-contain"
+            priority
+          />
           {hasDiscount && (
-            <span className="text-sm text-gray-500 line-through">
-              {formatPrice(product.originalPrice)}
-            </span>
+            <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow">
+              -{discountPercentage}%
+            </div>
           )}
         </div>
-      </div>
-    </Link>
+        <p className="text-sm text-gray-500 font-medium mt-2">{category}</p>
+        <h3 className="text-md font-bold mt-1 line-clamp-2">{title}</h3>
+        <div className="flex flex-col sm:flex-row gap-2 mt-1">
+          <p className="text-red-500 font-bold">{formatPrice(newPrice)}</p>
+          {oldPrice && (
+            <p className="text-gray-400 line-through">{formatPrice(oldPrice)}</p>
+          )}
+        </div>
+        <div className="flex mt-1">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <span key={i} className={`text-yellow-500 ${i < rating ? "" : "opacity-30"}`}>⭐</span>
+          ))}
+        </div>
+      </Link>
+    </div>
   );
-}
+};
+
+export default ProductCard;
