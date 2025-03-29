@@ -1,3 +1,5 @@
+import { CartProductDto } from '../../cart-products/dto/cart-product.dto';
+
 import { ProductDto } from '../../products/dto/product.dto';
 
 import { UserDto } from '../../users/dto/user.dto';
@@ -22,6 +24,16 @@ import {
 } from '@nestjs/swagger';
 
 export class CreateCartDto {
+  @ApiProperty({
+    required: false,
+    type: () => [CartProductDto],
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CartProductDto)
+  @IsArray()
+  items?: CartProductDto[] | null;
+
   @ApiProperty({
     required: false,
     type: () => [ProductDto],

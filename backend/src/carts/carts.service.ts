@@ -1,3 +1,6 @@
+import { CartProductsService } from '../cart-products/cart-products.service';
+import { CartProduct } from '../cart-products/domain/cart-product';
+
 import { ProductsService } from '../products/products.service';
 import { Product } from '../products/domain/product';
 
@@ -9,6 +12,7 @@ import {
   Injectable,
   HttpStatus,
   UnprocessableEntityException,
+  Inject,
 } from '@nestjs/common';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
@@ -19,6 +23,9 @@ import { Cart } from './domain/cart';
 @Injectable()
 export class CartsService {
   constructor(
+    @Inject(forwardRef(() => CartProductsService))
+    private readonly cartProductService: CartProductsService,
+
     private readonly productService: ProductsService,
 
     private readonly userService: UsersService,
@@ -30,6 +37,25 @@ export class CartsService {
   async create(createCartDto: CreateCartDto) {
     // Do not remove comment below.
     // <creating-property />
+    let items: CartProduct[] | null | undefined = undefined;
+
+    if (createCartDto.items) {
+      const itemsObjects = await this.cartProductService.findByIds(
+        createCartDto.items.map((entity) => entity.id),
+      );
+      if (itemsObjects.length !== createCartDto.items.length) {
+        throw new UnprocessableEntityException({
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            items: 'notExists',
+          },
+        });
+      }
+      items = itemsObjects;
+    } else if (createCartDto.items === null) {
+      items = null;
+    }
+
     let products: Product[] | null | undefined = undefined;
 
     if (createCartDto.products) {
@@ -65,6 +91,8 @@ export class CartsService {
     return this.cartRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      items,
+
       products,
 
       userId,
@@ -99,6 +127,25 @@ export class CartsService {
   ) {
     // Do not remove comment below.
     // <updating-property />
+    let items: CartProduct[] | null | undefined = undefined;
+
+    if (updateCartDto.items) {
+      const itemsObjects = await this.cartProductService.findByIds(
+        updateCartDto.items.map((entity) => entity.id),
+      );
+      if (itemsObjects.length !== updateCartDto.items.length) {
+        throw new UnprocessableEntityException({
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            items: 'notExists',
+          },
+        });
+      }
+      items = itemsObjects;
+    } else if (updateCartDto.items === null) {
+      items = null;
+    }
+
     let products: Product[] | null | undefined = undefined;
 
     if (updateCartDto.products) {
@@ -138,6 +185,8 @@ export class CartsService {
     return this.cartRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
+      items,
+
       products,
 
       userId,
