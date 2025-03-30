@@ -7,6 +7,7 @@ import {
   HttpStatus,
   UnprocessableEntityException,
   Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { CreateProductModelDto } from './dto/create-product-model.dto';
 import { UpdateProductModelDto } from './dto/update-product-model.dto';
