@@ -124,16 +124,16 @@ export default function ClientHeader() {
 
   const navItems = [
     { name: "Trang chủ", href: "/client" },
-    { name: "Sản phẩm", href: "#", hasDropdown: true },
-    { name: "Tin tức", href: "#" },
-    { name: "Đơn hàng", href: "/client/order" },
+    { name: "Sản phẩm", href: "/client/products", hasDropdown: true },
+    { name: "Tin tức", href: "/client/newsPage" },
+    { name: "Đơn hàng", href: "/client/orderPage" },
     { name: "Giỏ hàng", href: "/client/cart" },
   ];
 
   return (
     <div className="flex flex-col sticky top-0 z-50 bg-white shadow-sm">
       <div className="container w-full mx-auto py-3">
-        <div className="flex items-center justify-between">
+        <div className="container mx-auto flex items-center justify-between">
           <Link href="/client">
             <Image
               src="/images/logo.png"
@@ -321,6 +321,7 @@ export default function ClientHeader() {
       <div className="hidden md:flex bg-cyan-300 items-center justify-center text-base font-semibold relative">
         {navItems.map((item) =>
           item.hasDropdown ? (
+            
             <div
               key={item.name}
               className="relative"

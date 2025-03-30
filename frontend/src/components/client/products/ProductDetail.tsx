@@ -42,11 +42,19 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ category, title, images, 
 
   return (
     <section className="py-12 ">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto">
+        <div className="flex items-center gap-3 mb-4">
+          <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
+          <p className="text-yellow-500 flex gap-1 items-center">
+            {Array.from({ length: rating }, (_, i) => (
+              <span key={i}>⭐</span>
+            ))}
+          </p>
+        </div>
         <div className="flex flex-col md:flex-row gap-10 p-6">
           {/* Carousel chính */}
-          <div className="w-full md:w-2/3 flex flex-col gap-4">
-            <Carousel className="w-auto">
+          <div className="w-full md:w-2/3 flex flex-col gap-4 ">
+            <Carousel className="w-auto border-color-300 border-2 rounded-lg p-3 mb-3">
               <CarouselContent style={{ transform: `translateX(-${activeIndex * 100}%)`, transition: "transform 0.3s ease-in-out" }}>
                 {images.map((img, index) => (
                   <CarouselItem key={index} className="flex justify-center items-center min-w-full">
@@ -56,12 +64,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ category, title, images, 
               </CarouselContent>
               <CarouselPrevious
                 onClick={() => setActiveIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))}
-                className="absolute top-1/2 -translate-y-1/2 left-[10%] bg-white/50 hover:bg-white text-black p-2 rounded-full shadow"
+                className="absolute top-1/2 -translate-y-1/2 left-0 bg-white/50 hover:bg-white text-black p-2 rounded-full shadow"
               />
 
               <CarouselNext
                 onClick={() => setActiveIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0))}
-                className="absolute top-1/2 -translate-y-1/2 right-[10%] bg-white/50 hover:bg-white text-black p-2 rounded-full shadow"
+                className="absolute top-1/2 -translate-y-1/2 right-0 bg-white/50 hover:bg-white text-black p-2 rounded-full shadow"
               />
 
             </Carousel>
@@ -71,35 +79,36 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ category, title, images, 
               {images.map((img, index) => (
                 <Button
                   key={index}
-                  className={`border-2 p-1 rounded-lg transition ${
-                    activeIndex === index ? "border-blue-500" : "bg-white border-gray-300" 
-                  }`}
+                  className="p-1 rounded-lg transition bg-white border-0 hover:bg-white"
                   onClick={() => setActiveIndex(index)}
                 >
-                  <Image src={img} alt={title} width={80} height={40} className=" rounded-lg" />
+                  <Image
+                    src={img}
+                    alt={title}
+                    width={80}
+                    height={40}
+                    className={`rounded-lg border-2 hover:border-blue-500 ${
+                      activeIndex === index ? "border-blue-500" : "border-gray-300"
+                    }`}
+                  />
                 </Button>
               ))}
             </div>
+
           </div>
 
           {/* Thông tin sản phẩm */}
           <div className="w-full md:w-1/3 flex flex-col gap-10">
             <div>
-              <p className="text-gray-500">{category}</p>
-              <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
               <div className="flex items-center gap-2 mt-2">
                 <p className="text-red-500 font-bold text-2xl">{newPrice}₫</p>
                 <p className="text-gray-400 line-through">{oldPrice}₫</p>
               </div>
-              <p className="text-yellow-500 flex gap-1 mt-2">
-                {Array.from({ length: rating }, (_, i) => (
-                  <span key={i}>⭐</span>
-                ))}
-              </p>
+              
               {/* Chọn màu sắc */}
             {colors.length > 0 && (
               <div>
-                <p className="font-semibold text-gray-700">Màu sắc:</p>
+                <p className="font-semibold text-gray-700 mt-3">Màu sắc:</p>
                 <div className="flex gap-3 mt-2">
                   {colors.map((color) => (
                     <button
@@ -117,7 +126,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ category, title, images, 
             {/* Chọn dung lượng */}
             {storageOptions.length > 0 && (
               <div>
-                <p className="font-semibold text-gray-700">Bộ nhớ:</p>
+                <p className="font-semibold text-gray-700 mt-4">Bộ nhớ:</p>
                 <div className="flex gap-3 mt-2">
                   {storageOptions.map((storage) => (
                     <button
