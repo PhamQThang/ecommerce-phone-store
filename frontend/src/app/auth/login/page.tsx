@@ -78,7 +78,7 @@ export default function LoginPage() {
       }
 
       toast.success("Đăng nhập thành công", {
-        description: `Chào mừng ${role === "admin" ? "Admin" : role === "staff" ? "Nhân viên" : "Khách hàng"}!`,
+        description: `Chào mừng ${role === "Admin" ? "Quản trị viên" : role === "Employee" ? "Nhân viên" : "Khách hàng"}!`,
         duration: 1000,
       });
 

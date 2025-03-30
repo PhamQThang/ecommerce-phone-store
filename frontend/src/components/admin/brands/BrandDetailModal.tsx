@@ -1,4 +1,3 @@
-// /components/admin/brands/BrandDetailModal.tsx
 import { Brand } from "@/types/types";
 import {
   Dialog,
@@ -29,46 +28,55 @@ const BrandDetailModal: React.FC<BrandDetailModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Chi tiết thương hiệu: {brand.name}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-semibold w-full sm:w-32">ID:</span>
-            <span>{brand.id}</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <span className="font-semibold">ID:</span>
+              <p>{brand.id}</p>
+            </div>
+            <div>
+              <span className="font-semibold">Slug:</span>
+              <p>{brand.slug}</p>
+            </div>
+            <div>
+              <span className="font-semibold">Thời gian tạo:</span>
+              <p>{formatDate(brand.createdAt)}</p>
+            </div>
+            <div>
+              <span className="font-semibold">Thời gian cập nhật:</span>
+              <p>{formatDate(brand.updatedAt)}</p>
+            </div>
           </div>
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-semibold w-full sm:w-32">
-              Tên thương hiệu:
-            </span>
-            <span>{brand.name}</span>
-          </div>
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-semibold w-full sm:w-32">Slug:</span>
-            <span>{brand.slug}</span>
-          </div>
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-semibold w-full sm:w-32">Models:</span>
-            <span>
-              {brand.models.length > 0 ? brand.models.join(", ") : "Không có"}
-            </span>
-          </div>
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-semibold w-full sm:w-32">Thời gian tạo:</span>
-            <span>{formatDate(brand.createdAt)}</span>
-          </div>
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-semibold w-full sm:w-32">
-              Thời gian cập nhật:
-            </span>
-            <span>{formatDate(brand.updatedAt)}</span>
+
+          <div>
+            <h4 className="font-semibold mb-2">
+              Danh sách Model ({brand.models.length}):
+            </h4>
+            {brand.models.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {brand.models.map((model, index) => (
+                  <div key={model.id || index} className="border rounded p-3">
+                    <p className="font-medium">{model.name}</p>
+                    <p className="text-sm text-gray-600">Code: {model.code}</p>
+                    {model.description && (
+                      <p className="text-sm text-gray-500">
+                        {model.description}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500">Không có model nào</p>
+            )}
           </div>
         </div>
-        <DialogFooter className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-2">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Đóng
-          </Button>
+        <DialogFooter>
+          <Button onClick={() => onOpenChange(false)}>Đóng</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

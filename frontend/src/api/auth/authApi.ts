@@ -88,6 +88,7 @@ export const register = async (
 export const logout = async (): Promise<void> => {
   try {
     await axiosInstance.post("/api/v1/auth/logout");
+    localStorage.clear();
   } catch (error: any) {
     throw new Error(error.message || "Đăng xuất thất bại");
   }

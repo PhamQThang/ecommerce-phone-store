@@ -1,5 +1,5 @@
 // app/admin/layout.tsx
-import AdminSidebar from "@/components/admin/Sidebar";
+import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { SidebarProvider } from "@/components/ui/sidebar";
 

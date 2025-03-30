@@ -1,5 +1,4 @@
-// /components/admin/brands/BrandForm.tsx
-import { Brand } from "@/types/types";
+import { Brand, ProductModel } from "@/types/types";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +15,8 @@ interface BrandFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   editingBrand: Brand | null;
+  productModels: ProductModel[];
+  brands: Brand[];
   onSubmit: (data: Partial<Brand>) => void;
 }
 
@@ -29,15 +30,17 @@ const BrandForm: React.FC<BrandFormProps> = ({
     defaultValues: editingBrand || {
       name: "",
       slug: "",
-      models: [],
     },
   });
 
   React.useEffect(() => {
     if (editingBrand) {
-      reset(editingBrand);
+      reset({
+        name: editingBrand.name,
+        slug: editingBrand.slug,
+      });
     } else {
-      reset({ name: "", slug: "", models: [] });
+      reset({ name: "", slug: "" });
     }
   }, [editingBrand, reset]);
 
@@ -51,48 +54,32 @@ const BrandForm: React.FC<BrandFormProps> = ({
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Tên thương hiệu
+            <label className="block text-sm font-medium text-gray-700">
+              Tên thương hiệu <span className="text-red-500">*</span>
             </label>
             <Input
-              id="name"
               {...register("name", { required: "Tên thương hiệu là bắt buộc" })}
               placeholder="Nhập tên thương hiệu"
             />
           </div>
+
           <div>
-            <label
-              htmlFor="slug"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Slug
+            <label className="block text-sm font-medium text-gray-700">
+              Slug <span className="text-red-500">*</span>
             </label>
             <Input
-              id="slug"
               {...register("slug", { required: "Slug là bắt buộc" })}
               placeholder="Nhập slug"
             />
           </div>
-          {/* <div>
-            <label
-              htmlFor="models"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Models (cách nhau bởi dấu phẩy)
-            </label>
-            <Input
-              id="models"
-              {...register("models")}
-              placeholder="Nhập models (ví dụ: model1, model2)"
-              defaultValue={editingBrand?.models?.join(", ") || ""}
-            />
-          </div> */}
+
           <DialogFooter className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-2">
             <Button type="submit">{editingBrand ? "Cập nhật" : "Thêm"}</Button>
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Hủy
             </Button>
           </DialogFooter>
