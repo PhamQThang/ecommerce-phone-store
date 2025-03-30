@@ -84,13 +84,6 @@ export class CreateProductDto {
   os?: string | null;
 
   @ApiProperty({
-    required: true,
-    type: () => String,
-  })
-  @IsString()
-  seriCode: string;
-
-  @ApiProperty({
     required: false,
     type: () => [ProductIdentityDto],
   })

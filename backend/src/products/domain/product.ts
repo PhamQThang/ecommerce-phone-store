@@ -1,8 +1,8 @@
-import { ProductModel } from '../../product-models/domain/product-model';
 import { ApiProperty } from '@nestjs/swagger';
 import { Brand } from '../../brands/domain/brand';
 import { ProductIdentity } from '../../product-identities/domain/product-identity';
 import { ProductImage } from '../../product-images/domain/product-image';
+import { ProductModel } from '../../product-models/domain/product-model';
 import { ProductStatus } from '../product.type';
 
 export class ColorMapping {
@@ -59,12 +59,6 @@ export class Product {
     nullable: true,
   })
   os?: string | null;
-
-  @ApiProperty({
-    type: () => String,
-    nullable: false,
-  })
-  seriCode: string;
 
   @ApiProperty({
     type: () => [ProductIdentity],

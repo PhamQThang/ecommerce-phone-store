@@ -60,12 +60,6 @@ export class ProductEntity extends EntityRelationalHelper {
   })
   os?: string | null;
 
-  @Column({
-    nullable: false,
-    type: String,
-  })
-  seriCode: string;
-
   @OneToMany(
     () => ProductIdentityEntity,
     (childEntity) => childEntity.product,

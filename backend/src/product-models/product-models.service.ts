@@ -2,18 +2,18 @@ import { BrandsService } from '../brands/brands.service';
 import { Brand } from '../brands/domain/brand';
 
 import {
+  HttpStatus,
+  Inject,
   // common
   Injectable,
-  HttpStatus,
   UnprocessableEntityException,
-  Inject,
   forwardRef,
 } from '@nestjs/common';
+import { IPaginationOptions } from '../utils/types/pagination-options';
+import { ProductModel } from './domain/product-model';
 import { CreateProductModelDto } from './dto/create-product-model.dto';
 import { UpdateProductModelDto } from './dto/update-product-model.dto';
 import { ProductModelRepository } from './infrastructure/persistence/product-model.repository';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { ProductModel } from './domain/product-model';
 
 @Injectable()
 export class ProductModelsService {
