@@ -1,4 +1,3 @@
-// app/auth/login/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -27,10 +26,11 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Mail, Lock, Loader2 } from "lucide-react";
+import { login } from "@/api/auth/authApi";
 
 const loginSchema = z.object({
   email: z.string().email("Vui lòng nhập email hợp lệ"),
-  password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
+  password: z.string().min(5, "Mật khẩu phải có ít nhất 5 ký tự"),
 });
 
 export default function LoginPage() {
@@ -53,47 +53,50 @@ export default function LoginPage() {
     form.setValue("email", emailFromQuery);
   }, [emailFromQuery, form]);
 
-  // const onSubmit = async (values: z.infer<typeof loginSchema>) => {
-  //   setError(null);
-  //   setLoading(true);
-  //   try {
-  //     const response = await login(values.email, values.password);
-  //     if (!response.success) {
-  //       throw new Error(response.message || "Đăng nhập thất bại.");
-  //     }
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+    setError(null);
+    setLoading(true);
+    try {
+      const response = await login(values);
+      if (!response.token) {
+        throw new Error("Không nhận được token từ server.");
+      }
 
-  //     if (response.token) {
-  //       localStorage.setItem('token', response.token);
-  //       localStorage.setItem('userEmail', response.user.email);
-  //       localStorage.setItem('role', response.user.roles[0]);
-  //       localStorage.setItem('fullName', response.user.full_name);
-  //     }
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("refreshToken", response.refreshToken);
+      localStorage.setItem("tokenExpires", response.tokenExpires.toString());
+      localStorage.setItem("userEmail", response.user.email);
+      localStorage.setItem("role", response.user.role.name);
+      localStorage.setItem(
+        "fullName",
+        `${response.user.firstName} ${response.user.lastName}`
+      );
 
-  //     const role = response.user.roles[0];
-  //     if (!role) {
-  //       throw new Error("Không nhận được vai trò từ server.");
-  //     }
+      const role = response.user.role.name;
+      if (!role) {
+        throw new Error("Không nhận được vai trò từ server.");
+      }
 
-  //     toast.success("Đăng nhập thành công", {
-  //       description: `Chào mừng ${role === "admin" ? "Admin" : role === "staff" ? "Nhân viên" : "Khách hàng"}!`,
-  //       duration: 1000,
-  //     });
+      toast.success("Đăng nhập thành công", {
+        description: `Chào mừng ${role === "admin" ? "Admin" : role === "staff" ? "Nhân viên" : "Khách hàng"}!`,
+        duration: 1000,
+      });
 
-  //     if (role === "customer") {
-  //       router.push("/client");
-  //     } else {
-  //       router.push("/admin");
-  //     }
-  //   } catch (error: any) {
-  //     setError(error.message || "Đăng nhập thất bại.");
-  //     toast.error("Đăng nhập thất bại", {
-  //       description: error.message || "Vui lòng thử lại sau.",
-  //       duration: 1000,
-  //     });
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      if (role === "User") {
+        router.push("/client");
+      } else {
+        router.push("/admin");
+      }
+    } catch (error: any) {
+      setError(error.message || "Đăng nhập thất bại.");
+      toast.error("Đăng nhập thất bại", {
+        description: error.message || "Vui lòng thử lại sau.",
+        duration: 1000,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -109,9 +112,7 @@ export default function LoginPage() {
         <CardContent>
           {error && <p className="text-red-600 text-center mb-4">{error}</p>}
           <Form {...form}>
-            {/* <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6"> */}
-
-            {/* <form className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
                 name="email"
@@ -146,57 +147,6 @@ export default function LoginPage() {
                           placeholder="********"
                           className="pl-10"
                           {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Đang xử lý...
-                  </>
-                ) : (
-                  "Đăng nhập"
-                )}
-              </Button>
-            </form> */}
-            <form className="space-y-6">
-              <FormField
-                control={form.control}
-                name="email"
-                render={() => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                        <Input
-                          placeholder="email@example.com"
-                          className="pl-10"
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={() => (
-                  <FormItem>
-                    <FormLabel>Mật khẩu</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                        <Input
-                          type="password"
-                          placeholder="********"
-                          className="pl-10"
                         />
                       </div>
                     </FormControl>

@@ -1,3 +1,12 @@
+export interface Brand {
+  models: string[];
+  slug: string;
+  name: string;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Category {
   id: number;
   name: string;

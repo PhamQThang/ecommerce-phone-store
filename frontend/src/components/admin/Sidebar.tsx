@@ -64,6 +64,12 @@ export default function AdminSidebar() {
       roles: ["admin", "staff"],
     },
     {
+      title: "Quản lý thương hiệu",
+      url: "/admin/brands",
+      icon: BarChart,
+      roles: ["admin"],
+    },
+    {
       title: "Quản lý danh mục",
       url: "/admin/categories",
       icon: Package,
