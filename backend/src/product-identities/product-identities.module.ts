@@ -1,3 +1,4 @@
+import { ColorsModule } from '../colors/colors.module';
 import { ProductsModule } from '../products/products.module';
 import {
   // common
@@ -10,6 +11,8 @@ import { RelationalProductIdentityPersistenceModule } from './infrastructure/per
 
 @Module({
   imports: [
+    ColorsModule,
+
     forwardRef(() => ProductsModule),
 
     // import modules, etc.

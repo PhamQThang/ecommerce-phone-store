@@ -1,4 +1,4 @@
-import { ProductDto } from '../../products/dto/product.dto';
+import { CartProductDto } from '../../cart-products/dto/cart-product.dto';
 
 import { UserDto } from '../../users/dto/user.dto';
 
@@ -8,12 +8,11 @@ import {
 } from 'class-transformer';
 
 import {
-  // decorators here
-
-  ValidateNested,
-  IsNotEmptyObject,
   IsArray,
+  IsNotEmptyObject,
   IsOptional,
+  // decorators here
+  ValidateNested,
 } from 'class-validator';
 
 import {
@@ -24,13 +23,13 @@ import {
 export class CreateCartDto {
   @ApiProperty({
     required: false,
-    type: () => [ProductDto],
+    type: () => [CartProductDto],
   })
   @IsOptional()
   @ValidateNested()
-  @Type(() => ProductDto)
+  @Type(() => CartProductDto)
   @IsArray()
-  products?: ProductDto[] | null;
+  items?: CartProductDto[] | null;
 
   @ApiProperty({
     required: true,

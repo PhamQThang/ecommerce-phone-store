@@ -1,3 +1,5 @@
+import { ProductModelDto } from '../../product-models/dto/product-model.dto';
+
 import { ProductIdentityDto } from '../../product-identities/dto/product-identity.dto';
 
 import { ProductImageDto } from '../../product-images/dto/product-image.dto';
@@ -5,14 +7,13 @@ import { ProductImageDto } from '../../product-images/dto/product-image.dto';
 import { BrandDto } from '../../brands/dto/brand.dto';
 
 import {
-  // decorators here
-
-  IsString,
-  ValidateNested,
+  IsArray,
   IsNotEmptyObject,
   IsNumber,
-  IsArray,
   IsOptional,
+  // decorators here
+  IsString,
+  ValidateNested,
 } from 'class-validator';
 
 import {
@@ -26,6 +27,22 @@ import {
 } from 'class-transformer';
 
 export class CreateProductDto {
+  @ApiProperty({
+    required: true,
+    type: () => ProductModelDto,
+  })
+  @ValidateNested()
+  @Type(() => ProductModelDto)
+  @IsNotEmptyObject()
+  model: ProductModelDto;
+
+  @ApiProperty({
+    required: true,
+    type: () => Number,
+  })
+  @IsNumber()
+  basePrice: number;
+
   @ApiProperty({
     required: false,
     type: () => Number,
@@ -65,13 +82,6 @@ export class CreateProductDto {
   @IsOptional()
   @IsString()
   os?: string | null;
-
-  @ApiProperty({
-    required: true,
-    type: () => String,
-  })
-  @IsString()
-  seriCode: string;
 
   @ApiProperty({
     required: false,

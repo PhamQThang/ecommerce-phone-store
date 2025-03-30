@@ -1,20 +1,30 @@
-// frontend/components/AdminHeader.tsx
 "use client";
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { SidebarTrigger } from "../ui/sidebar";
+import { logout } from "@/api/auth/authApi";
 
 export default function AdminHeader() {
   const router = useRouter();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("userEmail");
-    toast.success("Đăng xuất thành công!");
-    router.push("/client");
+  const handleLogout = async () => {
+    try {
+      await logout();
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("fullName");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("tokenExpires");
+      toast.success("Đăng xuất thành công!");
+      router.push("/client");
+    } catch (error: any) {
+      toast.error("Đăng xuất thất bại", {
+        description: error.message || "Vui lòng thử lại sau.",
+      });
+    }
   };
 
   return (

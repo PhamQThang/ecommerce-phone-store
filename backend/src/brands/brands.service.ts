@@ -1,16 +1,26 @@
+import { ProductModel } from '../product-models/domain/product-model';
+import { ProductModelsService } from '../product-models/product-models.service';
+
 import {
+  HttpStatus,
+  Inject,
   // common
   Injectable,
+  UnprocessableEntityException,
+  forwardRef,
 } from '@nestjs/common';
+import { IPaginationOptions } from '../utils/types/pagination-options';
+import { Brand } from './domain/brand';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
 import { BrandRepository } from './infrastructure/persistence/brand.repository';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { Brand } from './domain/brand';
 
 @Injectable()
 export class BrandsService {
   constructor(
+    @Inject(forwardRef(() => ProductModelsService))
+    private readonly productModelService: ProductModelsService,
+
     // Dependencies here
     private readonly brandRepository: BrandRepository,
   ) {}
@@ -18,10 +28,24 @@ export class BrandsService {
   async create(createBrandDto: CreateBrandDto) {
     // Do not remove comment below.
     // <creating-property />
+    const modelsObjects = await this.productModelService.findByIds(
+      createBrandDto.models.map((entity) => entity.id),
+    );
+    if (modelsObjects.length !== createBrandDto.models.length) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          models: 'notExists',
+        },
+      });
+    }
+    const models = modelsObjects;
 
     return this.brandRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      models,
+
       slug: createBrandDto.slug,
 
       name: createBrandDto.name,
@@ -56,10 +80,28 @@ export class BrandsService {
   ) {
     // Do not remove comment below.
     // <updating-property />
+    let models: ProductModel[] | undefined = undefined;
+
+    if (updateBrandDto.models) {
+      const modelsObjects = await this.productModelService.findByIds(
+        updateBrandDto.models.map((entity) => entity.id),
+      );
+      if (modelsObjects.length !== updateBrandDto.models.length) {
+        throw new UnprocessableEntityException({
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            models: 'notExists',
+          },
+        });
+      }
+      models = modelsObjects;
+    }
 
     return this.brandRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
+      models,
+
       slug: updateBrandDto.slug,
 
       name: updateBrandDto.name,

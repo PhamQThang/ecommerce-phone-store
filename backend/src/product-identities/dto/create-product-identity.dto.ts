@@ -1,3 +1,5 @@
+import { ColorDto } from '../../colors/dto/color.dto';
+
 import { ProductDto } from '../../products/dto/product.dto';
 
 import {
@@ -20,6 +22,15 @@ import {
 } from 'class-transformer';
 
 export class CreateProductIdentityDto {
+  @ApiProperty({
+    required: true,
+    type: () => ColorDto,
+  })
+  @ValidateNested()
+  @Type(() => ColorDto)
+  @IsNotEmptyObject()
+  color: ColorDto;
+
   @ApiProperty({
     required: true,
     type: () => ProductDto,

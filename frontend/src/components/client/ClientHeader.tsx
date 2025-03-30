@@ -28,6 +28,7 @@ import {
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { toast } from "sonner";
 import Image from "next/image";
+import { logout } from "@/api/auth/authApi";
 
 export default function ClientHeader() {
   const router = useRouter();
@@ -50,12 +51,19 @@ export default function ClientHeader() {
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.clear();
-    setIsLoggedIn(false);
-    setFullName(null);
-    toast.success("Đăng xuất thành công!");
-    router.push("/client");
+  const handleLogout = async () => {
+    try {
+      await logout();
+      localStorage.clear();
+      setIsLoggedIn(false);
+      setFullName(null);
+      toast.success("Đăng xuất thành công!");
+      router.push("/client");
+    } catch (error: any) {
+      toast.error("Đăng xuất thất bại", {
+        description: error.message || "Vui lòng thử lại sau.",
+      });
+    }
   };
 
   const handleSearch = (e: React.FormEvent) => {

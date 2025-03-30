@@ -56,8 +56,14 @@ import { CartsModule } from './carts/carts.module';
 
 import { OrdersModule } from './orders/orders.module';
 
+import { CartProductsModule } from './cart-products/cart-products.module';
+
+import { ProductModelsModule } from './product-models/product-models.module';
+
 @Module({
   imports: [
+    ProductModelsModule,
+    CartProductsModule,
     OrdersModule,
     CartsModule,
     ProductIdentitiesModule,

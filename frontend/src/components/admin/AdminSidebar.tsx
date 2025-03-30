@@ -49,10 +49,8 @@ export default function AdminSidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [role, setRole] = useState<string | null>(null);
 
-  // Lấy role từ localStorage
   useEffect(() => {
-    // const userRole = localStorage.getItem("role");
-    const userRole = "admin"; // Giả lập role admin
+    const userRole = localStorage.getItem("role");
     setRole(userRole);
   }, []);
 
@@ -64,10 +62,10 @@ export default function AdminSidebar() {
       roles: ["admin", "staff"],
     },
     {
-      title: "Quản lý danh mục",
-      url: "/admin/categories",
+      title: "Quản lý thương hiệu",
+      url: "/admin/brands",
       icon: Package,
-      roles: ["admin", "staff"],
+      roles: ["admin"],
     },
     {
       title: "Quản lý nhà cung cấp",

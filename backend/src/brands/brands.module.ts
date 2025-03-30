@@ -1,6 +1,8 @@
+import { ProductModelsModule } from '../product-models/product-models.module';
 import {
   // common
   Module,
+  forwardRef,
 } from '@nestjs/common';
 import { BrandsService } from './brands.service';
 import { BrandsController } from './brands.controller';
@@ -8,6 +10,8 @@ import { RelationalBrandPersistenceModule } from './infrastructure/persistence/r
 
 @Module({
   imports: [
+    forwardRef(() => ProductModelsModule),
+
     // import modules, etc.
     RelationalBrandPersistenceModule,
   ],

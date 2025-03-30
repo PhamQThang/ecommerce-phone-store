@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import fs from 'node:fs/promises';
 import { ConfigService } from '@nestjs/config';
-import nodemailer from 'nodemailer';
 import Handlebars from 'handlebars';
+import fs from 'node:fs/promises';
+import nodemailer from 'nodemailer';
 import { AllConfigType } from '../config/config.type';
 
 @Injectable()
@@ -10,6 +10,7 @@ export class MailerService {
   private readonly transporter: nodemailer.Transporter;
   constructor(private readonly configService: ConfigService<AllConfigType>) {
     this.transporter = nodemailer.createTransport({
+      service: 'gmail',
       host: configService.get('mail.host', { infer: true }),
       port: configService.get('mail.port', { infer: true }),
       ignoreTLS: configService.get('mail.ignoreTLS', { infer: true }),

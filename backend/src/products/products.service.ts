@@ -1,29 +1,34 @@
-import { ProductIdentitiesService } from '../product-identities/product-identities.service';
-import { ProductIdentity } from '../product-identities/domain/product-identity';
+import { ProductModel } from '../product-models/domain/product-model';
+import { ProductModelsService } from '../product-models/product-models.service';
 
-import { ProductImagesService } from '../product-images/product-images.service';
+import { ProductIdentity } from '../product-identities/domain/product-identity';
+import { ProductIdentitiesService } from '../product-identities/product-identities.service';
+
 import { ProductImage } from '../product-images/domain/product-image';
+import { ProductImagesService } from '../product-images/product-images.service';
 
 import { BrandsService } from '../brands/brands.service';
 import { Brand } from '../brands/domain/brand';
 
 import {
+  HttpStatus,
+  Inject,
   // common
   Injectable,
-  HttpStatus,
   UnprocessableEntityException,
-  Inject,
   forwardRef,
 } from '@nestjs/common';
+import { IPaginationOptions } from '../utils/types/pagination-options';
+import { Product } from './domain/product';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductRepository } from './infrastructure/persistence/product.repository';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { Product } from './domain/product';
 
 @Injectable()
 export class ProductsService {
   constructor(
+    private readonly productModelService: ProductModelsService,
+
     @Inject(forwardRef(() => ProductIdentitiesService))
     private readonly productIdentityService: ProductIdentitiesService,
 
@@ -39,6 +44,18 @@ export class ProductsService {
   async create(createProductDto: CreateProductDto) {
     // Do not remove comment below.
     // <creating-property />
+    const modelObject = await this.productModelService.findById(
+      createProductDto.model.id,
+    );
+    if (!modelObject) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          model: 'notExists',
+        },
+      });
+    }
+    const model = modelObject;
 
     let identities: ProductIdentity[] | null | undefined = undefined;
 
@@ -94,6 +111,10 @@ export class ProductsService {
     return this.productRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      model,
+
+      basePrice: createProductDto.basePrice,
+
       screenSize: createProductDto.screenSize,
 
       pin: createProductDto.pin,
@@ -103,8 +124,6 @@ export class ProductsService {
       chipset: createProductDto.chipset,
 
       os: createProductDto.os,
-
-      seriCode: createProductDto.seriCode,
 
       identities,
       images,
@@ -149,6 +168,22 @@ export class ProductsService {
   ) {
     // Do not remove comment below.
     // <updating-property />
+    let model: ProductModel | undefined = undefined;
+
+    if (updateProductDto.model) {
+      const modelObject = await this.productModelService.findById(
+        updateProductDto.model.id,
+      );
+      if (!modelObject) {
+        throw new UnprocessableEntityException({
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            model: 'notExists',
+          },
+        });
+      }
+      model = modelObject;
+    }
 
     let identities: ProductIdentity[] | null | undefined = undefined;
 
@@ -208,6 +243,10 @@ export class ProductsService {
     return this.productRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
+      model,
+
+      basePrice: updateProductDto.basePrice,
+
       screenSize: updateProductDto.screenSize,
 
       pin: updateProductDto.pin,
@@ -217,8 +256,6 @@ export class ProductsService {
       chipset: updateProductDto.chipset,
 
       os: updateProductDto.os,
-
-      seriCode: updateProductDto.seriCode,
 
       identities,
 

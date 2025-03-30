@@ -1,3 +1,97 @@
+// types/types.ts
+// Brand Types
+export interface Brand {
+  id: string;
+  name: string;
+  slug: string;
+  models: ProductModel[]; // Array of model IDs
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GetBrandsResponse {
+  data: Brand[];
+  hasNextPage: boolean;
+}
+
+export interface GetBrandsParams {
+  page: number;
+  limit: number;
+}
+
+export interface BrandRequest {
+  name: string;
+  slug: string;
+  models?: ProductModel[];
+}
+
+// Product Model Types
+export interface ProductModel {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+  brand?: {
+    id: string;
+    name: string;
+  };
+}
+
+export interface GetProductModelsResponse {
+  data: ProductModel[];
+  hasNextPage: boolean;
+}
+
+export interface GetProductModelsParams {
+  page: number;
+  limit: number;
+}
+
+export interface ProductModelCreateRequest {
+  code: string;
+  name: string;
+  description?: string;
+  brand?: { id: string };
+}
+
+export interface ProductModelUpdateRequest {
+  code?: string;
+  name?: string;
+  description?: string;
+  brand?: { id: string };
+}
+
+// Common Types
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+}
+
+export interface ListResponse<T> {
+  data: T[];
+  hasNextPage: boolean;
+  total?: number;
+}
+
+// Form Types
+export interface BrandFormValues {
+  name: string;
+  slug: string;
+  models?: ProductModel[];
+}
+
+export interface ProductModelFormValues {
+  code: string;
+  name: string;
+  description?: string;
+  brand: {
+    id: string;
+    name: string;
+  };
+}
+/////////////////////////
 export interface Category {
   id: number;
   name: string;

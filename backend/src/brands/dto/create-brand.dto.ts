@@ -1,7 +1,11 @@
+import { ProductModelDto } from '../../product-models/dto/product-model.dto';
+
 import {
   // decorators here
 
   IsString,
+  IsArray,
+  ValidateNested,
 } from 'class-validator';
 
 import {
@@ -9,7 +13,21 @@ import {
   ApiProperty,
 } from '@nestjs/swagger';
 
+import {
+  // decorators here
+  Type,
+} from 'class-transformer';
+
 export class CreateBrandDto {
+  @ApiProperty({
+    required: true,
+    type: () => [ProductModelDto],
+  })
+  @ValidateNested()
+  @Type(() => ProductModelDto)
+  @IsArray()
+  models: ProductModelDto[];
+
   @ApiProperty({
     required: true,
     type: () => String,

@@ -1,3 +1,5 @@
+import { ProductModelEntity } from '../../../../../product-models/infrastructure/persistence/relational/entities/product-model.entity';
+
 import { ProductIdentityEntity } from '../../../../../product-identities/infrastructure/persistence/relational/entities/product-identity.entity';
 
 import { ProductImageEntity } from '../../../../../product-images/infrastructure/persistence/relational/entities/product-image.entity';
@@ -5,13 +7,13 @@ import { ProductImageEntity } from '../../../../../product-images/infrastructure
 import { BrandEntity } from '../../../../../brands/infrastructure/persistence/relational/entities/brand.entity';
 
 import {
+  Column,
   CreateDateColumn,
   Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-  Column,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
 
@@ -19,6 +21,15 @@ import { EntityRelationalHelper } from '../../../../../utils/relational-entity-h
   name: 'product',
 })
 export class ProductEntity extends EntityRelationalHelper {
+  @ManyToOne(() => ProductModelEntity, { eager: true, nullable: false })
+  model: ProductModelEntity;
+
+  @Column({
+    nullable: false,
+    type: Number,
+  })
+  basePrice: number;
+
   @Column({
     nullable: true,
     type: Number,
@@ -48,12 +59,6 @@ export class ProductEntity extends EntityRelationalHelper {
     type: String,
   })
   os?: string | null;
-
-  @Column({
-    nullable: false,
-    type: String,
-  })
-  seriCode: string;
 
   @OneToMany(
     () => ProductIdentityEntity,

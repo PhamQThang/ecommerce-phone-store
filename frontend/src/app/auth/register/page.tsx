@@ -26,17 +26,16 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Mail, Lock, User, Phone, Home, Loader2 } from "lucide-react";
-// import { register } from "@/api/authApi";
+import { Mail, Lock, User, Loader2 } from "lucide-react";
+import { register } from "@/api/auth/authApi";
 
 const registerSchema = z
   .object({
-    full_name: z.string().min(2, "Tên phải có ít nhất 2 ký tự"),
+    firstName: z.string().min(2, "Tên phải có ít nhất 2 ký tự"),
+    lastName: z.string().min(2, "Họ phải có ít nhất 2 ký tự"),
     email: z.string().email("Vui lòng nhập email hợp lệ"),
-    password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
+    password: z.string().min(5, "Mật khẩu phải có ít nhất 5 ký tự"),
     confirmPassword: z.string().min(6, "Xác nhận mật khẩu không khớp"),
-    phone_number: z.string().optional(),
-    address: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Mật khẩu không khớp",
@@ -51,12 +50,11 @@ export default function RegisterPage() {
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      full_name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
-      phone_number: "",
-      address: "",
     },
   });
 
@@ -64,20 +62,20 @@ export default function RegisterPage() {
     setError(null);
     setLoading(true);
     try {
-      // const response = await register(
-      //   values.full_name,
-      //   values.email,
-      //   values.password,
-      //   values.phone_number,
-      //   values.address
-      // );
-      // if (!response.success) {
-      //   throw new Error(response.message || "Đăng ký thất bại.");
-      // }
+      const registerData = {
+        email: values.email,
+        password: values.password,
+        firstName: values.firstName,
+        lastName: values.lastName,
+      };
+
+      await register(registerData);
+
       toast.success("Đăng ký thành công", {
         description: "Vui lòng đăng nhập để tiếp tục.",
         duration: 1000,
       });
+
       setTimeout(
         () =>
           router.push(`/auth/login?email=${encodeURIComponent(values.email)}`),
@@ -112,18 +110,34 @@ export default function RegisterPage() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
-                name="full_name"
+                name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Họ và tên</FormLabel>
+                    <FormLabel>Tên</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                         <Input
-                          placeholder="Nguyen Van A"
+                          placeholder="John"
                           className="pl-10"
                           {...field}
                         />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Họ</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <Input placeholder="Doe" className="pl-10" {...field} />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -141,46 +155,6 @@ export default function RegisterPage() {
                         <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                         <Input
                           placeholder="email@example.com"
-                          className="pl-10"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phone_number"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Số điện thoại</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                        <Input
-                          placeholder="0123456789"
-                          className="pl-10"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Địa chỉ</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                        <Input
-                          placeholder="123 Đường ABC"
                           className="pl-10"
                           {...field}
                         />

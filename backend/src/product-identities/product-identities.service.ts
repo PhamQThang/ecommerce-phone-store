@@ -1,3 +1,6 @@
+import { ColorsService } from '../colors/colors.service';
+import { Color } from '../colors/domain/color';
+
 import { ProductsService } from '../products/products.service';
 import {
   // common
@@ -17,6 +20,8 @@ import { Product } from '../products/domain/product';
 @Injectable()
 export class ProductIdentitiesService {
   constructor(
+    private readonly colorService: ColorsService,
+
     @Inject(forwardRef(() => ProductsService))
     private readonly productService: ProductsService,
 
@@ -27,6 +32,19 @@ export class ProductIdentitiesService {
   async create(createProductIdentityDto: CreateProductIdentityDto) {
     // Do not remove comment below.
     // <creating-property />
+    const colorObject = await this.colorService.findById(
+      createProductIdentityDto.color.id,
+    );
+    if (!colorObject) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          color: 'notExists',
+        },
+      });
+    }
+    const color = colorObject;
+
     const productObject = await this.productService.findById(
       createProductIdentityDto.product.id,
     );
@@ -43,6 +61,8 @@ export class ProductIdentitiesService {
     return this.productentityRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      color,
+
       product,
 
       status: createProductIdentityDto.status,
@@ -79,6 +99,23 @@ export class ProductIdentitiesService {
   ) {
     // Do not remove comment below.
     // <updating-property />
+    let color: Color | undefined = undefined;
+
+    if (updateProductIdentityDto.color) {
+      const colorObject = await this.colorService.findById(
+        updateProductIdentityDto.color.id,
+      );
+      if (!colorObject) {
+        throw new UnprocessableEntityException({
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            color: 'notExists',
+          },
+        });
+      }
+      color = colorObject;
+    }
+
     let product: Product | undefined = undefined;
 
     if (updateProductIdentityDto.product) {
@@ -99,6 +136,8 @@ export class ProductIdentitiesService {
     return this.productentityRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
+      color,
+
       product,
 
       status: updateProductIdentityDto.status,
