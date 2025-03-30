@@ -12,7 +12,7 @@ export default function FeaturedPhonesSection() {
   );
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-6 px-4 sm:py-8 sm:px-6 lg:py-10 lg:px-8">
+    <div className="w-full container mx-auto py-6 px-4 sm:py-8 sm:px-6 lg:py-10 lg:px-8">
       <div className="flex items-center justify-between mb-4 sm:mb-6 lg:mb-8 gap-4 sm:gap-0">
         <h2 className="text-md md:text-lg font-bold">Điện thoại nổi bật</h2>
 
@@ -25,7 +25,7 @@ export default function FeaturedPhonesSection() {
 
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         {featuredPhones.map((product) => (
-          <ProductCard key={product.id} {...product} />
+          <ProductCard key={product.id} {...product} newPrice={Number(product.newPrice)} oldPrice={Number(product.oldPrice)} />
         ))}
       </div>
     </div>

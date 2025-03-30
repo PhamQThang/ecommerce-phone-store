@@ -5,7 +5,7 @@ import { Facebook, Instagram, Youtube, PhoneCall, MapPin } from "lucide-react";
 const Footer = () => {
   return (
     <footer className="bg-[#C4FCF5] py-8">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 px-3 md:px-12">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 px-3 md:px-12 fixed-bottom-0">
         <div>
           <div className="flex items-center space-x-2">
             <Image

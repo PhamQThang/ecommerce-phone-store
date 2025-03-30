@@ -54,7 +54,7 @@ export default function HomeCarousel() {
   }, [api]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-3 px-3">
+    <div className="w-full container mx-auto py-3 px-3">
       <Carousel
         setApi={setApi}
         className="w-full"

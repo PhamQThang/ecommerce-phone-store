@@ -15,7 +15,7 @@ export default function SalesSection() {
   const displayedProducts = salesProducts.slice(0, 4);
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-6 px-3 sm:py-8 lg:py-10">
+    <div className="w-full container mx-auto py-6 px-3 sm:py-8 lg:py-10">
       <div className="w-full py-2">
         <div className="flex flex-col items-center gap-2 sm:flex-row sm:justify-between sm:gap-4">
           <div className="flex items-center justify-between w-full sm:w-auto">
