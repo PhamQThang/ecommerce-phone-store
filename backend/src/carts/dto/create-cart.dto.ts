@@ -11,6 +11,7 @@ import {
   IsArray,
   IsNotEmptyObject,
   IsOptional,
+  IsString,
   // decorators here
   ValidateNested,
 } from 'class-validator';
@@ -21,6 +22,14 @@ import {
 } from '@nestjs/swagger';
 
 export class CreateCartDto {
+  @ApiProperty({
+    required: false,
+    type: () => String,
+  })
+  @IsOptional()
+  @IsString()
+  status?: string | null;
+
   @ApiProperty({
     required: false,
     type: () => [CartProductDto],
@@ -38,7 +47,7 @@ export class CreateCartDto {
   @ValidateNested()
   @Type(() => UserDto)
   @IsNotEmptyObject()
-  userId: UserDto;
+  user: UserDto;
 
   // Don't forget to use the class-validator decorators in the DTO properties.
 }

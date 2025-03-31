@@ -54,7 +54,7 @@ export class OrdersService {
     }
     const items = itemsObjects;
 
-    const userObject = await this.userService.findById(cartObject?.userId.id);
+    const userObject = await this.userService.findById(cartObject?.user.id);
     if (!userObject) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -121,8 +121,8 @@ export class OrdersService {
 
     let user: User | undefined = undefined;
 
-    if (updateOrderDto.userId) {
-      const userObject = await this.userService.findById(updateOrderDto.userId);
+    if (updateOrderDto.user) {
+      const userObject = await this.userService.findById(updateOrderDto.user);
       if (!userObject) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,

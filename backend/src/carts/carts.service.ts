@@ -3,7 +3,6 @@ import { CartProduct } from '../cart-products/domain/cart-product';
 
 import { ProductsService } from '../products/products.service';
 
-import { User } from '../users/domain/user';
 import { UsersService } from '../users/users.service';
 
 import {
@@ -14,6 +13,7 @@ import {
   UnprocessableEntityException,
   forwardRef,
 } from '@nestjs/common';
+import { ColorsService } from 'src/colors/colors.service';
 import { IPaginationOptions } from '../utils/types/pagination-options';
 import { Cart } from './domain/cart';
 import { CreateCartDto } from './dto/create-cart.dto';
@@ -29,6 +29,7 @@ export class CartsService {
     private readonly productService: ProductsService,
 
     private readonly userService: UsersService,
+    private readonly colorService: ColorsService,
 
     // Dependencies here
     private readonly cartRepository: CartRepository,
@@ -37,6 +38,7 @@ export class CartsService {
   async create(createCartDto: CreateCartDto) {
     // Do not remove comment below.
     // <creating-property />
+
     let items: CartProduct[] | null | undefined = undefined;
 
     if (createCartDto.items) {
@@ -56,25 +58,25 @@ export class CartsService {
       items = null;
     }
 
-    const userIdObject = await this.userService.findById(
-      createCartDto.userId.id,
-    );
-    if (!userIdObject) {
+    const userObject = await this.userService.findById(createCartDto.user.id);
+    if (!userObject) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
-          userId: 'notExists',
+          user: 'notExists',
         },
       });
     }
-    const userId = userIdObject;
+    const user = userObject;
 
     return this.cartRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      status: createCartDto.status,
+
       items,
 
-      userId,
+      user,
     });
   }
 
@@ -106,48 +108,60 @@ export class CartsService {
   ) {
     // Do not remove comment below.
     // <updating-property />
-    let items: CartProduct[] | null | undefined = undefined;
 
-    if (updateCartDto.items) {
-      const itemsObjects = await this.cartProductService.findByIds(
-        updateCartDto.items.map((entity) => entity.id),
-      );
-      if (itemsObjects.length !== updateCartDto.items.length) {
-        throw new UnprocessableEntityException({
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: {
-            items: 'notExists',
-          },
-        });
+    console.log(JSON.stringify(updateCartDto), 'updateCartDto');
+    const cart = await this.cartRepository.findById(id);
+    if (!cart) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          cart: 'notExists',
+        },
+      });
+    }
+    let isFounded = false;
+    cart.items = cart.items?.map((item) => {
+      if (item.product.id === updateCartDto.productId) {
+        item.quantity = updateCartDto.quantity;
+        item.color.id = updateCartDto.colorId;
+        isFounded = true;
       }
-      items = itemsObjects;
-    } else if (updateCartDto.items === null) {
-      items = null;
+      return item;
+    });
+    console.log(cart.items, 'lsdfjlfddsfjlj');
+
+    const color = await this.colorService.findById(updateCartDto.colorId);
+    if (!color) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          color: 'notExists',
+        },
+      });
     }
 
-    let userId: User | undefined = undefined;
+    const product = await this.productService.findById(updateCartDto.productId);
+    if (!product) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          product: 'notExists',
+        },
+      });
+    }
 
-    if (updateCartDto.userId) {
-      const userIdObject = await this.userService.findById(
-        updateCartDto.userId.id,
-      );
-      if (!userIdObject) {
-        throw new UnprocessableEntityException({
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: {
-            userId: 'notExists',
-          },
-        });
-      }
-      userId = userIdObject;
+    if (!isFounded) {
+      cart?.items?.push({
+        product,
+        quantity: updateCartDto.quantity,
+        color,
+      } as any);
     }
 
     return this.cartRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
-      items,
-
-      userId,
+      items: cart.items,
     });
   }
 

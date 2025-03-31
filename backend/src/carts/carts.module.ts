@@ -3,6 +3,7 @@ import {
   Module,
   forwardRef,
 } from '@nestjs/common';
+import { ColorsModule } from 'src/colors/colors.module';
 import { CartProductsModule } from '../cart-products/cart-products.module';
 import { ProductsModule } from '../products/products.module';
 import { UsersModule } from '../users/users.module';
@@ -16,7 +17,7 @@ import { RelationalCartPersistenceModule } from './infrastructure/persistence/re
 
     ProductsModule,
     CartProductsModule,
-
+    ColorsModule,
     UsersModule,
 
     // import modules, etc.

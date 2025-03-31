@@ -1,17 +1,16 @@
 import {
+  Body,
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
+  HttpStatus,
   Param,
-  Delete,
+  Patch,
+  Post,
+  Request,
+  UnprocessableEntityException,
   UseGuards,
-  Query,
 } from '@nestjs/common';
-import { CartsService } from './carts.service';
-import { CreateCartDto } from './dto/create-cart.dto';
-import { UpdateCartDto } from './dto/update-cart.dto';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -19,14 +18,10 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import { CartsService } from './carts.service';
+import { CartStatus } from './carts.type';
 import { Cart } from './domain/cart';
-import { AuthGuard } from '@nestjs/passport';
-import {
-  InfinityPaginationResponse,
-  InfinityPaginationResponseDto,
-} from '../utils/dto/infinity-pagination-response.dto';
-import { infinityPagination } from '../utils/infinity-pagination';
-import { FindAllCartsDto } from './dto/find-all-carts.dto';
+import { UpdateCartDto } from './dto/update-cart.dto';
 
 @ApiTags('Carts')
 @ApiBearerAuth()
@@ -42,32 +37,38 @@ export class CartsController {
   @ApiCreatedResponse({
     type: Cart,
   })
-  create(@Body() createCartDto: CreateCartDto) {
-    return this.cartsService.create(createCartDto);
+  create(@Request() req) {
+    console.log(req.user);
+    return this.cartsService.create({
+      user: {
+        id: req.user.id,
+      },
+      status: CartStatus.IN_PROGRESS,
+    });
   }
 
-  @Get()
+  @Get('current')
   @ApiOkResponse({
-    type: InfinityPaginationResponse(Cart),
+    type: Cart,
+    description: 'Get current Cart',
   })
-  async findAll(
-    @Query() query: FindAllCartsDto,
-  ): Promise<InfinityPaginationResponseDto<Cart>> {
-    const page = query?.page ?? 1;
-    let limit = query?.limit ?? 10;
-    if (limit > 50) {
-      limit = 50;
-    }
+  async findCurrentCart(): Promise<Cart> {
+    const listCarts = await this.cartsService.findAllWithPagination({
+      paginationOptions: {
+        page: 1,
+        limit: 1,
+      },
+    });
 
-    return infinityPagination(
-      await this.cartsService.findAllWithPagination({
-        paginationOptions: {
-          page,
-          limit,
+    if (listCarts.length === 0) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          cartId: 'cartEmpty',
         },
-      }),
-      { page, limit },
-    );
+      });
+    }
+    return listCarts[0];
   }
 
   @Get(':id')
@@ -83,7 +84,7 @@ export class CartsController {
     return this.cartsService.findById(id);
   }
 
-  @Patch(':id')
+  @Patch(':id/items')
   @ApiParam({
     name: 'id',
     type: String,
@@ -96,7 +97,7 @@ export class CartsController {
     return this.cartsService.update(id, updateCartDto);
   }
 
-  @Delete(':id')
+  // @Delete(':id')
   @ApiParam({
     name: 'id',
     type: String,

@@ -1,4 +1,5 @@
 import { CartProductMapper } from '../../../../../cart-products/infrastructure/persistence/relational/mappers/cart-product.mapper';
+
 import { Cart } from '../../../../domain/cart';
 
 import { UserMapper } from '../../../../../users/infrastructure/persistence/relational/mappers/user.mapper';
@@ -8,6 +9,8 @@ import { CartEntity } from '../entities/cart.entity';
 export class CartMapper {
   static toDomain(raw: CartEntity): Cart {
     const domainEntity = new Cart();
+    domainEntity.status = raw.status;
+
     if (raw.items) {
       domainEntity.items = raw.items.map((item) =>
         CartProductMapper.toDomain(item),
@@ -16,8 +19,8 @@ export class CartMapper {
       domainEntity.items = null;
     }
 
-    if (raw.userId) {
-      domainEntity.userId = UserMapper.toDomain(raw.userId);
+    if (raw.user) {
+      domainEntity.user = UserMapper.toDomain(raw.user);
     }
 
     domainEntity.id = raw.id;
@@ -29,6 +32,8 @@ export class CartMapper {
 
   static toPersistence(domainEntity: Cart): CartEntity {
     const persistenceEntity = new CartEntity();
+    persistenceEntity.status = domainEntity.status;
+
     if (domainEntity.items) {
       persistenceEntity.items = domainEntity.items.map((item) =>
         CartProductMapper.toPersistence(item),
@@ -37,8 +42,8 @@ export class CartMapper {
       persistenceEntity.items = null;
     }
 
-    if (domainEntity.userId) {
-      persistenceEntity.userId = UserMapper.toPersistence(domainEntity.userId);
+    if (domainEntity.user) {
+      persistenceEntity.user = UserMapper.toPersistence(domainEntity.user);
     }
 
     if (domainEntity.id) {

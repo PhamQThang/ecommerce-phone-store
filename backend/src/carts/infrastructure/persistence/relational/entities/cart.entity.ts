@@ -3,6 +3,7 @@ import { CartProductEntity } from '../../../../../cart-products/infrastructure/p
 import { UserEntity } from '../../../../../users/infrastructure/persistence/relational/entities/user.entity';
 
 import {
+  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
@@ -17,15 +18,23 @@ import { EntityRelationalHelper } from '../../../../../utils/relational-entity-h
   name: 'cart',
 })
 export class CartEntity extends EntityRelationalHelper {
+  @Column({
+    nullable: true,
+    type: String,
+  })
+  status?: string | null;
+
   @OneToMany(() => CartProductEntity, (childEntity) => childEntity.cart, {
     eager: true,
     nullable: true,
+    cascade: true,
+    onUpdate: 'CASCADE',
   })
   items?: CartProductEntity[] | null;
 
   @OneToOne(() => UserEntity, { eager: true, nullable: false })
   @JoinColumn()
-  userId: UserEntity;
+  user: UserEntity;
 
   @PrimaryGeneratedColumn('uuid')
   id: string;

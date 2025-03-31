@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
-import { CartEntity } from '../entities/cart.entity';
+import { CartStatus } from 'src/carts/carts.type';
+import { In, Repository } from 'typeorm';
 import { NullableType } from '../../../../../utils/types/nullable.type';
+import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 import { Cart } from '../../../../domain/cart';
 import { CartRepository } from '../../cart.repository';
+import { CartEntity } from '../entities/cart.entity';
 import { CartMapper } from '../mappers/cart.mapper';
-import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 
 @Injectable()
 export class CartRelationalRepository implements CartRepository {
@@ -31,6 +32,12 @@ export class CartRelationalRepository implements CartRepository {
     const entities = await this.cartRepository.find({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,
       take: paginationOptions.limit,
+      where: {
+        status: CartStatus.IN_PROGRESS,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
     });
 
     return entities.map((entity) => CartMapper.toDomain(entity));

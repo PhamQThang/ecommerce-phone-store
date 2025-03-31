@@ -1,9 +1,15 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { CartProduct } from '../../cart-products/domain/cart-product';
 import { Product } from '../../products/domain/product';
 import { User } from '../../users/domain/user';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class Cart {
+  @ApiProperty({
+    type: () => String,
+    nullable: true,
+  })
+  status?: string | null;
+
   @ApiProperty({
     type: () => [CartProduct],
     nullable: true,
@@ -20,7 +26,7 @@ export class Cart {
     type: () => User,
     nullable: false,
   })
-  userId: User;
+  user: User;
 
   @ApiProperty({
     type: String,

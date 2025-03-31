@@ -25,5 +25,5 @@ export class UpdateOrderDto {
     type: String,
   })
   @Type(() => String)
-  userId?: string;
+  user?: string;
 }
