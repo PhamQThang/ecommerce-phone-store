@@ -19,6 +19,12 @@ import { EntityRelationalHelper } from '../../../../../utils/relational-entity-h
 export class OrderEntity extends EntityRelationalHelper {
   @Column({
     nullable: false,
+    type: String,
+  })
+  address: string;
+
+  @Column({
+    nullable: false,
     type: 'jsonb',
   })
   items: ProductEntity[];

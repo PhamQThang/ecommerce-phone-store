@@ -33,6 +33,7 @@ export class OrdersService {
   async create(createOrderDto: CreateOrderDto) {
     // Do not remove comment below.
     // <creating-property />
+
     const cartObject = await this.cartService.findById(createOrderDto.cartId);
     if (!cartObject) {
       throw new UnprocessableEntityException({
@@ -68,6 +69,8 @@ export class OrdersService {
     return this.orderRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      address: createOrderDto.address,
+
       items,
 
       user,
@@ -102,6 +105,7 @@ export class OrdersService {
   ) {
     // Do not remove comment below.
     // <updating-property />
+
     let items: Product[] | undefined = undefined;
 
     if (updateOrderDto.items) {
@@ -137,6 +141,8 @@ export class OrdersService {
     return this.orderRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
+      address: updateOrderDto.address,
+
       items,
 
       user,

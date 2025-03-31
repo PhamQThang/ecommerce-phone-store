@@ -17,6 +17,12 @@ export class User {
     type: () => String,
     nullable: true,
   })
+  address?: string | null;
+
+  @ApiProperty({
+    type: () => String,
+    nullable: true,
+  })
   phoneNumber?: string | null;
 
   @ApiProperty({

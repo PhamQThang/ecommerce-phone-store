@@ -4,6 +4,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class Order {
   @ApiProperty({
+    type: () => String,
+    nullable: false,
+  })
+  address: string;
+
+  @ApiProperty({
     type: () => [Product],
     nullable: false,
   })

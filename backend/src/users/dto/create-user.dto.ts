@@ -24,6 +24,14 @@ export class CreateUserDto {
   })
   @IsOptional()
   @IsString()
+  address?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => String,
+  })
+  @IsOptional()
+  @IsString()
   phoneNumber?: string | null;
 
   @ApiProperty({ example: 'test1@example.com', type: String })

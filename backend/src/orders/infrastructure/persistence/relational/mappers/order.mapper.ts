@@ -1,4 +1,5 @@
 import { Order } from '../../../../domain/order';
+
 import { ProductMapper } from '../../../../../products/infrastructure/persistence/relational/mappers/product.mapper';
 
 import { UserMapper } from '../../../../../users/infrastructure/persistence/relational/mappers/user.mapper';
@@ -8,6 +9,8 @@ import { OrderEntity } from '../entities/order.entity';
 export class OrderMapper {
   static toDomain(raw: OrderEntity): Order {
     const domainEntity = new Order();
+    domainEntity.address = raw.address;
+
     if (raw.items) {
       domainEntity.items = raw.items.map((item) =>
         ProductMapper.toDomain(item),
@@ -27,6 +30,8 @@ export class OrderMapper {
 
   static toPersistence(domainEntity: Order): OrderEntity {
     const persistenceEntity = new OrderEntity();
+    persistenceEntity.address = domainEntity.address;
+
     if (domainEntity.items) {
       persistenceEntity.items = domainEntity.items.map((item) =>
         ProductMapper.toPersistence(item),

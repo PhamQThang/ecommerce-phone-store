@@ -7,6 +7,7 @@ import {
   // decorators here
 
   IsNotEmpty,
+  IsString,
 } from 'class-validator';
 
 import {
@@ -15,6 +16,13 @@ import {
 } from '@nestjs/swagger';
 
 export class CreateOrderDto {
+  @ApiProperty({
+    required: true,
+    type: () => String,
+  })
+  @IsString()
+  address: string;
+
   @ApiProperty({
     required: true,
     type: String,

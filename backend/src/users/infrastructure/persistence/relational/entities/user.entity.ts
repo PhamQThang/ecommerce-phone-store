@@ -25,6 +25,12 @@ export class UserEntity extends EntityRelationalHelper {
     nullable: true,
     type: String,
   })
+  address?: string | null;
+
+  @Column({
+    nullable: true,
+    type: String,
+  })
   phoneNumber?: string | null;
 
   @PrimaryGeneratedColumn()
