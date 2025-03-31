@@ -16,6 +16,8 @@ import {
 } from '@nestjs/swagger';
 
 export class CreateOrderDto {
+  status?: string;
+
   @ApiProperty({
     required: true,
     type: () => String,

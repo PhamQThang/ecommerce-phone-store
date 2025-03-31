@@ -16,6 +16,7 @@ import { Order } from './domain/order';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderRepository } from './infrastructure/persistence/order.repository';
+import { OrderStatus } from './orders.type';
 
 @Injectable()
 export class OrdersService {
@@ -69,6 +70,8 @@ export class OrdersService {
     return this.orderRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      status: createOrderDto.status || OrderStatus.PENDING,
+
       address: createOrderDto.address,
 
       items,
@@ -141,6 +144,8 @@ export class OrdersService {
     return this.orderRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
+      status: updateOrderDto.status,
+
       address: updateOrderDto.address,
 
       items,

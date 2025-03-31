@@ -9,6 +9,8 @@ import { OrderEntity } from '../entities/order.entity';
 export class OrderMapper {
   static toDomain(raw: OrderEntity): Order {
     const domainEntity = new Order();
+    domainEntity.status = raw.status;
+
     domainEntity.address = raw.address;
 
     if (raw.items) {
@@ -30,6 +32,8 @@ export class OrderMapper {
 
   static toPersistence(domainEntity: Order): OrderEntity {
     const persistenceEntity = new OrderEntity();
+    persistenceEntity.status = domainEntity.status;
+
     persistenceEntity.address = domainEntity.address;
 
     if (domainEntity.items) {

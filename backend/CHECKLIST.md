@@ -1,7 +1,7 @@
 | Task Name | Status | Description |
 |-----------|--------|-------------|
 | Quản lý sản phẩm (bao gồm số lượng sản phẩm sẵn bán, thông tin sản phẩm) | ✅ |  |
-| Quản lý nhập hàng (sẽ cộng số lượng sản phẩm sau khi nhập hàng và IMEI sản phẩm. Ví dụ mua 5 chiếc iPhone 6 64GB đen thì sẽ thêm 5 IMEI) | ☐ |  |
+| Quản lý nhập hàng (sẽ cộng số lượng sản phẩm sau khi nhập hàng và IMEI sản phẩm. Ví dụ mua 5 chiếc iPhone 6 64GB đen thì sẽ thêm 5 IMEI) | ✅ |  |
 | Quản lý giỏ hàng | ✅ |  |
 | Quản lý đơn hàng (bao gồm của người dùng và của admin) | ☐ |  |
 | Quản lý bảo hành (check bảo hành IMEI của sản phẩm) | ☐ |  |

@@ -21,6 +21,12 @@ export class OrderEntity extends EntityRelationalHelper {
     nullable: false,
     type: String,
   })
+  status?: string;
+
+  @Column({
+    nullable: false,
+    type: String,
+  })
   address: string;
 
   @Column({
