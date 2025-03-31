@@ -2,8 +2,6 @@ import { ProductModelDto } from '../../product-models/dto/product-model.dto';
 
 import { ProductIdentityDto } from '../../product-identities/dto/product-identity.dto';
 
-import { ProductImageDto } from '../../product-images/dto/product-image.dto';
-
 import { BrandDto } from '../../brands/dto/brand.dto';
 
 import {
@@ -95,13 +93,13 @@ export class CreateProductDto {
 
   @ApiProperty({
     required: false,
-    type: () => [ProductImageDto],
+    type: () => [String],
   })
   @IsOptional()
   @ValidateNested()
-  @Type(() => ProductImageDto)
+  @Type(() => Array<string>)
   @IsArray()
-  images?: ProductImageDto[] | null;
+  images?: string[] | null;
 
   @ApiProperty({
     required: true,

@@ -1,4 +1,3 @@
-import { ProductModelsModule } from '../product-models/product-models.module';
 import {
   // common
   Module,
@@ -6,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { BrandsModule } from '../brands/brands.module';
 import { ProductIdentitiesModule } from '../product-identities/product-identities.module';
-import { ProductImagesModule } from '../product-images/product-images.module';
+import { ProductModelsModule } from '../product-models/product-models.module';
 import { RelationalProductPersistenceModule } from './infrastructure/persistence/relational/relational-persistence.module';
 import { ProductsController } from './products.controller';
 import { ProductsService } from './products.service';
@@ -16,8 +15,6 @@ import { ProductsService } from './products.service';
     ProductModelsModule,
 
     forwardRef(() => ProductIdentitiesModule),
-
-    forwardRef(() => ProductImagesModule),
 
     BrandsModule,
 

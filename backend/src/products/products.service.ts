@@ -4,9 +4,6 @@ import { ProductModelsService } from '../product-models/product-models.service';
 import { ProductIdentity } from '../product-identities/domain/product-identity';
 import { ProductIdentitiesService } from '../product-identities/product-identities.service';
 
-import { ProductImage } from '../product-images/domain/product-image';
-import { ProductImagesService } from '../product-images/product-images.service';
-
 import { BrandsService } from '../brands/brands.service';
 import { Brand } from '../brands/domain/brand';
 
@@ -31,9 +28,6 @@ export class ProductsService {
 
     @Inject(forwardRef(() => ProductIdentitiesService))
     private readonly productIdentityService: ProductIdentitiesService,
-
-    @Inject(forwardRef(() => ProductImagesService))
-    private readonly productImageService: ProductImagesService,
 
     private readonly brandService: BrandsService,
 
@@ -76,25 +70,6 @@ export class ProductsService {
       identities = null;
     }
 
-    let images: ProductImage[] | null | undefined = undefined;
-
-    if (createProductDto.images) {
-      const imagesObjects = await this.productImageService.findByIds(
-        createProductDto.images.map((entity) => entity.id),
-      );
-      if (imagesObjects.length !== createProductDto.images.length) {
-        throw new UnprocessableEntityException({
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: {
-            images: 'notExists',
-          },
-        });
-      }
-      images = imagesObjects;
-    } else if (createProductDto.images === null) {
-      images = null;
-    }
-
     const brandObject = await this.brandService.findById(
       createProductDto.brand.id,
     );
@@ -126,7 +101,7 @@ export class ProductsService {
       os: createProductDto.os,
 
       identities,
-      images,
+      images: createProductDto.images,
 
       storage: createProductDto.storage,
 
@@ -204,25 +179,6 @@ export class ProductsService {
       identities = null;
     }
 
-    let images: ProductImage[] | null | undefined = undefined;
-
-    if (updateProductDto.images) {
-      const imagesObjects = await this.productImageService.findByIds(
-        updateProductDto.images.map((entity) => entity.id),
-      );
-      if (imagesObjects.length !== updateProductDto.images.length) {
-        throw new UnprocessableEntityException({
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: {
-            images: 'notExists',
-          },
-        });
-      }
-      images = imagesObjects;
-    } else if (updateProductDto.images === null) {
-      images = null;
-    }
-
     let brand: Brand | undefined = undefined;
 
     if (updateProductDto.brand) {
@@ -259,7 +215,7 @@ export class ProductsService {
 
       identities,
 
-      images,
+      images: updateProductDto.images,
 
       storage: updateProductDto.storage,
 

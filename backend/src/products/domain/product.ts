@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Brand } from '../../brands/domain/brand';
 import { ProductIdentity } from '../../product-identities/domain/product-identity';
-import { ProductImage } from '../../product-images/domain/product-image';
 import { ProductModel } from '../../product-models/domain/product-model';
 import { ProductStatus } from '../product.type';
 
@@ -67,10 +66,10 @@ export class Product {
   identities?: ProductIdentity[] | null;
 
   @ApiProperty({
-    type: () => [ProductImage],
+    type: () => [String],
     nullable: true,
   })
-  images?: ProductImage[] | null;
+  images?: string[] | null;
 
   @ApiProperty({
     type: () => Number,

@@ -26,4 +26,10 @@ export class UpdateOrderDto {
   })
   @Type(() => String)
   user?: string;
+
+  @ApiProperty({
+    type: String,
+  })
+  @Type(() => String)
+  address?: string;
 }

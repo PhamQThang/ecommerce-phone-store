@@ -2,10 +2,6 @@ import { ProductModelEntity } from '../../../../../product-models/infrastructure
 
 import { ProductIdentityEntity } from '../../../../../product-identities/infrastructure/persistence/relational/entities/product-identity.entity';
 
-import { ProductImageEntity } from '../../../../../product-images/infrastructure/persistence/relational/entities/product-image.entity';
-
-import { BrandEntity } from '../../../../../brands/infrastructure/persistence/relational/entities/brand.entity';
-
 import {
   Column,
   CreateDateColumn,
@@ -67,11 +63,11 @@ export class ProductEntity extends EntityRelationalHelper {
   )
   identities?: ProductIdentityEntity[] | null;
 
-  @OneToMany(() => ProductImageEntity, (childEntity) => childEntity.product, {
-    eager: true,
+  @Column({
     nullable: true,
+    type: 'jsonb',
   })
-  images?: ProductImageEntity[] | null;
+  images?: string[] | null;
 
   @Column({
     nullable: false,
@@ -91,9 +87,6 @@ export class ProductEntity extends EntityRelationalHelper {
     unique: true,
   })
   slug: string;
-
-  @ManyToOne(() => BrandEntity, { eager: true, nullable: false })
-  brand: BrandEntity;
 
   @Column({
     nullable: false,

@@ -3,10 +3,6 @@ import { Product } from '../../../../domain/product';
 
 import { ProductIdentityMapper } from '../../../../../product-identities/infrastructure/persistence/relational/mappers/product-identity.mapper';
 
-import { ProductImageMapper } from '../../../../../product-images/infrastructure/persistence/relational/mappers/product-image.mapper';
-
-import { BrandMapper } from '../../../../../brands/infrastructure/persistence/relational/mappers/brand.mapper';
-
 import { ItemStatus, ProductStatus } from '../../../../product.type';
 import { ProductEntity } from '../entities/product.entity';
 
@@ -64,24 +60,13 @@ export class ProductMapper {
       domainEntity.status = ProductStatus.OUT_OF_STOCK;
       domainEntity.quantity = 0;
     }
-
-    if (raw.images) {
-      domainEntity.images = raw.images.map((item) =>
-        ProductImageMapper.toDomain(item),
-      );
-    } else if (raw.images === null) {
-      domainEntity.images = null;
-    }
+    domainEntity.images = raw.images;
 
     domainEntity.storage = raw.storage;
 
     domainEntity.ram = raw.ram;
 
     domainEntity.slug = raw.slug;
-
-    if (raw.brand) {
-      domainEntity.brand = BrandMapper.toDomain(raw.brand);
-    }
 
     domainEntity.name = raw.name;
 
@@ -120,23 +105,13 @@ export class ProductMapper {
       persistenceEntity.identities = null;
     }
 
-    if (domainEntity.images) {
-      persistenceEntity.images = domainEntity.images.map((item) =>
-        ProductImageMapper.toPersistence(item),
-      );
-    } else if (domainEntity.images === null) {
-      persistenceEntity.images = null;
-    }
+    persistenceEntity.images = domainEntity.images;
 
     persistenceEntity.storage = domainEntity.storage;
 
     persistenceEntity.ram = domainEntity.ram;
 
     persistenceEntity.slug = domainEntity.slug;
-
-    if (domainEntity.brand) {
-      persistenceEntity.brand = BrandMapper.toPersistence(domainEntity.brand);
-    }
 
     persistenceEntity.name = domainEntity.name;
 
