@@ -1,4 +1,4 @@
-import { SupplierEntity } from '../../../../../suppliers/infrastructure/persistence/relational/entities/supplier.entity';
+import { PurchaseOrderEntity } from '../../../../../purchase-orders/infrastructure/persistence/relational/entities/purchase-order.entity';
 
 import { ColorEntity } from '../../../../../colors/infrastructure/persistence/relational/entities/color.entity';
 
@@ -21,11 +21,11 @@ import { EntityRelationalHelper } from '../../../../../utils/relational-entity-h
 })
 export class ProductIdentityEntity extends EntityRelationalHelper {
   @ManyToOne(
-    () => SupplierEntity,
-    (parentEntity) => parentEntity.productIdentity,
+    () => PurchaseOrderEntity,
+    (parentEntity) => parentEntity.productIdentites,
     { eager: false, nullable: true },
   )
-  supplier?: SupplierEntity;
+  purchaseOrder: PurchaseOrderEntity;
 
   @OneToOne(() => ColorEntity, { eager: true, nullable: false })
   @JoinColumn()

@@ -1,3 +1,5 @@
+import { ProductIdentityDto } from '../../product-identities/dto/product-identity.dto';
+
 import { SupplierDto } from '../../suppliers/dto/supplier.dto';
 
 import {
@@ -10,6 +12,8 @@ import {
 
   ValidateNested,
   IsNotEmptyObject,
+  IsArray,
+  IsOptional,
 } from 'class-validator';
 
 import {
@@ -18,6 +22,16 @@ import {
 } from '@nestjs/swagger';
 
 export class CreatePurchaseOrderDto {
+  @ApiProperty({
+    required: false,
+    type: () => [ProductIdentityDto],
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ProductIdentityDto)
+  @IsArray()
+  productIdentites?: ProductIdentityDto[] | null;
+
   @ApiProperty({
     required: true,
     type: () => SupplierDto,

@@ -1,3 +1,5 @@
+import { ProductIdentityEntity } from '../../../../../product-identities/infrastructure/persistence/relational/entities/product-identity.entity';
+
 import { SupplierEntity } from '../../../../../suppliers/infrastructure/persistence/relational/entities/supplier.entity';
 
 import {
@@ -7,6 +9,7 @@ import {
   UpdateDateColumn,
   JoinColumn,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
 import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
 
@@ -14,6 +17,13 @@ import { EntityRelationalHelper } from '../../../../../utils/relational-entity-h
   name: 'purchase_order',
 })
 export class PurchaseOrderEntity extends EntityRelationalHelper {
+  @OneToMany(
+    () => ProductIdentityEntity,
+    (childEntity) => childEntity.purchaseOrder,
+    { eager: true, nullable: true },
+  )
+  productIdentites?: ProductIdentityEntity[] | null;
+
   @OneToOne(() => SupplierEntity, { eager: true, nullable: false })
   @JoinColumn()
   supplier: SupplierEntity;

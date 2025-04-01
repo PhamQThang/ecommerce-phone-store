@@ -1,17 +1,13 @@
-import { ProductIdentitiesModule } from '../product-identities/product-identities.module';
 import {
   // common
   Module,
-  forwardRef,
 } from '@nestjs/common';
-import { SuppliersService } from './suppliers.service';
-import { SuppliersController } from './suppliers.controller';
 import { RelationalSupplierPersistenceModule } from './infrastructure/persistence/relational/relational-persistence.module';
+import { SuppliersController } from './suppliers.controller';
+import { SuppliersService } from './suppliers.service';
 
 @Module({
   imports: [
-    forwardRef(() => ProductIdentitiesModule),
-
     // import modules, etc.
     RelationalSupplierPersistenceModule,
   ],

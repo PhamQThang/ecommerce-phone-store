@@ -1,13 +1,6 @@
-import { ProductIdentity } from '../../product-identities/domain/product-identity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class Supplier {
-  @ApiProperty({
-    type: () => [ProductIdentity],
-    nullable: true,
-  })
-  productIdentity?: ProductIdentity[] | null;
-
   @ApiProperty({
     type: () => String,
     nullable: true,

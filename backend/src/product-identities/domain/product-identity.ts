@@ -1,9 +1,16 @@
+import { PurchaseOrder } from '../../purchase-orders/domain/purchase-order';
 import { Supplier } from '../../suppliers/domain/supplier';
 import { Color } from '../../colors/domain/color';
 import { Product } from '../../products/domain/product';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ProductIdentity {
+  @ApiProperty({
+    type: () => PurchaseOrder,
+    nullable: false,
+  })
+  purchaseOrder: PurchaseOrder;
+
   @ApiProperty({
     type: () => Supplier,
     nullable: false,

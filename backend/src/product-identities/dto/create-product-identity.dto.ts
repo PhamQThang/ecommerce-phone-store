@@ -1,4 +1,4 @@
-import { SupplierDto } from '../../suppliers/dto/supplier.dto';
+import { PurchaseOrderDto } from '../../purchase-orders/dto/purchase-order.dto';
 
 import { ColorDto } from '../../colors/dto/color.dto';
 
@@ -24,10 +24,13 @@ import {
 
 export class CreateProductIdentityDto {
   @ApiProperty({
-    required: false,
-    type: () => SupplierDto,
+    required: true,
+    type: () => PurchaseOrderDto,
   })
-  supplier?: SupplierDto;
+  @ValidateNested()
+  @Type(() => PurchaseOrderDto)
+  @IsNotEmptyObject()
+  purchaseOrder: PurchaseOrderDto;
 
   @ApiProperty({
     required: true,

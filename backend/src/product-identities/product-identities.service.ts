@@ -1,30 +1,30 @@
-import { SuppliersService } from '../suppliers/suppliers.service';
-import { Supplier } from '../suppliers/domain/supplier';
+import { PurchaseOrder } from '../purchase-orders/domain/purchase-order';
+import { PurchaseOrdersService } from '../purchase-orders/purchase-orders.service';
 
 import { ColorsService } from '../colors/colors.service';
 import { Color } from '../colors/domain/color';
 
-import { ProductsService } from '../products/products.service';
 import {
+  HttpStatus,
+  Inject,
   // common
   Injectable,
-  HttpStatus,
   UnprocessableEntityException,
-  Inject,
   forwardRef,
 } from '@nestjs/common';
+import { Product } from '../products/domain/product';
+import { ProductsService } from '../products/products.service';
+import { IPaginationOptions } from '../utils/types/pagination-options';
+import { ProductIdentity } from './domain/product-identity';
 import { CreateProductIdentityDto } from './dto/create-product-identity.dto';
 import { UpdateProductIdentityDto } from './dto/update-product-identity.dto';
 import { ProductIdentityRepository } from './infrastructure/persistence/product-identity.repository';
-import { IPaginationOptions } from '../utils/types/pagination-options';
-import { ProductIdentity } from './domain/product-identity';
-import { Product } from '../products/domain/product';
 
 @Injectable()
 export class ProductIdentitiesService {
   constructor(
-    @Inject(forwardRef(() => SuppliersService))
-    private readonly supplierService: SuppliersService,
+    @Inject(forwardRef(() => PurchaseOrdersService))
+    private readonly purchaseOrderService: PurchaseOrdersService,
 
     private readonly colorService: ColorsService,
 
@@ -38,22 +38,18 @@ export class ProductIdentitiesService {
   async create(createProductIdentityDto: CreateProductIdentityDto) {
     // Do not remove comment below.
     // <creating-property />
-    let supplier: Supplier | undefined = undefined;
-
-    if (createProductIdentityDto.supplier) {
-      const supplierObject = await this.supplierService.findById(
-        createProductIdentityDto.supplier.id,
-      );
-      if (!supplierObject) {
-        throw new UnprocessableEntityException({
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: {
-            supplier: 'notExists',
-          },
-        });
-      }
-      supplier = supplierObject;
+    const purchaseOrderObject = await this.purchaseOrderService.findById(
+      createProductIdentityDto.purchaseOrder.id,
+    );
+    if (!purchaseOrderObject) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          purchaseOrder: 'notExists',
+        },
+      });
     }
+    const purchaseOrder = purchaseOrderObject;
 
     const colorObject = await this.colorService.findById(
       createProductIdentityDto.color.id,
@@ -84,7 +80,7 @@ export class ProductIdentitiesService {
     return this.productentityRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
-      supplier,
+      purchaseOrder,
 
       color,
 
@@ -124,21 +120,21 @@ export class ProductIdentitiesService {
   ) {
     // Do not remove comment below.
     // <updating-property />
-    let supplier: Supplier | undefined = undefined;
+    let purchaseOrder: PurchaseOrder | undefined = undefined;
 
-    if (updateProductIdentityDto.supplier) {
-      const supplierObject = await this.supplierService.findById(
-        updateProductIdentityDto.supplier.id,
+    if (updateProductIdentityDto.purchaseOrder) {
+      const purchaseOrderObject = await this.purchaseOrderService.findById(
+        updateProductIdentityDto.purchaseOrder.id,
       );
-      if (!supplierObject) {
+      if (!purchaseOrderObject) {
         throw new UnprocessableEntityException({
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errors: {
-            supplier: 'notExists',
+            purchaseOrder: 'notExists',
           },
         });
       }
-      supplier = supplierObject;
+      purchaseOrder = purchaseOrderObject;
     }
 
     let color: Color | undefined = undefined;
@@ -178,7 +174,7 @@ export class ProductIdentitiesService {
     return this.productentityRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
-      supplier,
+      purchaseOrder,
 
       color,
 

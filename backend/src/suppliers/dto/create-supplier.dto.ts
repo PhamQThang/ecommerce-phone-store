@@ -1,10 +1,7 @@
-import { ProductIdentityDto } from '../../product-identities/dto/product-identity.dto';
-
 import {
-  // decorators here
-
-  IsString,
   IsOptional,
+  // decorators here
+  IsString,
 } from 'class-validator';
 
 import {
@@ -13,8 +10,6 @@ import {
 } from '@nestjs/swagger';
 
 export class CreateSupplierDto {
-  productIdentity?: ProductIdentityDto[] | null;
-
   @ApiProperty({
     required: false,
     type: () => String,
