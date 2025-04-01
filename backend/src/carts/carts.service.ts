@@ -128,7 +128,7 @@ export class CartsService {
       }
       return item;
     });
-    console.log(cart.items, 'lsdfjlfddsfjlj');
+    cart.items = cart.items?.filter((item) => item.quantity > 0);
 
     const color = await this.colorService.findById(updateCartDto.colorId);
     if (!color) {
