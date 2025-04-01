@@ -62,8 +62,11 @@ import { SuppliersModule } from './suppliers/suppliers.module';
 
 import { PurchaseOrdersModule } from './purchase-orders/purchase-orders.module';
 
+import { BlogsModule } from './blogs/blogs.module';
+
 @Module({
   imports: [
+    BlogsModule,
     PurchaseOrdersModule,
     SuppliersModule,
     ProductModelsModule,
