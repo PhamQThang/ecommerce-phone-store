@@ -52,8 +52,10 @@ export class CartsController {
     type: Cart,
     description: 'Get current Cart',
   })
-  async findCurrentCart(): Promise<Cart> {
-    const listCarts = await this.cartsService.findAllWithPagination({
+  async findCurrentCart(@Request() request): Promise<Cart> {
+    const userId = request.user.id;
+
+    const listCarts = await this.cartsService.findAllWithPagination(userId, {
       paginationOptions: {
         page: 1,
         limit: 1,

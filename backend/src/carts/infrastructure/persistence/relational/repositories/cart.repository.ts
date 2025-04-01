@@ -24,16 +24,22 @@ export class CartRelationalRepository implements CartRepository {
     return CartMapper.toDomain(newEntity);
   }
 
-  async findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }): Promise<Cart[]> {
+  async findAllWithPagination(
+    userId: string,
+    {
+      paginationOptions,
+    }: {
+      paginationOptions: IPaginationOptions;
+    },
+  ): Promise<Cart[]> {
     const entities = await this.cartRepository.find({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,
       take: paginationOptions.limit,
       where: {
         status: CartStatus.IN_PROGRESS,
+        user: {
+          id: userId,
+        } as any,
       },
       order: {
         createdAt: 'DESC',

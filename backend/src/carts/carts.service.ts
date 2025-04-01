@@ -80,12 +80,15 @@ export class CartsService {
     });
   }
 
-  findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }) {
-    return this.cartRepository.findAllWithPagination({
+  findAllWithPagination(
+    userId: string,
+    {
+      paginationOptions,
+    }: {
+      paginationOptions: IPaginationOptions;
+    },
+  ) {
+    return this.cartRepository.findAllWithPagination(userId, {
       paginationOptions: {
         page: paginationOptions.page,
         limit: paginationOptions.limit,

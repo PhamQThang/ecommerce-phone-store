@@ -8,11 +8,14 @@ export abstract class CartRepository {
     data: Omit<Cart, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<Cart>;
 
-  abstract findAllWithPagination({
-    paginationOptions,
-  }: {
-    paginationOptions: IPaginationOptions;
-  }): Promise<Cart[]>;
+  abstract findAllWithPagination(
+    userId: string,
+    {
+      paginationOptions,
+    }: {
+      paginationOptions: IPaginationOptions;
+    },
+  ): Promise<Cart[]>;
 
   abstract findById(id: Cart['id']): Promise<NullableType<Cart>>;
 
