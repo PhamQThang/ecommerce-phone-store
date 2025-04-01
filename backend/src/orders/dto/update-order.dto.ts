@@ -32,4 +32,10 @@ export class UpdateOrderDto {
   })
   @Type(() => String)
   address?: string;
+
+  @ApiProperty({
+    type: String,
+  })
+  @Type(() => String)
+  status?: string;
 }
