@@ -2,8 +2,6 @@ import { ProductModelDto } from '../../product-models/dto/product-model.dto';
 
 import { ProductIdentityDto } from '../../product-identities/dto/product-identity.dto';
 
-import { BrandDto } from '../../brands/dto/brand.dto';
-
 import {
   IsArray,
   IsNotEmptyObject,
@@ -121,15 +119,6 @@ export class CreateProductDto {
   })
   @IsString()
   slug: string;
-
-  @ApiProperty({
-    required: true,
-    type: () => BrandDto,
-  })
-  @ValidateNested()
-  @Type(() => BrandDto)
-  @IsNotEmptyObject()
-  brand: BrandDto;
 
   @ApiProperty({
     required: true,

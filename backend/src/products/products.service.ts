@@ -5,7 +5,6 @@ import { ProductIdentity } from '../product-identities/domain/product-identity';
 import { ProductIdentitiesService } from '../product-identities/product-identities.service';
 
 import { BrandsService } from '../brands/brands.service';
-import { Brand } from '../brands/domain/brand';
 
 import {
   HttpStatus,
@@ -70,19 +69,6 @@ export class ProductsService {
       identities = null;
     }
 
-    const brandObject = await this.brandService.findById(
-      createProductDto.brand.id,
-    );
-    if (!brandObject) {
-      throw new UnprocessableEntityException({
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: {
-          brand: 'notExists',
-        },
-      });
-    }
-    const brand = brandObject;
-
     return this.productRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
@@ -108,8 +94,6 @@ export class ProductsService {
       ram: createProductDto.ram,
 
       slug: createProductDto.slug,
-
-      brand,
 
       name: createProductDto.name,
     });
@@ -179,23 +163,6 @@ export class ProductsService {
       identities = null;
     }
 
-    let brand: Brand | undefined = undefined;
-
-    if (updateProductDto.brand) {
-      const brandObject = await this.brandService.findById(
-        updateProductDto.brand.id,
-      );
-      if (!brandObject) {
-        throw new UnprocessableEntityException({
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: {
-            brand: 'notExists',
-          },
-        });
-      }
-      brand = brandObject;
-    }
-
     return this.productRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
@@ -222,8 +189,6 @@ export class ProductsService {
       ram: updateProductDto.ram,
 
       slug: updateProductDto.slug,
-
-      brand,
 
       name: updateProductDto.name,
     });
