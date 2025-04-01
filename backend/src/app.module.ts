@@ -58,8 +58,11 @@ import { CartProductsModule } from './cart-products/cart-products.module';
 
 import { ProductModelsModule } from './product-models/product-models.module';
 
+import { SuppliersModule } from './suppliers/suppliers.module';
+
 @Module({
   imports: [
+    SuppliersModule,
     ProductModelsModule,
     CartProductsModule,
     OrdersModule,

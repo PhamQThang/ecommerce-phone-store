@@ -1,3 +1,6 @@
+import { SuppliersService } from '../suppliers/suppliers.service';
+import { Supplier } from '../suppliers/domain/supplier';
+
 import { ColorsService } from '../colors/colors.service';
 import { Color } from '../colors/domain/color';
 
@@ -20,6 +23,9 @@ import { Product } from '../products/domain/product';
 @Injectable()
 export class ProductIdentitiesService {
   constructor(
+    @Inject(forwardRef(() => SuppliersService))
+    private readonly supplierService: SuppliersService,
+
     private readonly colorService: ColorsService,
 
     @Inject(forwardRef(() => ProductsService))
@@ -32,6 +38,23 @@ export class ProductIdentitiesService {
   async create(createProductIdentityDto: CreateProductIdentityDto) {
     // Do not remove comment below.
     // <creating-property />
+    let supplier: Supplier | undefined = undefined;
+
+    if (createProductIdentityDto.supplier) {
+      const supplierObject = await this.supplierService.findById(
+        createProductIdentityDto.supplier.id,
+      );
+      if (!supplierObject) {
+        throw new UnprocessableEntityException({
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            supplier: 'notExists',
+          },
+        });
+      }
+      supplier = supplierObject;
+    }
+
     const colorObject = await this.colorService.findById(
       createProductIdentityDto.color.id,
     );
@@ -61,6 +84,8 @@ export class ProductIdentitiesService {
     return this.productentityRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      supplier,
+
       color,
 
       product,
@@ -99,6 +124,23 @@ export class ProductIdentitiesService {
   ) {
     // Do not remove comment below.
     // <updating-property />
+    let supplier: Supplier | undefined = undefined;
+
+    if (updateProductIdentityDto.supplier) {
+      const supplierObject = await this.supplierService.findById(
+        updateProductIdentityDto.supplier.id,
+      );
+      if (!supplierObject) {
+        throw new UnprocessableEntityException({
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            supplier: 'notExists',
+          },
+        });
+      }
+      supplier = supplierObject;
+    }
+
     let color: Color | undefined = undefined;
 
     if (updateProductIdentityDto.color) {
@@ -136,6 +178,8 @@ export class ProductIdentitiesService {
     return this.productentityRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
+      supplier,
+
       color,
 
       product,

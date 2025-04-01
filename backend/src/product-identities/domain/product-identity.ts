@@ -1,8 +1,15 @@
+import { Supplier } from '../../suppliers/domain/supplier';
 import { Color } from '../../colors/domain/color';
 import { Product } from '../../products/domain/product';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ProductIdentity {
+  @ApiProperty({
+    type: () => Supplier,
+    nullable: false,
+  })
+  supplier?: Supplier;
+
   @ApiProperty({
     type: () => Color,
     nullable: false,

@@ -1,14 +1,15 @@
+import { SupplierDto } from '../../suppliers/dto/supplier.dto';
+
 import { ColorDto } from '../../colors/dto/color.dto';
 
 import { ProductDto } from '../../products/dto/product.dto';
 
 import {
-  // decorators here
-
-  IsString,
-  IsOptional,
-  ValidateNested,
   IsNotEmptyObject,
+  IsOptional,
+  // decorators here
+  IsString,
+  ValidateNested,
 } from 'class-validator';
 
 import {
@@ -22,6 +23,12 @@ import {
 } from 'class-transformer';
 
 export class CreateProductIdentityDto {
+  @ApiProperty({
+    required: false,
+    type: () => SupplierDto,
+  })
+  supplier?: SupplierDto;
+
   @ApiProperty({
     required: true,
     type: () => ColorDto,

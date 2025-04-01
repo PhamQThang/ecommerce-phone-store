@@ -1,3 +1,4 @@
+import { SuppliersModule } from '../suppliers/suppliers.module';
 import { ColorsModule } from '../colors/colors.module';
 import { ProductsModule } from '../products/products.module';
 import {
@@ -11,6 +12,8 @@ import { RelationalProductIdentityPersistenceModule } from './infrastructure/per
 
 @Module({
   imports: [
+    forwardRef(() => SuppliersModule),
+
     ColorsModule,
 
     forwardRef(() => ProductsModule),

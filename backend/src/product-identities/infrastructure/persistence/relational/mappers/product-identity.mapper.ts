@@ -1,4 +1,6 @@
 import { ProductIdentity } from '../../../../domain/product-identity';
+import { SupplierMapper } from '../../../../../suppliers/infrastructure/persistence/relational/mappers/supplier.mapper';
+
 import { ColorMapper } from '../../../../../colors/infrastructure/persistence/relational/mappers/color.mapper';
 
 import { ProductMapper } from '../../../../../products/infrastructure/persistence/relational/mappers/product.mapper';
@@ -8,6 +10,10 @@ import { ProductIdentityEntity } from '../entities/product-identity.entity';
 export class ProductIdentityMapper {
   static toDomain(raw: ProductIdentityEntity): ProductIdentity {
     const domainEntity = new ProductIdentity();
+    if (raw.supplier) {
+      domainEntity.supplier = SupplierMapper.toDomain(raw.supplier);
+    }
+
     if (raw.color) {
       domainEntity.color = ColorMapper.toDomain(raw.color);
     }
@@ -29,6 +35,12 @@ export class ProductIdentityMapper {
 
   static toPersistence(domainEntity: ProductIdentity): ProductIdentityEntity {
     const persistenceEntity = new ProductIdentityEntity();
+    if (domainEntity.supplier) {
+      persistenceEntity.supplier = SupplierMapper.toPersistence(
+        domainEntity.supplier,
+      );
+    }
+
     if (domainEntity.color) {
       persistenceEntity.color = ColorMapper.toPersistence(domainEntity.color);
     }
