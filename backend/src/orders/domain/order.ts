@@ -1,6 +1,7 @@
 import { Product } from '../../products/domain/product';
 import { User } from '../../users/domain/user';
 import { ApiProperty } from '@nestjs/swagger';
+import { OrderProduct } from './order-product';
 
 export class Order {
   @ApiProperty({
@@ -16,10 +17,10 @@ export class Order {
   address: string;
 
   @ApiProperty({
-    type: () => [Product],
+    type: () => [OrderProduct],
     nullable: false,
   })
-  items: Product[];
+  items: OrderProduct[];
 
   @ApiProperty({
     type: () => User,

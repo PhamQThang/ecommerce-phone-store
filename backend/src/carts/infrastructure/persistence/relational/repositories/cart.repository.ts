@@ -57,9 +57,9 @@ export class CartRelationalRepository implements CartRepository {
     }
 
     const cart = CartMapper.toDomain(entities[0]);
-    const promotions = await this.promotionRepository.findPromotionsByProducts(
-      entities.map((entity) => entity.id),
-    );
+    const productIds = cart.items?.map((item) => item.product.id) || [];
+    const promotions =
+      await this.promotionRepository.findPromotionsByProducts(productIds);
 
     cart.items?.forEach((product) => {
       product.product.discount = promotions?.find((promotion) =>
@@ -74,7 +74,19 @@ export class CartRelationalRepository implements CartRepository {
       where: { id },
     });
 
-    return entity ? CartMapper.toDomain(entity) : null;
+    if (!entity) return null;
+    const cart = CartMapper.toDomain(entity);
+    const productIds = cart.items?.map((item) => item.product.id) || [];
+    const promotions =
+      await this.promotionRepository.findPromotionsByProducts(productIds);
+
+    cart.items?.forEach((product) => {
+      product.product.discount = promotions?.find((promotion) =>
+        promotion?.products?.some((item) => item.id === product.id),
+      )?.discount;
+    });
+
+    return cart;
   }
 
   async findByIds(ids: Cart['id'][]): Promise<Cart[]> {

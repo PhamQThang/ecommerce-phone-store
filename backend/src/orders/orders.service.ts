@@ -17,6 +17,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderRepository } from './infrastructure/persistence/order.repository';
 import { OrderStatus } from './orders.type';
+import { OrderProduct } from './domain/order-product';
 
 @Injectable()
 export class OrdersService {
@@ -45,8 +46,8 @@ export class OrdersService {
       });
     }
 
-    const itemsObjects = cartObject?.products || [];
-    if (itemsObjects.length === 0) {
+    const cartItems = cartObject?.items || [];
+    if (cartItems.length === 0) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
@@ -54,7 +55,16 @@ export class OrdersService {
         },
       });
     }
-    const items = itemsObjects;
+
+    const orderProduct = cartItems.map(
+      (item) =>
+        ({
+          basePrice: item.product.basePrice,
+          discount: item.product.discount,
+          quantity: item.quantity,
+          productId: item.product.id,
+        }) as OrderProduct,
+    );
 
     const userObject = await this.userService.findById(cartObject?.user.id);
     if (!userObject) {
@@ -74,7 +84,7 @@ export class OrdersService {
 
       address: createOrderDto.address,
 
-      items,
+      items: orderProduct,
 
       user,
     });

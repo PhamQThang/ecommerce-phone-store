@@ -12,6 +12,7 @@ import {
   Column,
 } from 'typeorm';
 import { EntityRelationalHelper } from '../../../../../utils/relational-entity-helper';
+import { OrderProduct } from 'src/orders/domain/order-product';
 
 @Entity({
   name: 'order',
@@ -33,7 +34,7 @@ export class OrderEntity extends EntityRelationalHelper {
     nullable: false,
     type: 'jsonb',
   })
-  items: ProductEntity[];
+  items: OrderProduct[];
 
   @OneToOne(() => UserEntity, { eager: true, nullable: false })
   @JoinColumn()

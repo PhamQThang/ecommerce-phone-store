@@ -17,12 +17,6 @@ export class Cart {
   items?: CartProduct[] | null;
 
   @ApiProperty({
-    type: () => [Product],
-    nullable: true,
-  })
-  products?: Product[] | null;
-
-  @ApiProperty({
     type: () => User,
     nullable: false,
   })
