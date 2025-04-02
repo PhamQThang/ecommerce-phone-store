@@ -27,10 +27,11 @@ import {
 } from '../utils/dto/infinity-pagination-response.dto';
 import { infinityPagination } from '../utils/infinity-pagination';
 import { FindAllPromotionsDto } from './dto/find-all-promotions.dto';
+import { RolesGuard } from 'src/roles/roles.guard';
+import { RoleEnum } from 'src/roles/roles.enum';
+import { Roles } from 'src/roles/roles.decorator';
 
 @ApiTags('Promotions')
-@ApiBearerAuth()
-@UseGuards(AuthGuard('jwt'))
 @Controller({
   path: 'promotions',
   version: '1',
@@ -42,6 +43,9 @@ export class PromotionsController {
   @ApiCreatedResponse({
     type: Promotion,
   })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(RoleEnum.admin, RoleEnum.employee)
   create(@Body() createPromotionDto: CreatePromotionDto) {
     return this.promotionsService.create(createPromotionDto);
   }
@@ -92,6 +96,9 @@ export class PromotionsController {
   @ApiOkResponse({
     type: Promotion,
   })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(RoleEnum.admin, RoleEnum.employee)
   update(
     @Param('id') id: string,
     @Body() updatePromotionDto: UpdatePromotionDto,
@@ -105,6 +112,9 @@ export class PromotionsController {
     type: String,
     required: true,
   })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(RoleEnum.admin, RoleEnum.employee)
   remove(@Param('id') id: string) {
     return this.promotionsService.remove(id);
   }

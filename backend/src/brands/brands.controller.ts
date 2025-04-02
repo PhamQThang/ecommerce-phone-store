@@ -27,10 +27,11 @@ import {
 } from '../utils/dto/infinity-pagination-response.dto';
 import { infinityPagination } from '../utils/infinity-pagination';
 import { FindAllBrandsDto } from './dto/find-all-brands.dto';
+import { RolesGuard } from 'src/roles/roles.guard';
+import { Roles } from 'src/roles/roles.decorator';
+import { RoleEnum } from 'src/roles/roles.enum';
 
 @ApiTags('Brands')
-@ApiBearerAuth()
-@UseGuards(AuthGuard('jwt'))
 @Controller({
   path: 'brands',
   version: '1',
@@ -42,6 +43,9 @@ export class BrandsController {
   @ApiCreatedResponse({
     type: Brand,
   })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(RoleEnum.admin, RoleEnum.employee)
   create(@Body() createBrandDto: CreateBrandDto) {
     return this.brandsService.create(createBrandDto);
   }
@@ -92,6 +96,9 @@ export class BrandsController {
   @ApiOkResponse({
     type: Brand,
   })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(RoleEnum.admin, RoleEnum.employee)
   update(@Param('id') id: string, @Body() updateBrandDto: UpdateBrandDto) {
     return this.brandsService.update(id, updateBrandDto);
   }
@@ -102,6 +109,9 @@ export class BrandsController {
     type: String,
     required: true,
   })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(RoleEnum.admin, RoleEnum.employee)
   remove(@Param('id') id: string) {
     return this.brandsService.remove(id);
   }

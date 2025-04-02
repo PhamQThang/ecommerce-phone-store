@@ -27,10 +27,11 @@ import {
 } from '../utils/dto/infinity-pagination-response.dto';
 import { infinityPagination } from '../utils/infinity-pagination';
 import { FindAllBlogsDto } from './dto/find-all-blogs.dto';
+import { RolesGuard } from 'src/roles/roles.guard';
+import { RoleEnum } from 'src/roles/roles.enum';
+import { Roles } from 'src/roles/roles.decorator';
 
 @ApiTags('Blogs')
-@ApiBearerAuth()
-@UseGuards(AuthGuard('jwt'))
 @Controller({
   path: 'blogs',
   version: '1',
@@ -42,6 +43,9 @@ export class BlogsController {
   @ApiCreatedResponse({
     type: Blog,
   })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(RoleEnum.admin, RoleEnum.employee)
   create(@Body() createBlogDto: CreateBlogDto) {
     return this.blogsService.create(createBlogDto);
   }
@@ -92,6 +96,9 @@ export class BlogsController {
   @ApiOkResponse({
     type: Blog,
   })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(RoleEnum.admin, RoleEnum.employee)
   update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
     return this.blogsService.update(id, updateBlogDto);
   }
@@ -102,6 +109,9 @@ export class BlogsController {
     type: String,
     required: true,
   })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(RoleEnum.admin, RoleEnum.employee)
   remove(@Param('id') id: string) {
     return this.blogsService.remove(id);
   }
