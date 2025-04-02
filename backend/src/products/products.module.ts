@@ -15,7 +15,6 @@ import { ProductsService } from './products.service';
     ProductModelsModule,
 
     forwardRef(() => ProductIdentitiesModule),
-
     BrandsModule,
 
     // import modules, etc.

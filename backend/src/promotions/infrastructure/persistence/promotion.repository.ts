@@ -24,4 +24,6 @@ export abstract class PromotionRepository {
   ): Promise<Promotion | null>;
 
   abstract remove(id: Promotion['id']): Promise<void>;
+
+  abstract findPromotionsByProducts(productIds: string[]): Promise<Promotion[]>;
 }

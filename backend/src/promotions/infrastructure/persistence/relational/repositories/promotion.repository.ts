@@ -1,6 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import {
+  Repository,
+  In,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  IsNull,
+  Or,
+} from 'typeorm';
 import { PromotionEntity } from '../entities/promotion.entity';
 import { NullableType } from '../../../../../utils/types/nullable.type';
 import { Promotion } from '../../../../domain/promotion';
@@ -78,5 +85,25 @@ export class PromotionRelationalRepository implements PromotionRepository {
 
   async remove(id: Promotion['id']): Promise<void> {
     await this.promotionRepository.delete(id);
+  }
+
+  async findPromotionsByProducts(productIds: string[]): Promise<Promotion[]> {
+    const entities = await this.promotionRepository.find({
+      relations: {
+        products: true,
+      },
+      where: {
+        products: {
+          id: In(productIds),
+        },
+        startDate: Or(IsNull(), LessThanOrEqual(new Date())),
+        endDate: Or(IsNull(), MoreThanOrEqual(new Date())),
+      },
+      order: {
+        startDate: 'ASC',
+      },
+    });
+
+    return entities.map((entity) => PromotionMapper.toDomain(entity));
   }
 }

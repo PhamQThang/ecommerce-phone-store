@@ -105,6 +105,11 @@ export class Product {
   quantity?: number;
 
   @ApiProperty({
+    type: Number,
+  })
+  discount?: number;
+
+  @ApiProperty({
     type: String,
   })
   id: string;
