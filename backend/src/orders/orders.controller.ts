@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Query,
+  Request,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -42,8 +43,8 @@ export class OrdersController {
   @ApiCreatedResponse({
     type: Order,
   })
-  create(@Body() createOrderDto: CreateOrderDto) {
-    return this.ordersService.create(createOrderDto);
+  create(@Body() createOrderDto: CreateOrderDto, @Request() req) {
+    return this.ordersService.create(req.user.id, createOrderDto);
   }
 
   @Get()

@@ -32,7 +32,7 @@ export class OrdersService {
     private readonly cartService: CartsService,
   ) {}
 
-  async create(createOrderDto: CreateOrderDto) {
+  async create(userId: string, createOrderDto: CreateOrderDto) {
     // Do not remove comment below.
     // <creating-property />
 
@@ -42,6 +42,23 @@ export class OrdersService {
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
           cartId: 'notExists',
+        },
+      });
+    }
+
+    if (userId !== cartObject.user.id) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          cartId: 'notBelongsToUser',
+        },
+      });
+    }
+    if (cartObject.status !== 'PENDING') {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          cartId: 'notPending',
         },
       });
     }
@@ -119,23 +136,6 @@ export class OrdersService {
     // Do not remove comment below.
     // <updating-property />
 
-    let items: Product[] | undefined = undefined;
-
-    if (updateOrderDto.items) {
-      const itemsObjects = await this.productService.findByIds(
-        updateOrderDto.items.map((entity) => entity.id),
-      );
-      if (itemsObjects.length !== updateOrderDto.items.length) {
-        throw new UnprocessableEntityException({
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: {
-            items: 'notExists',
-          },
-        });
-      }
-      items = itemsObjects;
-    }
-
     let user: User | undefined = undefined;
 
     if (updateOrderDto.user) {
@@ -158,7 +158,7 @@ export class OrdersService {
 
       address: updateOrderDto.address,
 
-      items,
+      items: updateOrderDto.items,
 
       user,
     });
