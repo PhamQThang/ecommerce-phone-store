@@ -80,20 +80,8 @@ export class CartsService {
     });
   }
 
-  findAllWithPagination(
-    userId: string,
-    {
-      paginationOptions,
-    }: {
-      paginationOptions: IPaginationOptions;
-    },
-  ) {
-    return this.cartRepository.findAllWithPagination(userId, {
-      paginationOptions: {
-        page: paginationOptions.page,
-        limit: paginationOptions.limit,
-      },
-    });
+  findCurrentCart(userId: string) {
+    return this.cartRepository.findCurrentCart(userId);
   }
 
   findById(id: Cart['id']) {
