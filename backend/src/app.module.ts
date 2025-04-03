@@ -65,9 +65,14 @@ import { PurchaseOrdersModule } from './purchase-orders/purchase-orders.module';
 import { BlogsModule } from './blogs/blogs.module';
 
 import { PromotionsModule } from './promotions/promotions.module';
+import { VnpayModule } from 'nestjs-vnpay';
+import { ignoreLogger } from 'vnpay';
+
+import { OrderTransactionsModule } from './order-transactions/order-transactions.module';
 
 @Module({
   imports: [
+    OrderTransactionsModule,
     PromotionsModule,
     BlogsModule,
     PurchaseOrdersModule,
@@ -128,6 +133,15 @@ import { PromotionsModule } from './promotions/promotions.module';
     MailModule,
     MailerModule,
     HomeModule,
+    VnpayModule.register({
+      tmnCode: 'T0VXUX3C',
+      secureSecret: 'ZP5VIVCP105OSA0H4F3YVMA86IN537ZN',
+      vnpayHost: 'https://sandbox.vnpayment.vn',
+      testMode: true,
+      hashAlgorithm: 'SHA256' as any,
+      enableLog: true,
+      loggerFn: ignoreLogger,
+    }),
   ],
 })
 export class AppModule {}

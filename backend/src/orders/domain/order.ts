@@ -1,4 +1,3 @@
-import { Product } from '../../products/domain/product';
 import { User } from '../../users/domain/user';
 import { ApiProperty } from '@nestjs/swagger';
 import { OrderProduct } from './order-product';

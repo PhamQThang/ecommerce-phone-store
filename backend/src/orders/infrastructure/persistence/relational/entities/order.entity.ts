@@ -1,5 +1,3 @@
-import { ProductEntity } from '../../../../../products/infrastructure/persistence/relational/entities/product.entity';
-
 import { UserEntity } from '../../../../../users/infrastructure/persistence/relational/entities/user.entity';
 
 import {

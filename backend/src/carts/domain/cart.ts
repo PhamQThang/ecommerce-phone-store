@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CartProduct } from '../../cart-products/domain/cart-product';
-import { Product } from '../../products/domain/product';
 import { User } from '../../users/domain/user';
 
 export class Cart {

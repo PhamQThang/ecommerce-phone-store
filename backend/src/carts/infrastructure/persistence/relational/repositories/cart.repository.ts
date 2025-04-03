@@ -7,7 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CartStatus } from 'src/carts/carts.type';
 import { In, Repository } from 'typeorm';
 import { NullableType } from '../../../../../utils/types/nullable.type';
-import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 import { Cart } from '../../../../domain/cart';
 import { CartRepository } from '../../cart.repository';
 import { CartEntity } from '../entities/cart.entity';

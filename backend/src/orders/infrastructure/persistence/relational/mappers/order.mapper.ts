@@ -1,7 +1,5 @@
 import { Order } from '../../../../domain/order';
 
-import { ProductMapper } from '../../../../../products/infrastructure/persistence/relational/mappers/product.mapper';
-
 import { UserMapper } from '../../../../../users/infrastructure/persistence/relational/mappers/user.mapper';
 
 import { OrderEntity } from '../entities/order.entity';

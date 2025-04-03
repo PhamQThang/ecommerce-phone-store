@@ -1,6 +1,3 @@
-import { Product } from '../products/domain/product';
-import { ProductsService } from '../products/products.service';
-
 import { User } from '../users/domain/user';
 import { UsersService } from '../users/users.service';
 
@@ -18,12 +15,11 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderRepository } from './infrastructure/persistence/order.repository';
 import { OrderStatus } from './orders.type';
 import { OrderProduct } from './domain/order-product';
+import { CartStatus } from 'src/carts/carts.type';
 
 @Injectable()
 export class OrdersService {
   constructor(
-    private readonly productService: ProductsService,
-
     private readonly userService: UsersService,
 
     // Dependencies here
@@ -94,7 +90,7 @@ export class OrdersService {
     }
     const user = userObject;
 
-    return this.orderRepository.create({
+    const order = await this.orderRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
       status: createOrderDto.status || OrderStatus.PENDING,
@@ -105,6 +101,9 @@ export class OrdersService {
 
       user,
     });
+
+    await this.cartService.updateCartStatus(cartObject.id, CartStatus.CHECKOUT);
+    return order;
   }
 
   findAllWithPagination({
