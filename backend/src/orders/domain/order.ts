@@ -7,6 +7,12 @@ export class Order {
     type: () => String,
     nullable: false,
   })
+  totalAmount: number;
+
+  @ApiProperty({
+    type: () => String,
+    nullable: false,
+  })
   status?: string;
 
   @ApiProperty({

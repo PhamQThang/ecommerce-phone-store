@@ -15,7 +15,6 @@ import { OrdersService } from './orders.service';
     CartsModule,
 
     UsersModule,
-
     // import modules, etc.
     RelationalOrderPersistenceModule,
   ],

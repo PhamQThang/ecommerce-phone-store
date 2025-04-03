@@ -10,6 +10,7 @@ import { UpdateOrderTransactionDto } from './dto/update-order-transaction.dto';
 import { OrderTransactionRepository } from './infrastructure/persistence/order-transaction.repository';
 import { IPaginationOptions } from '../utils/types/pagination-options';
 import { OrderTransaction } from './domain/order-transaction';
+import { Order } from 'src/orders/domain/order';
 
 @Injectable()
 export class OrderTransactionsService {

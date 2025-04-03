@@ -27,6 +27,7 @@ import {
 } from '../utils/dto/infinity-pagination-response.dto';
 import { infinityPagination } from '../utils/infinity-pagination';
 import { FindAllOrderTransactionsDto } from './dto/find-all-order-transactions.dto';
+import { OrderTransactionCallback } from './order-transactions.type';
 
 @ApiTags('Ordertransactions')
 @ApiBearerAuth()
@@ -39,6 +40,28 @@ export class OrderTransactionsController {
   constructor(
     private readonly orderTransactionsService: OrderTransactionsService,
   ) {}
+
+  @Get('callback')
+  @ApiOkResponse({})
+  callback(@Query() query: OrderTransactionCallback) {
+    // example of a callback response
+    return {
+      vnp_Amount: 1200000000,
+      vnp_BankCode: 'NCB',
+      vnp_BankTranNo: 'VNP14889214',
+      vnp_CardType: 'ATM',
+      vnp_OrderInfo: 'Thanh toan don hang 123456',
+      vnp_PayDate: '20250403181801',
+      vnp_ResponseCode: '00',
+      vnp_TmnCode: 'T0VXUX3C',
+      vnp_TransactionNo: 14889214,
+      vnp_TransactionStatus: '00',
+      vnp_TxnRef: 'donhang123456',
+      vnp_SecureHash:
+        '0c2af89a2c328ef041573c36cd693f7630c71279c3cb5e5af1b510925bca9f16cc1d7108f28b3ffa34dd7eb3da4e244ab7b4419be4813007916a58f5b8be92b5',
+    };
+    // return this.orderTransactionsService.callback(query);
+  }
 
   @Post()
   @ApiCreatedResponse({

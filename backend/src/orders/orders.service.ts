@@ -16,6 +16,8 @@ import { OrderRepository } from './infrastructure/persistence/order.repository';
 import { OrderStatus } from './orders.type';
 import { OrderProduct } from './domain/order-product';
 import { CartStatus } from 'src/carts/carts.type';
+import { ProductCode, VnpLocale, dateFormat } from 'vnpay';
+import { VnpayService } from 'nestjs-vnpay';
 
 @Injectable()
 export class OrdersService {
@@ -26,6 +28,7 @@ export class OrdersService {
     private readonly orderRepository: OrderRepository,
 
     private readonly cartService: CartsService,
+    private readonly vnpayService: VnpayService,
   ) {}
 
   async create(userId: string, createOrderDto: CreateOrderDto) {
@@ -88,22 +91,51 @@ export class OrdersService {
         },
       });
     }
-    const user = userObject;
 
+    const totalAmount = orderProduct.reduce((acc, item) => {
+      const finalPrice = item.basePrice - item.discount;
+      return acc + finalPrice * item.quantity;
+    }, 0);
+
+    const user = userObject;
     const order = await this.orderRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
-      status: createOrderDto.status || OrderStatus.PENDING,
+      status: createOrderDto.status ?? OrderStatus.PENDING,
 
       address: createOrderDto.address,
 
       items: orderProduct,
 
       user,
+
+      totalAmount,
     });
 
     await this.cartService.updateCartStatus(cartObject.id, CartStatus.CHECKOUT);
-    return order;
+    return {
+      order: order,
+      paymentUrl: this.createPaymentUrl(order),
+    };
+  }
+
+  createPaymentUrl(order: Order) {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const paymentUrl = this.vnpayService.buildPaymentUrl({
+      vnp_Amount: order.totalAmount,
+      vnp_IpAddr: '13.160.92.202',
+      vnp_TxnRef: order.id,
+      vnp_OrderInfo: `Thanh toán đơn hàng ${order.id}`,
+      vnp_OrderType: ProductCode.Other,
+      vnp_ReturnUrl: `${process.env.BACKEND_DOMAIN}/api/v1/order-transactions/callback`,
+      vnp_Locale: VnpLocale.VN,
+      vnp_CreateDate: dateFormat(new Date()),
+      vnp_ExpireDate: dateFormat(tomorrow),
+    });
+
+    return paymentUrl;
   }
 
   findAllWithPagination({
