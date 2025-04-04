@@ -5,7 +5,7 @@ import { Facebook, Instagram, Youtube, PhoneCall, MapPin } from "lucide-react";
 const Footer = () => {
   return (
     <footer className="bg-[#C4FCF5] py-8">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 px-3 md:px-12 fixed-bottom-0">
+      <div className="container w-full mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 px-3 fixed-bottom-0">
         <div>
           <div className="flex items-center space-x-2">
             <Image
@@ -47,7 +47,7 @@ const Footer = () => {
             <li>Thu cũ - Đổi mới</li>
             <li>Chính sách trả góp</li>
             <li>Chính sách mua hàng</li>
-            <li>Chính sách bảo hành</li>
+            <li><Link href={`/client/policy`}>Chính sách bảo hành</Link></li>
           </ul>
         </div>
 
@@ -66,7 +66,7 @@ const Footer = () => {
             </li>
             <li>Thời gian hỗ trợ: 08:00am - 22:00pm</li>
             <li>
-              <Link href="#" className="text-blue-600">
+              <Link href="https://maps.app.goo.gl/Nhue7YUAr572MyeQ8" className="text-blue-600">
                 Tìm Store trên Google Maps
               </Link>
             </li>

@@ -23,8 +23,23 @@ const ProductCard: React.FC<ProductProps> = ({
   discountPercentage,
   rating,
 }) => {
-  const formatPrice = (price: number) =>
-    price.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+  const isValidPrice = (price: number | undefined) =>
+    price !== undefined && !isNaN(price) && price >= 0;
+
+  if (!isValidPrice(newPrice)) {
+    console.error(`Invalid newPrice for product ID: ${id}`);
+    newPrice = 0; // Gán giá trị mặc định nếu không hợp lệ
+  }
+
+  if (!isValidPrice(oldPrice)) {
+    console.error(`Invalid oldPrice for product ID: ${id}`);
+    oldPrice = undefined; // Bỏ qua oldPrice nếu không hợp lệ
+  }
+
+  const formatPrice = (price: number | undefined) =>
+    price !== undefined
+      ? price.toLocaleString("vi-VN", { style: "currency", currency: "VND" })
+      : "Không xác định";
 
   const thumbnail = images.length > 0 ? images[0] : "/image/default.png"; // Lấy ảnh đầu tiên hoặc mặc định
   const hasDiscount = discountPercentage > 0;

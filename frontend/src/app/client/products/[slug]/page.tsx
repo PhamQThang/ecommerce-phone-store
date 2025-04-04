@@ -15,6 +15,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
   return (
     <ProductDetail
       {...product}
+      oldPrice={product.oldPrice.toString()}
+      newPrice={product.newPrice.toString()}
       description={
         typeof product.description === "string"
           ? { text: product.description, images: [] }
