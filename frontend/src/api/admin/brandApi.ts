@@ -3,12 +3,12 @@ import axiosInstance from "../config/axiosConfig";
 import {
   Brand,
   GetBrandsResponse,
-  GetBrandsParams,
   BrandRequest,
+  PaginationParams,
 } from "@/types/types";
 
 export const getBrands = async (
-  params: GetBrandsParams
+  params: PaginationParams
 ): Promise<GetBrandsResponse> => {
   const response = await axiosInstance.get("/api/v1/brands", { params });
   return response.data;

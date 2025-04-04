@@ -46,7 +46,6 @@ interface SubMenuItem {
 
 export default function AdminSidebar() {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
   const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
@@ -59,61 +58,61 @@ export default function AdminSidebar() {
       title: "Dashboard",
       url: "/admin",
       icon: BarChart,
-      roles: ["admin", "staff"],
+      roles: ["admin", "employee"],
     },
     {
       title: "Quản lý thương hiệu",
       url: "/admin/brands",
       icon: Package,
-      roles: ["admin"],
+      roles: ["Admin"],
     },
     {
       title: "Quản lý nhà cung cấp",
       url: "/admin/suppliers",
       icon: Truck,
-      roles: ["admin", "staff"],
+      roles: ["Admin", "employee"],
     },
     {
       title: "Quản lý sản phẩm",
       url: "/admin/products",
       icon: Package,
-      roles: ["admin", "staff"],
+      roles: ["Admin", "employee"],
     },
     {
       title: "Quản lý nhập hàng",
       url: "/admin/import-orders",
       icon: Truck,
-      roles: ["admin", "staff"],
+      roles: ["Admin", "employee"],
     },
     {
       title: "Quản lý đơn hàng",
       url: "/admin/orders",
       icon: ShoppingCart,
-      roles: ["admin", "staff"],
+      roles: ["Admin", "employee"],
     },
     {
       title: "Quản lý khuyến mãi",
       url: "/admin/promotions",
       icon: Percent,
-      roles: ["admin", "staff"],
+      roles: ["Admin", "employee"],
     },
     {
       title: "Quản lý báo cáo",
       url: "/admin/reports",
       icon: BarChart,
-      roles: ["admin", "staff"],
+      roles: ["Admin", "employee"],
     },
     {
       title: "Quản lý khách hàng",
       url: "/admin/customers",
       icon: Users,
-      roles: ["admin", "staff"],
+      roles: ["Admin", "employee"],
     },
     {
       title: "Quản lý nhân viên",
-      url: "/admin/staff",
+      url: "/admin/employee",
       icon: UserCog,
-      roles: ["admin"],
+      roles: ["Admin"],
     },
   ];
 

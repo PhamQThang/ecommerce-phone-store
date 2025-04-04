@@ -14,11 +14,6 @@ export interface GetBrandsResponse {
   hasNextPage: boolean;
 }
 
-export interface GetBrandsParams {
-  page: number;
-  limit: number;
-}
-
 export interface BrandRequest {
   name: string;
   slug: string;
@@ -44,11 +39,6 @@ export interface GetProductModelsResponse {
   hasNextPage: boolean;
 }
 
-export interface GetProductModelsParams {
-  page: number;
-  limit: number;
-}
-
 export interface ProductModelCreateRequest {
   code: string;
   name: string;
@@ -63,6 +53,33 @@ export interface ProductModelUpdateRequest {
   brand?: { id: string };
 }
 
+export interface GetProductsResponse {
+  data: Product[];
+  hasNextPage: boolean;
+}
+
+export interface ProductRequest {
+  model: { id: string };
+  basePrice: number;
+  screenSize: number;
+  pin: number;
+  screenTechnology: string;
+  chipset: string;
+  os: string;
+  identities: any[];
+  images: any[];
+  storage: number;
+  ram: number;
+  slug: string;
+  name: string;
+}
+
+export interface UploadFileResponse {
+  file: {
+    id: string;
+    path: string;
+  };
+}
 // Common Types
 export interface PaginationParams {
   page?: number;
@@ -91,6 +108,36 @@ export interface ProductModelFormValues {
     name: string;
   };
 }
+
+export interface Cart {
+  id: string;
+  userId: string;
+  items: any[]; // Có thể thay đổi tùy theo cấu trúc items của bạn
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  basePrice: number;
+  screenSize: number;
+  pin: number;
+  screenTechnology: string;
+  chipset: string;
+  os: string;
+  identities: any[] | null;
+  status: string;
+  quantity: number;
+  colors: any[];
+  images: any[];
+  storage: number;
+  ram: number;
+  model: ProductModel;
+  createdAt: string;
+  updatedAt: string;
+}
 /////////////////////////
 export interface Category {
   id: number;
@@ -107,18 +154,6 @@ export interface Supplier {
   email: string;
   phoneNumber: string;
   address: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  category_id: number;
-  supplier_id: number;
   createdAt: string;
   updatedAt: string;
 }

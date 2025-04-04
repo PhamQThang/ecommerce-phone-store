@@ -13,7 +13,7 @@ interface ProductModelDetailModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   model: ProductModel | null;
-  brands: Brand[]; // Thêm brands để tra cứu tên
+  brands: Brand[];
 }
 
 const ProductModelDetailModal: React.FC<ProductModelDetailModalProps> = ({

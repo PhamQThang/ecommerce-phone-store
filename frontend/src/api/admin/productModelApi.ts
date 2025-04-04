@@ -3,13 +3,13 @@ import axiosInstance from "../config/axiosConfig";
 import {
   ProductModel,
   GetProductModelsResponse,
-  GetProductModelsParams,
   ProductModelCreateRequest,
   ProductModelUpdateRequest,
+  PaginationParams,
 } from "@/types/types";
 
 export const getProductModels = async (
-  params: GetProductModelsParams
+  params?: PaginationParams
 ): Promise<GetProductModelsResponse> => {
   const response = await axiosInstance.get("/api/v1/product-models", {
     params,

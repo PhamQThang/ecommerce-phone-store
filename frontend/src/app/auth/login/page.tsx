@@ -27,6 +27,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Mail, Lock, Loader2 } from "lucide-react";
 import { login } from "@/api/auth/authApi";
+import { createCart, getCurrentCart } from "@/api/client/cartApi";
 
 const loginSchema = z.object({
   email: z.string().email("Vui lòng nhập email hợp lệ"),
@@ -52,6 +53,15 @@ export default function LoginPage() {
   useEffect(() => {
     form.setValue("email", emailFromQuery);
   }, [emailFromQuery, form]);
+
+  const checkAndCreateCart = async () => {
+    try {
+      const cart = await getCurrentCart();
+      if (!cart) await createCart();
+    } catch (error: any) {
+      console.error("Lỗi khi kiểm tra/tạo giỏ hàng:", error.message);
+    }
+  };
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     setError(null);
@@ -83,6 +93,7 @@ export default function LoginPage() {
       });
 
       if (role === "User") {
+        await checkAndCreateCart();
         router.push("/client");
       } else {
         router.push("/admin");

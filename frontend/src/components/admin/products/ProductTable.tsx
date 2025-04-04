@@ -1,7 +1,4 @@
-// /admin/components/ProductTable.tsx
-import { Product } from "@/types/types";
-import { Category } from "@/types/types";
-import { Supplier } from "@/types/types";
+// components/admin/products/ProductTable.tsx
 import {
   Table,
   TableBody,
@@ -11,111 +8,76 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Eye } from "lucide-react";
 import { format } from "date-fns";
+import { Product } from "@/types/types";
 
 interface ProductTableProps {
   products: Product[];
-  categories: Category[];
-  suppliers: Supplier[];
-  onView: (product: Product) => void;
   onEdit: (product: Product) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
+  onView: (product: Product) => void;
 }
 
-const ProductTable: React.FC<ProductTableProps> = ({
+const ProductTable = ({
   products,
-  categories,
-  suppliers,
-  onView,
   onEdit,
   onDelete,
-}) => {
-  const formatDate = (dateString: string) => {
-    return format(new Date(dateString), "dd/MM/yyyy HH:mm:ss");
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(price);
-  };
+  onView,
+}: ProductTableProps) => {
+  const formatDate = (dateString: string) =>
+    format(new Date(dateString), "dd/MM/yyyy HH:mm");
 
   return (
     <div className="overflow-x-auto">
-      {/* Hiển thị dạng bảng cho tablet và PC */}
+      {/* Desktop view */}
       <div className="hidden sm:block">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="hidden md:table-cell">ID</TableHead>
               <TableHead>Tên sản phẩm</TableHead>
+              <TableHead>Model</TableHead>
               <TableHead>Giá</TableHead>
-              <TableHead className="hidden md:table-cell">Số lượng</TableHead>
-              <TableHead className="hidden lg:table-cell">Danh mục</TableHead>
-              <TableHead className="hidden lg:table-cell">
-                Nhà cung cấp
-              </TableHead>
-              <TableHead className="hidden lg:table-cell">
-                Thời gian tạo
-              </TableHead>
-              <TableHead className="hidden lg:table-cell">
-                Thời gian cập nhật
-              </TableHead>
+              <TableHead>RAM</TableHead>
+              <TableHead>Trạng thái</TableHead>
+              <TableHead>Ngày tạo</TableHead>
               <TableHead>Hành động</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {products.map((product) => (
               <TableRow key={product.id}>
-                <TableCell className="hidden md:table-cell">
-                  {product.id}
-                </TableCell>
                 <TableCell>{product.name}</TableCell>
-                <TableCell>{formatPrice(product.price)}</TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {product.stock}
-                </TableCell>
-                <TableCell className="hidden lg:table-cell">
-                  {categories.find((cat) => cat.id === product.category_id)
-                    ?.name || "Không có"}
-                </TableCell>
-                <TableCell className="hidden lg:table-cell">
-                  {suppliers.find((sup) => sup.id === product.supplier_id)
-                    ?.name || "Không có"}
-                </TableCell>
-                <TableCell className="hidden lg:table-cell">
-                  {formatDate(product.createdAt)}
-                </TableCell>
-                <TableCell className="hidden lg:table-cell">
-                  {formatDate(product.updatedAt)}
-                </TableCell>
+                <TableCell>{product.model.name}</TableCell>
+                <TableCell>{product.basePrice.toLocaleString()} VNĐ</TableCell>
+                <TableCell>{product.ram} GB</TableCell>
+                <TableCell>{product.status}</TableCell>
+                <TableCell>{formatDate(product.createdAt)}</TableCell>
                 <TableCell>
-                  <div className="flex space-x-2">
+                  <div className="flex gap-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => onView(product)}
                     >
-                      <Eye className="h-4 w-4 sm:mr-1" />
-                      <span className="hidden sm:inline">Xem</span>
+                      <Eye className="h-4 w-4" />
+                      <span className="hidden sm:inline ml-1">Xem</span>
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => onEdit(product)}
                     >
-                      <Pencil className="h-4 w-4 sm:mr-1" />
-                      <span className="hidden sm:inline">Sửa</span>
+                      <Pencil className="h-4 w-4" />
+                      <span className="hidden sm:inline ml-1">Sửa</span>
                     </Button>
                     <Button
                       variant="destructive"
                       size="sm"
                       onClick={() => onDelete(product.id)}
                     >
-                      <Trash2 className="h-4 w-4 sm:mr-1" />
-                      <span className="hidden sm:inline">Xóa</span>
+                      <Trash2 className="h-4 w-4" />
+                      <span className="hidden sm:inline ml-1">Xóa</span>
                     </Button>
                   </div>
                 </TableCell>
@@ -125,7 +87,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
         </Table>
       </div>
 
-      {/* Hiển thị dạng thẻ (card) cho mobile */}
+      {/* Mobile view */}
       <div className="block sm:hidden space-y-4">
         {products.map((product) => (
           <div key={product.id} className="border rounded-lg p-4 shadow-sm">
@@ -133,10 +95,20 @@ const ProductTable: React.FC<ProductTableProps> = ({
               <div>
                 <h3 className="font-semibold">{product.name}</h3>
                 <p className="text-sm text-gray-500">
-                  {formatPrice(product.price)}
+                  Model: {product.model.name}
+                </p>
+                <p className="text-sm text-gray-500">
+                  Giá: {product.basePrice.toLocaleString()} VNĐ
+                </p>
+                <p className="text-sm text-gray-500">RAM: {product.ram} GB</p>
+                <p className="text-sm text-gray-500">
+                  Trạng thái: {product.status}
+                </p>
+                <p className="text-sm text-gray-500">
+                  Tạo: {formatDate(product.createdAt)}
                 </p>
               </div>
-              <div className="flex space-x-2">
+              <div className="flex gap-2">
                 <Button
                   variant="outline"
                   size="sm"
