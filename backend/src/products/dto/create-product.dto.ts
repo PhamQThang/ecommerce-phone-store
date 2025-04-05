@@ -94,7 +94,6 @@ export class CreateProductDto {
     type: () => [String],
   })
   @IsOptional()
-  @ValidateNested()
   @Type(() => Array<string>)
   @IsArray()
   images?: string[] | null;
