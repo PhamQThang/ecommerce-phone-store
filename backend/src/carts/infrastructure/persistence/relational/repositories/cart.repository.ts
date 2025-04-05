@@ -1,19 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CartStatus } from 'src/carts/carts.type';
 import { In, Repository } from 'typeorm';
 import { NullableType } from '../../../../../utils/types/nullable.type';
-import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 import { Cart } from '../../../../domain/cart';
 import { CartRepository } from '../../cart.repository';
 import { CartEntity } from '../entities/cart.entity';
 import { CartMapper } from '../mappers/cart.mapper';
+import { PromotionRepository } from 'src/promotions/infrastructure/persistence/promotion.repository';
 
 @Injectable()
 export class CartRelationalRepository implements CartRepository {
   constructor(
     @InjectRepository(CartEntity)
     private readonly cartRepository: Repository<CartEntity>,
+
+    @InjectRepository(PromotionRepository)
+    private readonly promotionRepository: PromotionRepository,
   ) {}
 
   async create(data: Cart): Promise<Cart> {
@@ -24,17 +31,10 @@ export class CartRelationalRepository implements CartRepository {
     return CartMapper.toDomain(newEntity);
   }
 
-  async findAllWithPagination(
-    userId: string,
-    {
-      paginationOptions,
-    }: {
-      paginationOptions: IPaginationOptions;
-    },
-  ): Promise<Cart[]> {
+  async findCurrentCart(userId: string): Promise<Cart> {
     const entities = await this.cartRepository.find({
-      skip: (paginationOptions.page - 1) * paginationOptions.limit,
-      take: paginationOptions.limit,
+      skip: 0,
+      take: 1,
       where: {
         status: CartStatus.IN_PROGRESS,
         user: {
@@ -46,7 +46,26 @@ export class CartRelationalRepository implements CartRepository {
       },
     });
 
-    return entities.map((entity) => CartMapper.toDomain(entity));
+    if (!entities.length) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          cartId: 'cartNotFound',
+        },
+      });
+    }
+
+    const cart = CartMapper.toDomain(entities[0]);
+    const productIds = cart.items?.map((item) => item.product.id) || [];
+    const promotions =
+      await this.promotionRepository.findPromotionsByProducts(productIds);
+
+    cart.items?.forEach((product) => {
+      product.product.discount = promotions?.find((promotion) =>
+        promotion?.products?.some((item) => item.id === product.id),
+      )?.discount;
+    });
+    return cart;
   }
 
   async findById(id: Cart['id']): Promise<NullableType<Cart>> {
@@ -54,7 +73,19 @@ export class CartRelationalRepository implements CartRepository {
       where: { id },
     });
 
-    return entity ? CartMapper.toDomain(entity) : null;
+    if (!entity) return null;
+    const cart = CartMapper.toDomain(entity);
+    const productIds = cart.items?.map((item) => item.product.id) || [];
+    const promotions =
+      await this.promotionRepository.findPromotionsByProducts(productIds);
+
+    cart.items?.forEach((product) => {
+      product.product.discount = promotions?.find((promotion) =>
+        promotion?.products?.some((item) => item.id === product.id),
+      )?.discount;
+    });
+
+    return cart;
   }
 
   async findByIds(ids: Cart['id'][]): Promise<Cart[]> {

@@ -14,11 +14,11 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { ColorsService } from 'src/colors/colors.service';
-import { IPaginationOptions } from '../utils/types/pagination-options';
 import { Cart } from './domain/cart';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { CartRepository } from './infrastructure/persistence/cart.repository';
+import { CartStatus } from './carts.type';
 
 @Injectable()
 export class CartsService {
@@ -80,20 +80,8 @@ export class CartsService {
     });
   }
 
-  findAllWithPagination(
-    userId: string,
-    {
-      paginationOptions,
-    }: {
-      paginationOptions: IPaginationOptions;
-    },
-  ) {
-    return this.cartRepository.findAllWithPagination(userId, {
-      paginationOptions: {
-        page: paginationOptions.page,
-        limit: paginationOptions.limit,
-      },
-    });
+  findCurrentCart(userId: string) {
+    return this.cartRepository.findCurrentCart(userId);
   }
 
   findById(id: Cart['id']) {
@@ -170,5 +158,26 @@ export class CartsService {
 
   remove(id: Cart['id']) {
     return this.cartRepository.remove(id);
+  }
+
+  async updateCartStatus(id: Cart['id'], status: CartStatus) {
+    // Do not remove comment below.
+    // <updating-cart-status />
+
+    const cart = await this.cartRepository.findById(id);
+    if (!cart) {
+      throw new UnprocessableEntityException({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: {
+          cart: 'notExists',
+        },
+      });
+    }
+
+    return this.cartRepository.update(id, {
+      // Do not remove comment below.
+      // <updating-cart-status-payload />
+      status,
+    });
   }
 }

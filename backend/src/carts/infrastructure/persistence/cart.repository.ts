@@ -1,6 +1,5 @@
 import { DeepPartial } from '../../../utils/types/deep-partial.type';
 import { NullableType } from '../../../utils/types/nullable.type';
-import { IPaginationOptions } from '../../../utils/types/pagination-options';
 import { Cart } from '../../domain/cart';
 
 export abstract class CartRepository {
@@ -8,14 +7,7 @@ export abstract class CartRepository {
     data: Omit<Cart, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<Cart>;
 
-  abstract findAllWithPagination(
-    userId: string,
-    {
-      paginationOptions,
-    }: {
-      paginationOptions: IPaginationOptions;
-    },
-  ): Promise<Cart[]>;
+  abstract findCurrentCart(userId: string): Promise<Cart>;
 
   abstract findById(id: Cart['id']): Promise<NullableType<Cart>>;
 

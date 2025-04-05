@@ -22,4 +22,6 @@ export class UpdateCartDto {
   })
   @IsString()
   colorId: string;
+
+  status?: string;
 }

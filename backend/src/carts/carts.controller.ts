@@ -2,12 +2,10 @@ import {
   Body,
   Controller,
   Get,
-  HttpStatus,
   Param,
   Patch,
   Post,
   Request,
-  UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -54,23 +52,8 @@ export class CartsController {
   })
   async findCurrentCart(@Request() request): Promise<Cart> {
     const userId = request.user.id;
-
-    const listCarts = await this.cartsService.findAllWithPagination(userId, {
-      paginationOptions: {
-        page: 1,
-        limit: 1,
-      },
-    });
-
-    if (listCarts.length === 0) {
-      throw new UnprocessableEntityException({
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: {
-          cartId: 'cartEmpty',
-        },
-      });
-    }
-    return listCarts[0];
+    const cart = await this.cartsService.findCurrentCart(userId);
+    return cart;
   }
 
   @Get(':id')

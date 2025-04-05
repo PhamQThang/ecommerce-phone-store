@@ -5,6 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNotEmpty } from 'class-validator';
 import { ProductDto } from 'src/products/dto/product.dto';
+import { OrderProduct } from '../domain/order-product';
 
 export class UpdateOrderDto {
   @ApiProperty({
@@ -18,8 +19,8 @@ export class UpdateOrderDto {
   @ApiProperty({
     type: () => [ProductDto],
   })
-  @Type(() => ProductDto)
-  items?: ProductDto[];
+  @Type(() => OrderProduct)
+  items?: OrderProduct[];
 
   @ApiProperty({
     type: String,

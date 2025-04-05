@@ -8,12 +8,16 @@ import { ProductRepository } from '../../product.repository';
 import { ProductMapper } from '../mappers/product.mapper';
 import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 import { ProductIdentityMapper } from '../../../../../product-identities/infrastructure/persistence/relational/mappers/product-identity.mapper';
+import { PromotionRepository } from 'src/promotions/infrastructure/persistence/promotion.repository';
 
 @Injectable()
 export class ProductRelationalRepository implements ProductRepository {
   constructor(
     @InjectRepository(ProductEntity)
     private readonly productRepository: Repository<ProductEntity>,
+
+    @InjectRepository(PromotionRepository)
+    private readonly promotionRepository: PromotionRepository,
   ) {}
 
   async create(data: Product): Promise<Product> {
@@ -34,7 +38,17 @@ export class ProductRelationalRepository implements ProductRepository {
       take: paginationOptions.limit,
     });
 
-    return entities.map((entity) => ProductMapper.toDomain(entity));
+    const promotions = await this.promotionRepository.findPromotionsByProducts(
+      entities.map((entity) => entity.id),
+    );
+
+    const products = entities.map((entity) => ProductMapper.toDomain(entity));
+    products.forEach((product) => {
+      product.discount = promotions?.find((promotion) =>
+        promotion?.products?.some((item) => item.id === product.id),
+      )?.discount;
+    });
+    return products;
   }
 
   async findById(
@@ -51,6 +65,15 @@ export class ProductRelationalRepository implements ProductRepository {
         ProductIdentityMapper.toDomain(item),
       );
     }
+
+    const promotions = await this.promotionRepository.findPromotionsByProducts([
+      entity.id,
+    ]);
+
+    result.discount = promotions?.find((promotion) =>
+      promotion?.products?.some((item) => item.id === result.id),
+    )?.discount;
+
     return result;
   }
 

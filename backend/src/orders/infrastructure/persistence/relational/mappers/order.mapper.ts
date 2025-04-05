@@ -1,7 +1,5 @@
 import { Order } from '../../../../domain/order';
 
-import { ProductMapper } from '../../../../../products/infrastructure/persistence/relational/mappers/product.mapper';
-
 import { UserMapper } from '../../../../../users/infrastructure/persistence/relational/mappers/user.mapper';
 
 import { OrderEntity } from '../entities/order.entity';
@@ -14,9 +12,7 @@ export class OrderMapper {
     domainEntity.address = raw.address;
 
     if (raw.items) {
-      domainEntity.items = raw.items.map((item) =>
-        ProductMapper.toDomain(item),
-      );
+      domainEntity.items = raw.items;
     }
 
     if (raw.user) {
@@ -37,9 +33,7 @@ export class OrderMapper {
     persistenceEntity.address = domainEntity.address;
 
     if (domainEntity.items) {
-      persistenceEntity.items = domainEntity.items.map((item) =>
-        ProductMapper.toPersistence(item),
-      );
+      persistenceEntity.items = domainEntity.items;
     }
 
     if (domainEntity.user) {

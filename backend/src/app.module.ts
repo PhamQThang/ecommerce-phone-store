@@ -62,8 +62,27 @@ import { SuppliersModule } from './suppliers/suppliers.module';
 
 import { PurchaseOrdersModule } from './purchase-orders/purchase-orders.module';
 
+import { BlogsModule } from './blogs/blogs.module';
+
+import { PromotionsModule } from './promotions/promotions.module';
+
+import { OrderTransactionsModule } from './order-transactions/order-transactions.module';
+import { VnpayCoreModule } from './vnpay.module';
+
 @Module({
   imports: [
+    VnpayCoreModule.register({
+      tmnCode: process.env.VNPAY_TMN_CODE ?? '',
+      secureSecret: process.env.VNPAY_SECRET_KEY ?? '',
+      vnpayHost: process.env.VNPAY_HOST,
+      testMode: true,
+      hashAlgorithm: 'SHA512' as any,
+      enableLog: true,
+      loggerFn: console.log,
+    }),
+    OrderTransactionsModule,
+    PromotionsModule,
+    BlogsModule,
     PurchaseOrdersModule,
     SuppliersModule,
     ProductModelsModule,
