@@ -40,7 +40,25 @@ export interface Color {
   createdAt: string;
   updatedAt: string;
 }
-
+export interface ProductIdentity {
+  id: string;
+  status: string;
+  imei: string;
+  createdAt: string;
+  updatedAt: string;
+  colorId?: string;
+  productId?: string;
+  purchaseOrderId?: string;
+  color?: Color;
+}
+export interface PurchaseOrder {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  supplierId?: string;
+  supplier: Supplier;
+  productIdentites: ProductIdentity[];
+}
 export interface GetProductModelsResponse {
   data: ProductModel[];
   hasNextPage: boolean;
@@ -108,6 +126,31 @@ export interface GetColorsResponse {
   hasNextPage: boolean;
 }
 
+export interface ProductIdentityRequest {
+  purchaseOrder: {
+    id: string;
+  };
+  color: {
+    id: string;
+  };
+  product: {
+    id: string;
+  };
+  status: string;
+  imei: string;
+}
+
+export interface PurchaseOrderRequest {
+  productIdentities: { id: string }[]; // Mảng rỗng khi tạo
+  supplier: {
+    id: string;
+  };
+}
+
+export interface GetPurchaseOrdersResponse {
+  data: PurchaseOrder[];
+  hasNextPage: boolean;
+}
 // Common Types
 export interface PaginationParams {
   page?: number;

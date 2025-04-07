@@ -30,7 +30,7 @@ export default function AdminHeader() {
 
   return (
     <header className="sticky top-0 bg-gray-100 p-4 shadow-md z-50">
-      <div className="mx-auto flex justify-between items-center max-w-7xl">
+      <div className="mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <SidebarTrigger />
           <h1 className="text-xl sm:text-2xl font-bold">Admin Dashboard</h1>

@@ -84,12 +84,12 @@ export default function AdminSidebar() {
       icon: Eclipse,
       roles: ["Admin", "Employee"],
     },
-    // {
-    //   title: "Quản lý nhập hàng",
-    //   url: "/admin/import-orders",
-    //   icon: Truck,
-    //   roles: ["Admin", "Employee"],
-    // },
+    {
+      title: "Quản lý nhập hàng",
+      url: "/admin/purchase-orders",
+      icon: Truck,
+      roles: ["Admin", "Employee"],
+    },
     // {
     //   title: "Quản lý đơn hàng",
     //   url: "/admin/orders",

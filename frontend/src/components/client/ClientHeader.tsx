@@ -213,7 +213,9 @@ export default function ClientHeader() {
                   <span className="hidden md:inline text-gray-700 font-medium">
                     {isLoggedIn ? fullName : "Tài khoản"}
                   </span>
-                  <ChevronDown className={`h-5 w-5 transition-transform ${isMenuOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown
+                    className={`h-5 w-5 transition-transform ${isMenuOpen ? "rotate-180" : ""}`}
+                  />
                 </Button>
               </PopoverTrigger>
               <PopoverContent
@@ -224,7 +226,10 @@ export default function ClientHeader() {
                 {isLoggedIn ? (
                   <div className="flex flex-col gap-1">
                     <Link href="/profile">
-                      <Button variant="ghost" className="w-full justify-start text-sm text-gray-700 hover:bg-blue-50">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-sm text-gray-700 hover:bg-blue-50"
+                      >
                         Thông tin cá nhân
                       </Button>
                     </Link>
@@ -239,12 +244,18 @@ export default function ClientHeader() {
                 ) : (
                   <div className="flex flex-col gap-1">
                     <Link href="/auth/login">
-                      <Button variant="ghost" className="w-full justify-start text-sm text-gray-700 hover:bg-blue-50">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-sm text-gray-700 hover:bg-blue-50"
+                      >
                         Đăng nhập
                       </Button>
                     </Link>
                     <Link href="/auth/register">
-                      <Button variant="ghost" className="w-full justify-start text-sm text-gray-700 hover:bg-blue-50">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-sm text-gray-700 hover:bg-blue-50"
+                      >
                         Đăng ký
                       </Button>
                     </Link>
