@@ -43,7 +43,7 @@ export default function SalesSection() {
 
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mt-4">
         {displayedProducts.map((product) => (
-          <ProductCard key={product.id} {...product} />
+          <ProductCard key={product.id} {...product} newPrice={Number(product.newPrice)} oldPrice={Number(product.oldPrice)} />
         ))}
       </div>
     </div>
