@@ -108,7 +108,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ category, title, images, 
           </div>
 
           {/* Thông tin sản phẩm */}
-          <div className="w-full sm-5/12 md:w-7/12 flex flex-col gap-10">
+          <div className="w-full sm:w-5/12 md:w-7/12 flex flex-col gap-10">
             <div>
               <div className="flex items-center gap-2 mt-2">
                 <p className="text-red-500 font-bold text-2xl">{currencyFormatter.format(Number(newPrice))}</p>
