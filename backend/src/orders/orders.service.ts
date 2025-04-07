@@ -7,17 +7,17 @@ import {
   Injectable,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { VnpayService } from 'nestjs-vnpay';
+import { CartStatus } from 'src/carts/carts.type';
+import { ProductCode, VnpLocale, dateFormat } from 'vnpay';
 import { CartsService } from '../carts/carts.service';
 import { IPaginationOptions } from '../utils/types/pagination-options';
 import { Order } from './domain/order';
+import { OrderProduct } from './domain/order-product';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderRepository } from './infrastructure/persistence/order.repository';
 import { OrderStatus } from './orders.type';
-import { OrderProduct } from './domain/order-product';
-import { CartStatus } from 'src/carts/carts.type';
-import { ProductCode, VnpLocale, dateFormat } from 'vnpay';
-import { VnpayService } from 'nestjs-vnpay';
 
 @Injectable()
 export class OrdersService {
@@ -53,11 +53,11 @@ export class OrdersService {
         },
       });
     }
-    if (cartObject.status !== 'PENDING') {
+    if (cartObject.status !== CartStatus.IN_PROGRESS) {
       throw new UnprocessableEntityException({
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         errors: {
-          cartId: 'notPending',
+          cartId: 'notInProgress',
         },
       });
     }
@@ -93,7 +93,7 @@ export class OrdersService {
     }
 
     const totalAmount = orderProduct.reduce((acc, item) => {
-      const finalPrice = item.basePrice - item.discount;
+      const finalPrice = item.basePrice - (item.discount || 0);
       return acc + finalPrice * item.quantity;
     }, 0);
 
