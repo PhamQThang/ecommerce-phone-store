@@ -1,4 +1,4 @@
-// components/admin/Sidebar.tsx
+// components/admin/AdminSidebar.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/collapsible";
 import {
   ChevronDown,
-  Menu,
   Package,
   Truck,
   ShoppingCart,
@@ -28,6 +27,7 @@ import {
   BarChart,
   Users,
   UserCog,
+  Eclipse,
 } from "lucide-react";
 
 interface MenuItem {
@@ -58,7 +58,7 @@ export default function AdminSidebar() {
       title: "Dashboard",
       url: "/admin",
       icon: BarChart,
-      roles: ["admin", "employee"],
+      roles: ["admin", "Employee"],
     },
     {
       title: "Quản lý thương hiệu",
@@ -70,54 +70,60 @@ export default function AdminSidebar() {
       title: "Quản lý nhà cung cấp",
       url: "/admin/suppliers",
       icon: Truck,
-      roles: ["Admin", "employee"],
+      roles: ["Admin", "Employee"],
     },
     {
       title: "Quản lý sản phẩm",
       url: "/admin/products",
       icon: Package,
-      roles: ["Admin", "employee"],
+      roles: ["Admin", "Employee"],
     },
     {
-      title: "Quản lý nhập hàng",
-      url: "/admin/import-orders",
-      icon: Truck,
-      roles: ["Admin", "employee"],
+      title: "Quản lý màu",
+      url: "/admin/colors",
+      icon: Eclipse,
+      roles: ["Admin", "Employee"],
     },
-    {
-      title: "Quản lý đơn hàng",
-      url: "/admin/orders",
-      icon: ShoppingCart,
-      roles: ["Admin", "employee"],
-    },
-    {
-      title: "Quản lý khuyến mãi",
-      url: "/admin/promotions",
-      icon: Percent,
-      roles: ["Admin", "employee"],
-    },
-    {
-      title: "Quản lý báo cáo",
-      url: "/admin/reports",
-      icon: BarChart,
-      roles: ["Admin", "employee"],
-    },
-    {
-      title: "Quản lý khách hàng",
-      url: "/admin/customers",
-      icon: Users,
-      roles: ["Admin", "employee"],
-    },
-    {
-      title: "Quản lý nhân viên",
-      url: "/admin/employee",
-      icon: UserCog,
-      roles: ["Admin"],
-    },
+    // {
+    //   title: "Quản lý nhập hàng",
+    //   url: "/admin/import-orders",
+    //   icon: Truck,
+    //   roles: ["Admin", "Employee"],
+    // },
+    // {
+    //   title: "Quản lý đơn hàng",
+    //   url: "/admin/orders",
+    //   icon: ShoppingCart,
+    //   roles: ["Admin", "Employee"],
+    // },
+    // {
+    //   title: "Quản lý khuyến mãi",
+    //   url: "/admin/promotions",
+    //   icon: Percent,
+    //   roles: ["Admin", "Employee"],
+    // },
+    // {
+    //   title: "Quản lý báo cáo",
+    //   url: "/admin/reports",
+    //   icon: BarChart,
+    //   roles: ["Admin", "Employee"],
+    // },
+    // {
+    //   title: "Quản lý khách hàng",
+    //   url: "/admin/customers",
+    //   icon: Users,
+    //   roles: ["Admin", "Employee"],
+    // },
+    // {
+    //   title: "Quản lý nhân viên",
+    //   url: "/admin/Employee",
+    //   icon: UserCog,
+    //   roles: ["Admin"],
+    // },
   ];
 
   return (
-    <Sidebar className="w-64 bg-white shadow-lg">
+    <Sidebar className="w-64 bg-white shadow-lg hidden sm:flex">
       <SidebarGroup>
         <SidebarGroupLabel>Quản lý hệ thống</SidebarGroupLabel>
         <SidebarGroupContent>

@@ -34,6 +34,13 @@ export interface ProductModel {
   };
 }
 
+export interface Color {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface GetProductModelsResponse {
   data: ProductModel[];
   hasNextPage: boolean;
@@ -80,6 +87,27 @@ export interface UploadFileResponse {
     path: string;
   };
 }
+
+export interface SupplierRequest {
+  name: string;
+  address: string;
+  phoneNumber: string;
+}
+
+export interface GetSuppliersResponse {
+  data: Supplier[];
+  hasNextPage: boolean;
+}
+
+export interface ColorRequest {
+  name: string;
+}
+
+export interface GetColorsResponse {
+  data: Color[];
+  hasNextPage: boolean;
+}
+
 // Common Types
 export interface PaginationParams {
   page?: number;
@@ -149,11 +177,10 @@ export interface Category {
 }
 
 export interface Supplier {
-  id: number;
+  id: string;
   name: string;
-  email: string;
-  phoneNumber: string;
   address: string;
+  phoneNumber: string;
   createdAt: string;
   updatedAt: string;
 }

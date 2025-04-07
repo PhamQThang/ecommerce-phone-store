@@ -64,7 +64,7 @@ export default function ProductForm({
   const [models, setModels] = useState<ProductModel[]>([]);
   const [selectedModel, setSelectedModel] = useState<ProductModel | null>(null);
   const [loading, setLoading] = useState(false);
-  const [images, setImages] = useState<string[]>([]); // Lưu danh sách path của ảnh
+  const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
 
   const form = useForm<z.infer<typeof productSchema>>({
@@ -84,7 +84,6 @@ export default function ProductForm({
     },
   });
 
-  // Lấy danh sách model khi component mount
   useEffect(() => {
     const fetchModels = async () => {
       try {
@@ -99,12 +98,10 @@ export default function ProductForm({
     fetchModels();
   }, []);
 
-  // Cập nhật form và images khi editingProduct thay đổi
   useEffect(() => {
     const fetchProductData = async () => {
       if (editingProduct) {
         try {
-          // Lấy dữ liệu mới nhất từ API
           const productData = await getProductById(editingProduct.id);
           form.reset({
             name: productData.name,
@@ -144,21 +141,19 @@ export default function ProductForm({
           modelId: "",
         });
         setSelectedModel(null);
-        setImages([]); // Reset danh sách ảnh khi thêm mới
+        setImages([]);
       }
     };
 
     fetchProductData();
   }, [editingProduct, models, form]);
 
-  // Xử lý khi chọn model
   const handleModelChange = (modelId: string) => {
     const selected = models.find((model) => model.id === modelId);
     setSelectedModel(selected || null);
     form.setValue("modelId", modelId);
   };
 
-  // Xử lý upload ảnh
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -178,11 +173,10 @@ export default function ProductForm({
       });
     } finally {
       setUploading(false);
-      // Reset input file
       event.target.value = "";
     }
   };
-  // Xử lý xóa ảnh
+
   const handleRemoveImage = (path: string) => {
     setImages((prev) => prev.filter((image) => image !== path));
     toast.success("Xóa ảnh thành công");
@@ -224,218 +218,240 @@ export default function ProductForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[900px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {editingProduct ? "Sửa sản phẩm" : "Thêm sản phẩm"}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-4"
-          >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tên sản phẩm</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Iphone 16 256gb" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="slug"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Slug</FormLabel>
-                  <FormControl>
-                    <Input placeholder="phone-16-12gb" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="basePrice"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Giá cơ bản</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="25000"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="screenSize"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Kích thước màn hình</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="16"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="pin"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Dung lượng pin</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="3000"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="screenTechnology"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Công nghệ màn hình</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Amoled" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="chipset"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Chipset</FormLabel>
-                  <FormControl>
-                    <Input placeholder="AMD 5600H" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="os"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Hệ điều hành</FormLabel>
-                  <FormControl>
-                    <Input placeholder="17" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="storage"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Dung lượng lưu trữ</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="0"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="ram"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>RAM</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="12"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="modelId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Model</FormLabel>
-                  <Select onValueChange={handleModelChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Chọn model" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {models.map((model) => (
-                        <SelectItem key={model.id} value={model.id}>
-                          {model.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Trường upload ảnh */}
-            <div>
+          <form onSubmit={form.handleSubmit(handleSubmit)}>
+            {/* Chia form thành 2 cột trên màn hình lớn */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Cột 1 */}
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tên sản phẩm</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Iphone 16 256gb" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="slug"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Slug</FormLabel>
+                      <FormControl>
+                        <Input placeholder="phone-16-12gb" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="basePrice"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Giá cơ bản</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="25000"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="screenSize"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Kích thước màn hình</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="16"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="pin"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Dung lượng pin</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="3000"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="screenTechnology"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Công nghệ màn hình</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Amoled" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Cột 2 */}
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="chipset"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Chipset</FormLabel>
+                      <FormControl>
+                        <Input placeholder="AMD 5600H" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="os"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Hệ điều hành</FormLabel>
+                      <FormControl>
+                        <Input placeholder="17" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="storage"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Dung lượng lưu trữ</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="0"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="ram"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>RAM</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="12"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="modelId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Model</FormLabel>
+                      <Select
+                        onValueChange={handleModelChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Chọn model" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {models.map((model) => (
+                            <SelectItem key={model.id} value={model.id}>
+                              {model.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Phần upload ảnh - Đặt ở dưới cùng, chiếm toàn bộ chiều rộng */}
+            <div className="mt-4">
               <FormLabel>Ảnh sản phẩm</FormLabel>
               <Input
                 type="file"
                 accept="image/*"
                 onChange={handleFileUpload}
                 disabled={uploading}
+                className="mt-1"
               />
               {uploading && (
-                <p className="text-sm text-gray-500">Đang upload...</p>
+                <p className="text-sm text-gray-500 mt-1">Đang upload...</p>
               )}
               {images.length > 0 && (
                 <div className="mt-2">
                   <h4 className="text-sm font-medium">Danh sách ảnh:</h4>
-                  <div className="grid grid-cols-2 gap-2 mt-1">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mt-1 max-h-40 overflow-y-auto">
                     {images.map((image, index) => (
                       <div key={index} className="relative">
                         <img
                           src={process.env.NEXT_PUBLIC_API_URL + image}
                           alt={`Product image ${index + 1}`}
-                          className="w-full h-24 object-cover rounded"
+                          className="w-full h-20 object-cover rounded"
                         />
                         <Button
                           variant="destructive"
@@ -451,7 +467,8 @@ export default function ProductForm({
                 </div>
               )}
             </div>
-            <DialogFooter className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-2">
+
+            <DialogFooter className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-2 mt-4">
               <Button type="submit" disabled={loading || uploading}>
                 {loading
                   ? "Đang xử lý..."

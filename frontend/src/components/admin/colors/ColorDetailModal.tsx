@@ -1,5 +1,5 @@
-// components/admin/suppliers/SupplierDetailModal.tsx
-import { Supplier } from "@/types/types";
+// components/admin/colors/ColorDetailModal.tsx
+import { Color } from "@/types/types";
 import {
   Dialog,
   DialogContent,
@@ -10,18 +10,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 
-interface SupplierDetailModalProps {
+interface ColorDetailModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  supplier: Supplier | null;
+  color: Color | null;
 }
 
-const SupplierDetailModal: React.FC<SupplierDetailModalProps> = ({
+const ColorDetailModal: React.FC<ColorDetailModalProps> = ({
   open,
   onOpenChange,
-  supplier,
+  color,
 }) => {
-  if (!supplier) return null;
+  if (!color) return null;
 
   const formatDate = (dateString: string) => {
     return format(new Date(dateString), "dd/MM/yyyy HH:mm:ss");
@@ -31,36 +31,26 @@ const SupplierDetailModal: React.FC<SupplierDetailModalProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Chi tiết nhà cung cấp: {supplier.name}</DialogTitle>
+          <DialogTitle>Chi tiết màu sắc: {color.name}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center">
             <span className="font-semibold w-full sm:w-32">ID:</span>
-            <span>{supplier.id}</span>
+            <span>{color.id}</span>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-semibold w-full sm:w-32">
-              Tên nhà cung cấp:
-            </span>
-            <span>{supplier.name}</span>
-          </div>
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-semibold w-full sm:w-32">Số điện thoại:</span>
-            <span>{supplier.phoneNumber}</span>
-          </div>
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-semibold w-full sm:w-32">Địa chỉ:</span>
-            <span>{supplier.address}</span>
+            <span className="font-semibold w-full sm:w-32">Tên màu:</span>
+            <span>{color.name}</span>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center">
             <span className="font-semibold w-full sm:w-32">Thời gian tạo:</span>
-            <span>{formatDate(supplier.createdAt)}</span>
+            <span>{formatDate(color.createdAt)}</span>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center">
             <span className="font-semibold w-full sm:w-32">
               Thời gian cập nhật:
             </span>
-            <span>{formatDate(supplier.updatedAt)}</span>
+            <span>{formatDate(color.updatedAt)}</span>
           </div>
         </div>
         <DialogFooter className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-2">
@@ -73,4 +63,4 @@ const SupplierDetailModal: React.FC<SupplierDetailModalProps> = ({
   );
 };
 
-export default SupplierDetailModal;
+export default ColorDetailModal;

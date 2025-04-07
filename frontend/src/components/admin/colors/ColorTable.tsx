@@ -1,6 +1,5 @@
-// /admin/components/ImportOrderTable.tsx
-import { ImportOrder } from "@/types/types";
-import { Supplier } from "@/types/types";
+// components/admin/colors/ColorTable.tsx
+import { Color } from "@/types/types";
 import {
   Table,
   TableBody,
@@ -13,17 +12,15 @@ import { Button } from "@/components/ui/button";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 
-interface ImportOrderTableProps {
-  importOrders: ImportOrder[];
-  suppliers: Supplier[];
-  onView: (importOrder: ImportOrder) => void;
-  onEdit: (importOrder: ImportOrder) => void;
-  onDelete: (id: number) => void;
+interface ColorTableProps {
+  colors: Color[];
+  onView: (color: Color) => void;
+  onEdit: (color: Color) => void;
+  onDelete: (id: string) => void;
 }
 
-const ImportOrderTable: React.FC<ImportOrderTableProps> = ({
-  importOrders,
-  suppliers,
+const ColorTable: React.FC<ColorTableProps> = ({
+  colors,
   onView,
   onEdit,
   onDelete,
@@ -32,24 +29,14 @@ const ImportOrderTable: React.FC<ImportOrderTableProps> = ({
     return format(new Date(dateString), "dd/MM/yyyy HH:mm:ss");
   };
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(price);
-  };
-
   return (
     <div className="overflow-x-auto">
-      {/* Hiển thị dạng bảng cho tablet và PC */}
       <div className="hidden sm:block">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="hidden md:table-cell">ID</TableHead>
-              <TableHead>Nhà cung cấp</TableHead>
-              <TableHead>Tổng giá trị</TableHead>
-              <TableHead>Trạng thái</TableHead>
+              <TableHead>Tên màu</TableHead>
               <TableHead className="hidden lg:table-cell">
                 Thời gian tạo
               </TableHead>
@@ -60,29 +47,24 @@ const ImportOrderTable: React.FC<ImportOrderTableProps> = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {importOrders.map((importOrder) => (
-              <TableRow key={importOrder.id}>
+            {colors.map((color) => (
+              <TableRow key={color.id}>
                 <TableCell className="hidden md:table-cell">
-                  {importOrder.id}
+                  {color.id}
                 </TableCell>
-                <TableCell>
-                  {suppliers.find((sup) => sup.id === importOrder.supplier_id)
-                    ?.name || "Không có"}
-                </TableCell>
-                <TableCell>{formatPrice(importOrder.total_amount)}</TableCell>
-                <TableCell>{importOrder.status}</TableCell>
+                <TableCell>{color.name}</TableCell>
                 <TableCell className="hidden lg:table-cell">
-                  {formatDate(importOrder.createdAt)}
+                  {formatDate(color.createdAt)}
                 </TableCell>
                 <TableCell className="hidden lg:table-cell">
-                  {formatDate(importOrder.updatedAt)}
+                  {formatDate(color.updatedAt)}
                 </TableCell>
                 <TableCell>
                   <div className="flex space-x-2">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => onView(importOrder)}
+                      onClick={() => onView(color)}
                     >
                       <Eye className="h-4 w-4 sm:mr-1" />
                       <span className="hidden sm:inline">Xem</span>
@@ -90,7 +72,7 @@ const ImportOrderTable: React.FC<ImportOrderTableProps> = ({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => onEdit(importOrder)}
+                      onClick={() => onEdit(color)}
                     >
                       <Pencil className="h-4 w-4 sm:mr-1" />
                       <span className="hidden sm:inline">Sửa</span>
@@ -98,7 +80,7 @@ const ImportOrderTable: React.FC<ImportOrderTableProps> = ({
                     <Button
                       variant="destructive"
                       size="sm"
-                      onClick={() => onDelete(importOrder.id)}
+                      onClick={() => onDelete(color.id)}
                     >
                       <Trash2 className="h-4 w-4 sm:mr-1" />
                       <span className="hidden sm:inline">Xóa</span>
@@ -111,39 +93,32 @@ const ImportOrderTable: React.FC<ImportOrderTableProps> = ({
         </Table>
       </div>
 
-      {/* Hiển thị dạng thẻ (card) cho mobile */}
       <div className="block sm:hidden space-y-4">
-        {importOrders.map((importOrder) => (
-          <div key={importOrder.id} className="border rounded-lg p-4 shadow-sm">
+        {colors.map((color) => (
+          <div key={color.id} className="border rounded-lg p-4 shadow-sm">
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="font-semibold">
-                  {suppliers.find((sup) => sup.id === importOrder.supplier_id)
-                    ?.name || "Không có"}
-                </h3>
-                <p className="text-sm text-gray-500">
-                  {formatPrice(importOrder.total_amount)}
-                </p>
+                <h3 className="font-semibold">{color.name}</h3>
               </div>
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => onView(importOrder)}
+                  onClick={() => onView(color)}
                 >
                   <Eye className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => onEdit(importOrder)}
+                  onClick={() => onEdit(color)}
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="destructive"
                   size="sm"
-                  onClick={() => onDelete(importOrder.id)}
+                  onClick={() => onDelete(color.id)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -156,4 +131,4 @@ const ImportOrderTable: React.FC<ImportOrderTableProps> = ({
   );
 };
 
-export default ImportOrderTable;
+export default ColorTable;

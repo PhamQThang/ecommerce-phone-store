@@ -1,4 +1,4 @@
-// /admin/components/SupplierTable.tsx
+// components/admin/suppliers/SupplierTable.tsx
 import { Supplier } from "@/types/types";
 import {
   Table,
@@ -16,7 +16,7 @@ interface SupplierTableProps {
   suppliers: Supplier[];
   onView: (supplier: Supplier) => void;
   onEdit: (supplier: Supplier) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
 }
 
 const SupplierTable: React.FC<SupplierTableProps> = ({
@@ -37,7 +37,6 @@ const SupplierTable: React.FC<SupplierTableProps> = ({
             <TableRow>
               <TableHead className="hidden md:table-cell">ID</TableHead>
               <TableHead>Tên nhà cung cấp</TableHead>
-              <TableHead>Email</TableHead>
               <TableHead className="hidden md:table-cell">
                 Số điện thoại
               </TableHead>
@@ -58,7 +57,6 @@ const SupplierTable: React.FC<SupplierTableProps> = ({
                   {supplier.id}
                 </TableCell>
                 <TableCell>{supplier.name}</TableCell>
-                <TableCell>{supplier.email}</TableCell>
                 <TableCell className="hidden md:table-cell">
                   {supplier.phoneNumber}
                 </TableCell>
@@ -111,7 +109,7 @@ const SupplierTable: React.FC<SupplierTableProps> = ({
             <div className="flex justify-between items-center">
               <div>
                 <h3 className="font-semibold">{supplier.name}</h3>
-                <p className="text-sm text-gray-500">{supplier.email}</p>
+                <p className="text-sm text-gray-500">{supplier.phoneNumber}</p>
               </div>
               <div className="flex space-x-2">
                 <Button
