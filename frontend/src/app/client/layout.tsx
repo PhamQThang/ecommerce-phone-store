@@ -9,7 +9,7 @@ export default function ClientLayout({
   return (
     <div className="min-h-screen bg-white">
       <ClientHeader />
-      <main>{children}</main>
+      <main className="min-h-[60vh]">{children}</main>
       <Footer />
     </div>
   );

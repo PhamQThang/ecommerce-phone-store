@@ -38,6 +38,8 @@ export default function ClientHeader() {
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [openCategory, setOpenCategory] = useState<string | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -77,6 +79,21 @@ export default function ClientHeader() {
 
   const toggleCategory = (categoryName: string) => {
     setOpenCategory(openCategory === categoryName ? null : categoryName);
+  };
+
+  const handleMouseEnter = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+      setHoverTimeout(null);
+    }
+    setIsProductsOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setIsProductsOpen(false);
+    }, 200); // Adjust delay as needed
+    setHoverTimeout(timeout);
   };
 
   const categories = [
@@ -132,7 +149,7 @@ export default function ClientHeader() {
 
   return (
     <div className="flex flex-col sticky top-0 z-50 bg-white shadow-sm">
-      <div className="container w-full mx-auto py-3">
+      <div className="container w-full mx-auto p-3">
         <div className="container mx-auto flex items-center justify-between">
           <Link href="/client">
             <Image
@@ -148,7 +165,7 @@ export default function ClientHeader() {
               <Input
                 type="text"
                 placeholder="Tìm kiếm..."
-                className="pl-10 pr-4 py-2 text-sm rounded-full border-gray-200 focus:border-green-400 focus:ring-green-400"
+                className="pl-10 pr-4 py-2 text-sm rounded-full border-gray-200 focus:border-blue-400 focus:ring-blue-400"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -175,7 +192,7 @@ export default function ClientHeader() {
                     <Input
                       type="text"
                       placeholder="Tìm kiếm sản phẩm..."
-                      className="pl-10 pr-4 py-2 text-sm rounded-full border-gray-200 focus:border-green-400 focus:ring-green-400"
+                      className="pl-10 pr-4 py-2 text-sm rounded-full border-gray-200 focus:border-blue-400 focus:ring-blue-400"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -185,34 +202,35 @@ export default function ClientHeader() {
               </SheetContent>
             </Sheet>
 
-            <Popover open={isAccountOpen} onOpenChange={setIsAccountOpen}>
+            <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <PopoverTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-2"
+                  onMouseEnter={() => setIsMenuOpen(true)}
+                >
                   <User className="h-6 w-6 text-gray-600" />
                   <span className="hidden md:inline text-gray-700 font-medium">
                     {isLoggedIn ? fullName : "Tài khoản"}
                   </span>
-                  <ChevronDown
-                    className={`h-5 w-5 text-gray-600 transition-transform duration-200 ${
-                      isAccountOpen ? "rotate-180" : ""
-                    }`}
-                  />
+                  <ChevronDown className={`h-5 w-5 transition-transform ${isMenuOpen ? "rotate-180" : ""}`} />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-48 p-2 bg-white shadow-lg rounded-lg border border-gray-100">
+              <PopoverContent
+                className="w-48 p-2 bg-white shadow-lg rounded-lg border border-gray-100"
+                onMouseEnter={() => setIsMenuOpen(true)}
+                onMouseLeave={() => setIsMenuOpen(false)}
+              >
                 {isLoggedIn ? (
                   <div className="flex flex-col gap-1">
                     <Link href="/profile">
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-md"
-                      >
+                      <Button variant="ghost" className="w-full justify-start text-sm text-gray-700 hover:bg-blue-50">
                         Thông tin cá nhân
                       </Button>
                     </Link>
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-md"
+                      className="w-full justify-start text-sm text-gray-700 hover:bg-blue-50"
                       onClick={handleLogout}
                     >
                       Đăng xuất
@@ -221,18 +239,12 @@ export default function ClientHeader() {
                 ) : (
                   <div className="flex flex-col gap-1">
                     <Link href="/auth/login">
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-md"
-                      >
+                      <Button variant="ghost" className="w-full justify-start text-sm text-gray-700 hover:bg-blue-50">
                         Đăng nhập
                       </Button>
                     </Link>
                     <Link href="/auth/register">
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-md"
-                      >
+                      <Button variant="ghost" className="w-full justify-start text-sm text-gray-700 hover:bg-blue-50">
                         Đăng ký
                       </Button>
                     </Link>
@@ -268,13 +280,13 @@ export default function ClientHeader() {
                             <div className="flex items-center justify-between">
                               <Link
                                 href={category.href}
-                                className="block py-2 px-4 text-gray-700 font-semibold text-base hover:bg-green-50 hover:text-green-600 rounded-lg flex-1 transition-colors duration-200"
+                                className="block py-2 px-4 text-gray-700 font-semibold text-base hover:bg-blue-50 hover:text-blue-600 rounded-lg flex-1 transition-colors duration-200"
                               >
                                 {category.name}
                               </Link>
                               <Button
                                 onClick={() => toggleCategory(category.name)}
-                                className="p-2 hover:bg-green-50 rounded-lg transition-colors duration-200"
+                                className="p-2 bg-blue-50 hover:bg-blue-50 rounded-lg transition-colors duration-200"
                               >
                                 <ChevronRight
                                   className={`h-5 w-5 text-gray-500 transition-transform duration-200 ${
@@ -291,7 +303,7 @@ export default function ClientHeader() {
                                   <Link
                                     key={product.name}
                                     href={`${category.href}/${product.slug}`}
-                                    className="block py-1.5 px-4 text-gray-600 text-sm hover:bg-green-50 hover:text-green-600 rounded-lg transition-colors duration-200"
+                                    className="block py-1.5 px-4 text-gray-600 text-sm hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors duration-200"
                                   >
                                     {product.name}
                                   </Link>
@@ -305,7 +317,7 @@ export default function ClientHeader() {
                       <Link
                         key={item.name}
                         href={item.href}
-                        className="block py-2 px-4 text-gray-700 font-medium text-base hover:bg-green-50 hover:text-green-600 rounded-lg transition-colors duration-200"
+                        className="block py-2 px-4 text-gray-700 font-medium text-base hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors duration-200"
                       >
                         {item.name}
                       </Link>
@@ -321,24 +333,23 @@ export default function ClientHeader() {
       <div className="hidden md:flex bg-cyan-300 items-center justify-center text-base font-semibold relative">
         {navItems.map((item) =>
           item.hasDropdown ? (
-            
             <div
               key={item.name}
               className="relative"
-              onMouseEnter={() => setIsProductsOpen(true)}
-              onMouseLeave={() => setIsProductsOpen(false)}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
-              <span className="cursor-pointer text-gray-800 hover:bg-black hover:text-white transition-colors duration-200 flex items-center py-3 px-6">
+              <span className="cursor-pointer font-bold text-gray-800 hover:bg-black hover:text-white transition-colors duration-200 flex items-center p-3">
                 {item.name}
               </span>
               {isProductsOpen && (
-                <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-3 w-[700px] bg-white shadow-xl rounded-lg p-6 z-50 border border-gray-100">
-                  <div className="grid grid-cols-3 gap-8">
+                <div className="absolute left-1/2 transform -translate-x-[35%] mx-auto top-full mt-3 w-[700px] bg-white shadow-xl rounded-lg p-6 z-50 border border-gray-100">
+                  <div className="grid sm:grid-cols-3 gap-6">
                     {categories.map((category) => (
                       <div key={category.name} className="flex flex-col gap-2">
                         <Link
                           href={category.href}
-                          className="font-bold text-lg text-gray-800 hover:text-green-600 border-b border-gray-200 pb-2 mb-2 transition-colors duration-200"
+                          className="font-bold text-lg text-gray-800 hover:text-blue-600 border-b border-gray-200 pb-2 mb-2 transition-colors duration-200"
                         >
                           {category.name}
                         </Link>
@@ -346,7 +357,7 @@ export default function ClientHeader() {
                           <Link
                             key={product.name}
                             href={`${category.href}/${product.slug}`}
-                            className="text-gray-600 text-sm hover:text-green-600 hover:bg-green-50 rounded-md px-2 py-1 transition-colors duration-200"
+                            className="text-gray-600 text-sm hover:text-blue-600 hover:bg-blue-50 rounded-md px-2 py-1 transition-colors duration-200"
                           >
                             {product.name}
                           </Link>

@@ -8,7 +8,7 @@ import CartItem from "@/components/client/cart/CartItem";
 
 const CartPage = () => {
   const [cart, setCart] = useState(
-    products.map((p) => ({ ...p, quantity: 1, isChecked: true }))
+    products.map((p) => ({ ...p, quantity: 1, isChecked: true, newPrice: String(p.newPrice) }))
   );
 
   const removeItem = (id: string) => {
@@ -31,21 +31,20 @@ const CartPage = () => {
     if (!item.isChecked) return acc;
 
     // Chuyển đổi giá từ string -> number (loại bỏ ký tự không phải số)
-    const price = parseFloat(item.newPrice.replace(/\D/g, ""));
-    return acc + price * item.quantity;
+    return acc + Number(item.newPrice) * item.quantity;
   }, 0);
 
   return (
-    <div className="container mx-auto mb-8 px-1 grid grid-cols-1 md:grid-cols-12 gap-2">
+    <div className="container mx-auto mb-8 px-1 grid w-full gap-2">
       {/* Giỏ hàng */}
-      <div className="mx-auto p-4 mt-5 bg-white rounded-lg shadow-lg md:col-span-9 w-full h-auto border-color-200">
+      <div className="mx-auto p-4 mt-5 bg-white rounded-lg shadow-lg  w-full h-auto border-color-200">
         <h2 className="text-2xl font-bold mb-4">Giỏ hàng của bạn</h2>
         <div className="grid gap-4 mt-10">
           <div className="grid grid-cols-12 font-bold text-gray-700 border-b pb-2 mb-4 text-center">
-            <p className="col-span-5 hidden sm:flex">Tên sản phẩm</p>
-            <p className="col-span-2 text-center hidden sm:flex">Giá</p>
-            <p className="col-span-2 text-center hidden sm:flex">Số lượng</p>
-            <p className="col-span-2 text-center hidden sm:flex">Tạm tính</p>
+            <p className="col-span-5 hidden sm:flex justify-center">Tên sản phẩm</p>
+            <p className="col-span-2 text-center hidden sm:flex justify-center">Giá</p>
+            <p className="col-span-2 text-center hidden sm:flex justify-center">Số lượng</p>
+            <p className="col-span-2 text-center hidden sm:flex justify-center">Tạm tính</p>
           </div>
           {cart.map((item) => (
             <CartItem
@@ -60,7 +59,7 @@ const CartPage = () => {
       </div>
 
       {/* Thông tin giỏ hàng */}
-      <div className="mx-auto p-4 mt-5 bg-white rounded-lg shadow-lg md:col-span-3 w-full h-[200px]">
+      <div className="mx-auto p-4 mt-5 bg-white rounded-lg shadow-lg  w-full h-[200px]">
         <h2 className="text-2xl font-bold mb-4">Thông tin giỏ hàng</h2>
         <div className="mt-4 flex justify-between">
           <p>Tạm tính:</p>
