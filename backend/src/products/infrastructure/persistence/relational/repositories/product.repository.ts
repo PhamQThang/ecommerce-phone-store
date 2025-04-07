@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
-import { ProductEntity } from '../entities/product.entity';
+import { PromotionRepository } from 'src/promotions/infrastructure/persistence/promotion.repository';
+import { In, Repository } from 'typeorm';
+import { ProductIdentityMapper } from '../../../../../product-identities/infrastructure/persistence/relational/mappers/product-identity.mapper';
 import { NullableType } from '../../../../../utils/types/nullable.type';
+import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 import { Product } from '../../../../domain/product';
 import { ProductRepository } from '../../product.repository';
+import { ProductEntity } from '../entities/product.entity';
 import { ProductMapper } from '../mappers/product.mapper';
-import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
-import { ProductIdentityMapper } from '../../../../../product-identities/infrastructure/persistence/relational/mappers/product-identity.mapper';
-import { PromotionRepository } from 'src/promotions/infrastructure/persistence/promotion.repository';
 
 @Injectable()
 export class ProductRelationalRepository implements ProductRepository {
@@ -16,7 +16,6 @@ export class ProductRelationalRepository implements ProductRepository {
     @InjectRepository(ProductEntity)
     private readonly productRepository: Repository<ProductEntity>,
 
-    @InjectRepository(PromotionRepository)
     private readonly promotionRepository: PromotionRepository,
   ) {}
 

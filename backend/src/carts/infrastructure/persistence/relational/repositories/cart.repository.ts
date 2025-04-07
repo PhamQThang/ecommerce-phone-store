@@ -5,13 +5,13 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CartStatus } from 'src/carts/carts.type';
+import { PromotionRepository } from 'src/promotions/infrastructure/persistence/promotion.repository';
 import { In, Repository } from 'typeorm';
 import { NullableType } from '../../../../../utils/types/nullable.type';
 import { Cart } from '../../../../domain/cart';
 import { CartRepository } from '../../cart.repository';
 import { CartEntity } from '../entities/cart.entity';
 import { CartMapper } from '../mappers/cart.mapper';
-import { PromotionRepository } from 'src/promotions/infrastructure/persistence/promotion.repository';
 
 @Injectable()
 export class CartRelationalRepository implements CartRepository {
@@ -19,7 +19,6 @@ export class CartRelationalRepository implements CartRepository {
     @InjectRepository(CartEntity)
     private readonly cartRepository: Repository<CartEntity>,
 
-    @InjectRepository(PromotionRepository)
     private readonly promotionRepository: PromotionRepository,
   ) {}
 
