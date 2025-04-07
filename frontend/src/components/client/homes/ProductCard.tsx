@@ -4,7 +4,7 @@ import Link from "next/link";
 
 interface ProductProps {
   id: string;
-  images?: string[]; // Mảng ảnh (có thể undefined)
+  images?: string[];
   category: string;
   title: string;
   newPrice: number;
@@ -28,12 +28,12 @@ const ProductCard: React.FC<ProductProps> = ({
 
   if (!isValidPrice(newPrice)) {
     console.error(`Invalid newPrice for product ID: ${id}`);
-    newPrice = 0; // Gán giá trị mặc định nếu không hợp lệ
+    newPrice = 0;
   }
 
   if (!isValidPrice(oldPrice)) {
     console.error(`Invalid oldPrice for product ID: ${id}`);
-    oldPrice = undefined; // Bỏ qua oldPrice nếu không hợp lệ
+    oldPrice = undefined;
   }
 
   const formatPrice = (price: number | undefined) =>
@@ -67,12 +67,19 @@ const ProductCard: React.FC<ProductProps> = ({
         <div className="flex flex-col sm:flex-row gap-2 mt-1">
           <p className="text-red-500 font-bold">{formatPrice(newPrice)}</p>
           {oldPrice && (
-            <p className="text-gray-400 line-through">{formatPrice(oldPrice)}</p>
+            <p className="text-gray-400 line-through">
+              {formatPrice(oldPrice)}
+            </p>
           )}
         </div>
         <div className="flex mt-1">
           {Array.from({ length: 5 }).map((_, i) => (
-            <span key={i} className={`text-yellow-500 ${i < rating ? "" : "opacity-30"}`}>⭐</span>
+            <span
+              key={i}
+              className={`text-yellow-500 ${i < rating ? "" : "opacity-30"}`}
+            >
+              ⭐
+            </span>
           ))}
         </div>
       </Link>
