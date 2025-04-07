@@ -10,6 +10,7 @@ import {
   // decorators here
   IsString,
   ValidateNested,
+  IsNumber,
 } from 'class-validator';
 
 import {
@@ -23,6 +24,14 @@ import {
 } from 'class-transformer';
 
 export class CreateProductIdentityDto {
+  @ApiProperty({
+    required: false,
+    type: () => Number,
+  })
+  @IsOptional()
+  @IsNumber()
+  purchasePrice?: number | null;
+
   @ApiProperty({
     required: true,
     type: () => PurchaseOrderDto,

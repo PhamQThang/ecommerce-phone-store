@@ -35,6 +35,7 @@ export class ProductMapper {
 
       const colors = raw.identities?.reduce(
         (acc, item) => {
+          if (item.color?.id === undefined) return acc;
           if (item.status === ItemStatus.SOLD) return acc;
           if (acc[item.color.id] === undefined) {
             acc[item.color.id] = {

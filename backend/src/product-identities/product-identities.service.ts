@@ -38,6 +38,7 @@ export class ProductIdentitiesService {
   async create(createProductIdentityDto: CreateProductIdentityDto) {
     // Do not remove comment below.
     // <creating-property />
+
     const purchaseOrderObject = await this.purchaseOrderService.findById(
       createProductIdentityDto.purchaseOrder.id,
     );
@@ -80,6 +81,8 @@ export class ProductIdentitiesService {
     return this.productentityRepository.create({
       // Do not remove comment below.
       // <creating-property-payload />
+      purchasePrice: createProductIdentityDto.purchasePrice,
+
       purchaseOrder,
 
       color,
@@ -120,6 +123,7 @@ export class ProductIdentitiesService {
   ) {
     // Do not remove comment below.
     // <updating-property />
+
     let purchaseOrder: PurchaseOrder | undefined = undefined;
 
     if (updateProductIdentityDto.purchaseOrder) {
@@ -174,6 +178,8 @@ export class ProductIdentitiesService {
     return this.productentityRepository.update(id, {
       // Do not remove comment below.
       // <updating-property-payload />
+      purchasePrice: updateProductIdentityDto.purchasePrice,
+
       purchaseOrder,
 
       color,

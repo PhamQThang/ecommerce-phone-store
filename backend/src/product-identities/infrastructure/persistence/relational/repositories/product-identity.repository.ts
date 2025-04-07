@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
-import { ProductIdentityEntity } from '../entities/product-identity.entity';
+import { In, Repository } from 'typeorm';
 import { NullableType } from '../../../../../utils/types/nullable.type';
+import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 import { ProductIdentity } from '../../../../domain/product-identity';
 import { ProductIdentityRepository } from '../../product-identity.repository';
+import { ProductIdentityEntity } from '../entities/product-identity.entity';
 import { ProductIdentityMapper } from '../mappers/product-identity.mapper';
-import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 
 @Injectable()
 export class ProductIdentityRelationalRepository

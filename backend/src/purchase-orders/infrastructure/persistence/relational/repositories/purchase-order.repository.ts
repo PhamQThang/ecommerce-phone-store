@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
-import { PurchaseOrderEntity } from '../entities/purchase-order.entity';
+import { ProductIdentityEntity } from 'src/product-identities/infrastructure/persistence/relational/entities/product-identity.entity';
+import { In, Repository } from 'typeorm';
 import { NullableType } from '../../../../../utils/types/nullable.type';
+import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 import { PurchaseOrder } from '../../../../domain/purchase-order';
 import { PurchaseOrderRepository } from '../../purchase-order.repository';
+import { PurchaseOrderEntity } from '../entities/purchase-order.entity';
 import { PurchaseOrderMapper } from '../mappers/purchase-order.mapper';
-import { IPaginationOptions } from '../../../../../utils/types/pagination-options';
 
 @Injectable()
 export class PurchaseOrderRelationalRepository
@@ -15,6 +16,8 @@ export class PurchaseOrderRelationalRepository
   constructor(
     @InjectRepository(PurchaseOrderEntity)
     private readonly purchaseOrderRepository: Repository<PurchaseOrderEntity>,
+    @InjectRepository(ProductIdentityEntity)
+    private readonly productIdentityRepository: Repository<ProductIdentityEntity>,
   ) {}
 
   async create(data: PurchaseOrder): Promise<PurchaseOrder> {
@@ -44,6 +47,22 @@ export class PurchaseOrderRelationalRepository
     const entity = await this.purchaseOrderRepository.findOne({
       where: { id },
     });
+
+    if (!entity) {
+      return null;
+    }
+
+    if (entity.productIdentites) {
+      for (const productIdentity of entity.productIdentites) {
+        const identity = await this.productIdentityRepository.findOne({
+          where: { id: productIdentity.id },
+          relations: ['product'],
+        });
+        if (identity) {
+          productIdentity.product = identity.product;
+        }
+      }
+    }
 
     return entity ? PurchaseOrderMapper.toDomain(entity) : null;
   }

@@ -1,17 +1,15 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { PurchaseOrdersService } from './purchase-orders.service';
-import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
-import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -19,14 +17,16 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { PurchaseOrder } from './domain/purchase-order';
-import { AuthGuard } from '@nestjs/passport';
 import {
   InfinityPaginationResponse,
   InfinityPaginationResponseDto,
 } from '../utils/dto/infinity-pagination-response.dto';
 import { infinityPagination } from '../utils/infinity-pagination';
+import { PurchaseOrder } from './domain/purchase-order';
+import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { FindAllPurchaseOrdersDto } from './dto/find-all-purchase-orders.dto';
+import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
+import { PurchaseOrdersService } from './purchase-orders.service';
 
 @ApiTags('Purchaseorders')
 @ApiBearerAuth()
@@ -80,6 +80,7 @@ export class PurchaseOrdersController {
     type: PurchaseOrder,
   })
   findById(@Param('id') id: string) {
+    console.log('isdfdsfd', id);
     return this.purchaseOrdersService.findById(id);
   }
 

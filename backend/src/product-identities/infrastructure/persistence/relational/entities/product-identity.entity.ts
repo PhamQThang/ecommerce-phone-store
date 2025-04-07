@@ -20,6 +20,12 @@ import { EntityRelationalHelper } from '../../../../../utils/relational-entity-h
   name: 'product_identity',
 })
 export class ProductIdentityEntity extends EntityRelationalHelper {
+  @Column({
+    nullable: true,
+    type: Number,
+  })
+  purchasePrice?: number | null;
+
   @ManyToOne(
     () => PurchaseOrderEntity,
     (parentEntity) => parentEntity.productIdentites,

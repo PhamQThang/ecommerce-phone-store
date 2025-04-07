@@ -1,4 +1,5 @@
 import { PurchaseOrderMapper } from '../../../../../purchase-orders/infrastructure/persistence/relational/mappers/purchase-order.mapper';
+
 import { ProductIdentity } from '../../../../domain/product-identity';
 
 import { ColorMapper } from '../../../../../colors/infrastructure/persistence/relational/mappers/color.mapper';
@@ -10,6 +11,8 @@ import { ProductIdentityEntity } from '../entities/product-identity.entity';
 export class ProductIdentityMapper {
   static toDomain(raw: ProductIdentityEntity): ProductIdentity {
     const domainEntity = new ProductIdentity();
+    domainEntity.purchasePrice = raw.purchasePrice;
+
     if (raw.purchaseOrder) {
       domainEntity.purchaseOrder = PurchaseOrderMapper.toDomain(
         raw.purchaseOrder,
@@ -37,6 +40,8 @@ export class ProductIdentityMapper {
 
   static toPersistence(domainEntity: ProductIdentity): ProductIdentityEntity {
     const persistenceEntity = new ProductIdentityEntity();
+    persistenceEntity.purchasePrice = domainEntity.purchasePrice;
+
     if (domainEntity.purchaseOrder) {
       persistenceEntity.purchaseOrder = PurchaseOrderMapper.toPersistence(
         domainEntity.purchaseOrder,

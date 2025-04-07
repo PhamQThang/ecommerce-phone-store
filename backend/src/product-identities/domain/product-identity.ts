@@ -6,6 +6,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class ProductIdentity {
   @ApiProperty({
+    type: () => Number,
+    nullable: true,
+  })
+  purchasePrice?: number | null;
+
+  @ApiProperty({
     type: () => PurchaseOrder,
     nullable: false,
   })

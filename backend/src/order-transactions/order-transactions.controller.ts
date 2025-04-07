@@ -1,17 +1,15 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { OrderTransactionsService } from './order-transactions.service';
-import { CreateOrderTransactionDto } from './dto/create-order-transaction.dto';
-import { UpdateOrderTransactionDto } from './dto/update-order-transaction.dto';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -19,14 +17,16 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { OrderTransaction } from './domain/order-transaction';
-import { AuthGuard } from '@nestjs/passport';
 import {
   InfinityPaginationResponse,
   InfinityPaginationResponseDto,
 } from '../utils/dto/infinity-pagination-response.dto';
 import { infinityPagination } from '../utils/infinity-pagination';
+import { OrderTransaction } from './domain/order-transaction';
+import { CreateOrderTransactionDto } from './dto/create-order-transaction.dto';
 import { FindAllOrderTransactionsDto } from './dto/find-all-order-transactions.dto';
+import { UpdateOrderTransactionDto } from './dto/update-order-transaction.dto';
+import { OrderTransactionsService } from './order-transactions.service';
 import { OrderTransactionCallback } from './order-transactions.type';
 
 @ApiTags('Ordertransactions')
@@ -44,6 +44,7 @@ export class OrderTransactionsController {
   @Get('callback')
   @ApiOkResponse({})
   callback(@Query() query: OrderTransactionCallback) {
+    console.log('callback', query);
     // example of a callback response
     return {
       vnp_Amount: 1200000000,
