@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
-import { CartRepository } from '../cart.repository';
-import { CartRelationalRepository } from './repositories/cart.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RelationalPromotionPersistenceModule } from 'src/promotions/infrastructure/persistence/relational/relational-persistence.module';
+import { CartRepository } from '../cart.repository';
 import { CartEntity } from './entities/cart.entity';
-import { PromotionRepository } from 'src/promotions/infrastructure/persistence/promotion.repository';
+import { CartRelationalRepository } from './repositories/cart.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CartEntity, PromotionRepository])],
+  imports: [
+    TypeOrmModule.forFeature([CartEntity]),
+    RelationalPromotionPersistenceModule,
+  ],
   providers: [
     {
       provide: CartRepository,
